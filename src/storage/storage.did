@@ -1,0 +1,67 @@
+type AssetArg = record {
+  content_type : text;
+  file_name : text;
+  chunk_ids : vec nat;
+  checksum : nat32;
+  content_encoding : ContentEncoding;
+};
+type AssetQuery = record {
+  id : nat;
+  url : text;
+  owner : principal;
+  content_type : text;
+  file_name : text;
+  content_encoding : ContentEncoding;
+};
+type ChunkArg = record { content : vec nat8; order : nat32 };
+type ChunkQuery = record {
+  id : nat;
+  order : nat32;
+  owner : principal;
+  created_at : nat64;
+  checksum : nat32;
+};
+type ContentEncoding = variant { GZIP; Identity };
+type HttpRequest = record {
+  url : text;
+  method : text;
+  body : vec nat8;
+  headers : vec record { text; text };
+};
+type HttpResponse = record {
+  body : vec nat8;
+  headers : vec record { text; text };
+  streaming_strategy : opt StreamingStrategy;
+  status_code : nat16;
+};
+type StreamingCallbackHttpResponse = record {
+  token : opt StreamingCallbackToken;
+  body : vec nat8;
+};
+type StreamingCallbackToken = record {
+  chunk_index : nat32;
+  asset_id : nat;
+  content_encoding : text;
+  chunk_size : nat32;
+};
+type StreamingStrategy = variant {
+  Callback : record {
+    token : StreamingCallbackToken;
+    callback : func () -> ();
+  };
+};
+service : () -> {
+  asset_list : () -> (vec record { nat; AssetQuery }) query;
+  chunk_availability_check : (vec nat) -> (bool) query;
+  clear_expired_chunks : () -> ();
+  commit_batch : (AssetArg) -> (nat);
+  delete_asset : (nat) -> (bool);
+  get_asset : (nat) -> (AssetQuery) query;
+  get_chunk : (nat) -> (ChunkQuery) query;
+  http_request : (HttpRequest) -> (HttpResponse) query;
+  http_request_streaming_callback : (StreamingCallbackToken) -> (
+      StreamingCallbackHttpResponse,
+    ) query;
+  is_full : () -> (bool);
+  upload_chunk : (ChunkArg) -> (nat);
+}

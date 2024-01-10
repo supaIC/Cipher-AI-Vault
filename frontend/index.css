@@ -1,0 +1,85 @@
+html, body, #root, .app {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #f5f5f7;
+    background-color: #000;
+}
+
+p {
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+button {
+    height: 35px;
+    width: 100px;
+    color: #f5f5f7;
+    background: none;
+    border: 2px solid white;
+    border-radius: 12px;
+    cursor: pointer;
+}
+  
+button:hover {
+    background-color: rgba(240,240,240,0.15);
+    transform: scale(1.05);
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+  
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    background-color: #101010;
+}
+
+.walletList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    border: 1px solid silver;
+    border-radius: 12px;
+}
+
+.walletList button {
+    margin-top: 10px;
+    display: flex;
+    height: 40px;
+    width: 135px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.walletList img {
+    height: 20px;
+    width: 20px;
+    margin: 10px;
+}
+
+.walletList h2 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.walletList p {
+    font-size: 14px;
+    margin: 0;
+}
