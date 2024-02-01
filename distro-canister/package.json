@@ -1,0 +1,22 @@
+{
+  "name": "distro_canister",
+  "version": "1.0.0",
+  "description": "A distrobution canister for cycles.",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm install && dfx start --clean --background && dfx canister create --all && dfx deploy && dfx stop && echo 'Setup Complete!'",
+    "build": "npx azle distro",
+    "test-deploy": "dfx canister install distro --wasm .azle/distro/distro.wasm.gz --mode reinstall -y",
+    "reinstall": "dfx build --network ic && dfx canister --network ic install distro --wasm .azle/distro/distro.wasm.gz --mode reinstall -y"
+  },
+  "keywords": [],
+  "author": "Daniel McCoy",
+  "license": "MIT",
+  "dependencies": {
+    "@dfinity/agent": "^0.19.2",
+    "@dfinity/assets": "^0.19.2",
+    "@dfinity/candid": "^0.19.2",
+    "@dfinity/identity": "^0.19.2",
+    "azle": "^0.17.1"
+  }
+}

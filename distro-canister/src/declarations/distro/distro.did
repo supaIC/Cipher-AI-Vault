@@ -1,0 +1,5 @@
+type ManualReply = variant { Ok : bool; Err : text };
+service : () -> {
+  cyclesBalance : () -> (int) query;
+  topUp : (principal, nat) -> (ManualReply);
+}

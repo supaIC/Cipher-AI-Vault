@@ -21,7 +21,7 @@ export class SupabaseFsWorker {
       data,
     } = this.supabase.storage
       .from(this.bucketName)
-      .getPublicUrl(u); // make into IC call
+      .getPublicUrl(u); // make into IC call - Grab and parse url from list function (DM)
     const {publicUrl} = data;
     return publicUrl;
   }
@@ -50,7 +50,7 @@ export class SupabaseFsWorker {
     const result = await this.supabase
       .storage
       .from(this.bucketName)
-      .upload(u, value, opts); // make into IC call
+      .upload(u, value, opts); // make into IC call - Asset upload functionality (DM)
     if (!result.error) {
       const u2 = this.getUrl(keyPath);
       return u2;
@@ -63,6 +63,6 @@ export class SupabaseFsWorker {
     await this.supabase
       .storage
       .from(this.bucketName)
-      .remove([u]); // make into IC call
+      .remove([u]); // make into IC call - Asset delete functionality (DM)
   }
 }

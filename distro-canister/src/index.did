@@ -1,0 +1,6 @@
+type ManualReply = variant { Ok : bool; Err : text };
+type ManualReply_1 = variant { Ok : text; Err : text };
+service : () -> {
+  addCycles : (int) -> (ManualReply);
+  getCanisterStatus : () -> (ManualReply_1);
+}
