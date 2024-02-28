@@ -1,10 +1,10 @@
-## Upstreet IC Login
+## Upstreet IC Testbed
 ### Version 1.1.0
 
-This is an open sourced login menu for the Internet Computer. It supports Internet Identity, Plug, Stoic, and NFID. This module aims at providing an interoperable way of integrating all of your favorite IC wallets easily.
+This is a repository for testing Internet Computer integrations within Upstreet.
 
 Currently uses DFX 0.15.1 and Dfinity package versions 0.19.3.
-Must have DFX fully setup and Node 16-18 installed before proceeding.
+Must have DFX fully setup with Rust and Node 16-18 installed before proceeding.
 
 ### Setup:
 
@@ -13,21 +13,12 @@ Easy Setup:
 This repo comes handy with a one step easy setup command to be run after cloning. As long as you have dfx and node configured properly, this should work.
 
 ```bash
-git clone https://github.com/upstreetai/upstreet-ic-login.git
-cd upstreet-ic-login
+git clone https://github.com/upstreetai/ic-supabase.git
+cd ic-supabase
 npm run setup
 ```
 
-Note: If you have a password set on your DFX identity you will need to enter it once during the initial setup.
-
-If for any reason the easy setup does not work please follow the steps below to manually setup the project.
-
-```bash
-npm install
-dfx start --clean --background
-dfx deploy
-dfx stop
-```
+Note: If you have a password set on your DFX identity you will need to enter it during the initial setup.
 
 ### Developer Mode:
 
