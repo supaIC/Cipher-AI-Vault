@@ -83,3 +83,40 @@ button:hover {
     font-size: 14px;
     margin: 0;
 }
+
+/*  Rest of app */
+
+.overlay {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #202020;
+    color: blue;
+    font-weight: bold;
+    font-size: 30px;
+    z-index: 100;
+}
+
+.overlay button {
+    margin: 20px;
+}
+
+#stuff p {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+/* .uploadContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+
+} */

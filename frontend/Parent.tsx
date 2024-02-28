@@ -1,22 +1,86 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { HttpAgent } from "@dfinity/agent";
 import { ICWalletList } from "./ICWalletList";
 import { UserObject } from "./functions";
 import { AssetManager } from "@dfinity/assets";
+import "./index.css";
 
 export function Parent() {
 
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
 
+  // This function is passed to the ICWalletList component to handle the user auth process.
   const giveToParent = (principal: string, agent: HttpAgent, provider: string) => {
     setCurrentUser({principal, agent, provider});
   }
 
+  // This creates an instance of the asset canister actor.
   const createAssetActor = async() : Promise<AssetManager> => {
     const assetActor = new AssetManager({agent: currentUser!.agent as HttpAgent, canisterId: "zks6t-giaaa-aaaap-qb7fa-cai"});
     return assetActor;
   }
 
+  const deleteAsset = async(key: string) => {
+    const actor = await createAssetActor();
+    const response = await actor.delete(key);
+    alert(response);
+  }
+
+  // This lists the available files in the asset canister.
+  const loadList = async() => {
+    const actor = await createAssetActor();
+    const list = await actor.list();
+    const stuff = document.getElementById("stuff");
+    if (stuff) {
+      const listDiv = document.createElement("div");
+      listDiv.style.display = "flex";
+      listDiv.style.flexDirection = "column";
+      listDiv.style.alignItems = "center";
+      listDiv.style.justifyContent = "center";
+      list.forEach((file) => {
+        const name = document.createElement("img");
+        const header = "https://zks6t-giaaa-aaaap-qb7fa-cai.raw.icp0.io/";
+        // if file key starts with a slash just remove it
+        if (file.key.startsWith("/")) {
+          name.src = header + file.key.slice(1);
+        } else {
+          name.src = header + file.key;
+        }
+        name.style.width = "100px";
+        name.style.height = "100px";
+        name.style.margin = "10px";
+        name.style.borderRadius = "10px";
+        name.onclick = async() => {
+          const rootDiv = document.getElementById("options");
+          if (rootDiv) {
+            rootDiv.innerHTML = "";
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.style.backgroundColor = "red";
+            deleteButton.style.color = "white";
+            deleteButton.style.padding = "10px";
+            deleteButton.style.border = "none";
+            deleteButton.style.borderRadius = "10px";
+            deleteButton.style.margin = "10px";
+            deleteButton.style.cursor = "pointer";
+            deleteButton.onclick = async() => {
+              await deleteAsset(file.key);
+              rootDiv.innerHTML = "";
+              await loadList();
+            }
+            rootDiv.appendChild(deleteButton);
+          }
+        }
+        
+        listDiv.appendChild(name);
+      }
+      )
+      stuff.appendChild(listDiv);
+    }
+  }
+
+  // This function creates a temporary file upload interface.
+  // Todo: Needs styling and error handling.
   const createFileUploadInterface = async() => {
     const rootDiv = document.getElementById("root");
     const overlay = document.createElement("div");
@@ -80,6 +144,8 @@ export function Parent() {
       const file = fileInput.files![0];
       const response = await actor.store(file);
       alert(response);
+      overlay.remove();
+      await loadList();
     }
     // fileInput.onchange = () => {
     //   if (fileInput.files) {
@@ -92,8 +158,21 @@ export function Parent() {
     //     reader.readAsText(file);
     //   }
     // }
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.style.backgroundColor = "red";
+    cancelButton.style.color = "white";
+    cancelButton.style.padding = "10px";
+    cancelButton.style.border = "none";
+    cancelButton.style.borderRadius = "10px";
+    cancelButton.style.margin = "10px";
+    cancelButton.style.cursor = "pointer";
+    cancelButton.onclick = () => {
+      overlay.remove();
+    }
     container.appendChild(fileButton);
     container.appendChild(submitButton);
+    container.appendChild(cancelButton);
     container.appendChild(fileInput);
     overlay.appendChild(container);
   }
@@ -103,6 +182,12 @@ export function Parent() {
   const uploadFile = async() => {
     await createFileUploadInterface();
   }
+
+  useEffect(() => {
+    if (currentUser) {
+      loadList();
+    }
+  } , [currentUser]);
  
   return (
     <div className="app">
@@ -111,9 +196,11 @@ export function Parent() {
       }
       {
         currentUser && 
-        <>
+        <div className="overlay">
           <button onClick={uploadFile} >File Upload</button>
-        </>
+          <div id="stuff"></div>
+          <div id='options'></div>
+        </div>
       }
     </div>
   )
