@@ -50,7 +50,7 @@ export const stoicLogin = async(whitelist: string[]) : Promise<UserObject> => {
 // NFID
 
 export const nfidLogin = async(grabUserObject: any) : Promise<void> => {
-    const appName = "The Asset App";
+    const appName = "supabase-IC";
     const appLogo = "https://nfid.one/icons/favicon-96x96.png";
     const authPath = "/authenticate/?applicationName="+appName+"&applicationLogo="+appLogo+"#authorize";
     const authUrl = "https://nfid.one" + authPath;

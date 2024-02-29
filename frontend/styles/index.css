@@ -1,0 +1,394 @@
+/* Global styles */
+html, body, #root, .app {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #f5f5f7;
+    background-color: #121212; /* Enhancing the background color for deep contrast */
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+button {
+    min-height: 35px;
+    padding: 0 15px;
+    color: #FFF;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.file-input + .file-label {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px 25px;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.file-input + .file-label:hover {
+    background-color: #45a049;
+}
+
+.file-input {
+    display: none;
+}
+
+.loading, .error {
+    margin-top: 20px;
+}
+
+.error {
+    color: #ff3860;
+}
+
+.assets-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.asset-item {
+    background-color: #202020;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.asset-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ff4747;
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+    background-color: #ff0000;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.loading {
+    color: #FFF;
+    font-size: 20px;
+}
+
+.error-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff3860;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.error-notification button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.walletList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    border: 1px solid silver;
+    border-radius: 12px;
+}
+
+.walletList button {
+    margin-top: 10px;
+    display: flex;
+    height: 40px;
+    width: 135px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #1e1e1e;
+}
+
+.walletList img {
+    height: 20px;
+    width: 20px;
+    margin: 10px;
+}
+
+.walletList h2 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.walletList p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Adding confirmation dialog styles */
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+.confirm-box {
+    background-color: #282c34;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 300px;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.confirm-delete, .cancel-delete {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.confirm-delete {
+    background-color: #ff3860;
+    color: #fff;
+}
+
+.confirm-delete:hover {
+    background-color: #e22e4d;
+}
+
+.cancel-delete {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.cancel-delete:hover {
+    background-color: #5a6268;
+}
+
+/* Enhancing existing styles for a cohesive look */
+.delete-button {
+    background-color: transparent;
+    color: #ff3860;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button:hover {
+    background-color: transparent;
+    color: #e22e4d;
+}
+
+.asset-item:hover .delete-button {
+    visibility: visible;
+}
+
+.asset-item {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.asset-item:hover {
+    transform: scale(1.03);
+    z-index: 1;
+}
+
+.asset-image {
+    transition: opacity 0.3s ease;
+}
+
+.asset-item:hover .asset-image {
+    opacity: 0.9;
+}
+
+/* Adjusting the overlay and loading for consistency */
+.overlay, .loading, .error-notification {
+    z-index: 30;
+}
+
+/* Additional UI enhancements */
+.app, .loading, .error-notification, .walletList {
+    transition: all 0.3s ease;
+}
+
+/* Improving visibility and interaction */
+.error-notification button {
+    margin-left: 15px;
+    background-color: #ff3860;
+    color: #fff;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-notification button:hover {
+    background-color: #e22e4d;
+}
+
+/* Update button styles for a more modern and cohesive appearance */
+button {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: fixed;
+    z-index: 999;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: black; /* Adjust text color */
+}
+
+.tooltip p {
+    margin: 0;
+}
+
+/* Asset View */
+.asset-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column; /* Ensure content and buttons are stacked vertically */
+    justify-content: center;
+    align-items: center;
+}
+
+.asset-view-content {
+    background-color: rgba(33, 33, 33, 0.33); /* Transparent white background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 66%; /* About 2/3rds of the screen width */
+    height: 66%; /* About 2/3rds of the screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensure the image does not overflow */
+    position: relative; /* Make the container relative for absolute positioning of buttons */
+}
+
+.asset-view-content img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.asset-view-actions {
+    margin-top: 30px; /* Push buttons to the bottom */
+}
+
+.asset-view-actions button {
+    background-color: #4285f4;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px; /* Add margin between buttons */
+    transition: background-color 0.3s ease;
+}
+
+.asset-view-actions button:hover {
+    background-color: #3367d6;
+}
+
+.logged-in-info {
+    position: fixed;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    background-color: rgba(33, 33, 33, 0.8); /* Background color with opacity */
+    padding: 5px 10px; /* Padding for better visibility */
+    border-radius: 5px; /* Rounded corners */
+    z-index: 9999; /* Ensure it's above other elements */
+  }
+  

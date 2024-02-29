@@ -1,10 +1,10 @@
 import React from "react"
-import "./index.css";
-import * as logins from "./functions";
-import dfinity from "./logos/dfinity.png"
-import plug from "./logos/plug.png";
-import stoic from "./logos/stoic.png";
-import nfid from "./logos/nfid.png";
+import "../styles/index.css";
+import * as logins from "../hooks/walletFunctions";
+import dfinity from "../logos/dfinity.png"
+import plug from "../logos/plug.png";
+import stoic from "../logos/stoic.png";
+import nfid from "../logos/nfid.png";
 // import branding from "../../assets/branding/logo-cut.png";
 
 export function ICWalletList({

@@ -1,207 +1,221 @@
-import React, { useEffect, useState } from "react"
-import { HttpAgent } from "@dfinity/agent";
-import { ICWalletList } from "./ICWalletList";
-import { UserObject } from "./functions";
-import { AssetManager } from "@dfinity/assets";
-import "./index.css";
+import React, { useEffect, useState, useCallback } from 'react';
+import { HttpAgent } from '@dfinity/agent';
+import { AssetManager } from '@dfinity/assets';
+import './styles/index.css';
+import UploadButton from './components/UploadButton';
+import { LoadingOverlay, ErrorNotification, DeleteConfirmation } from './components/OverlayComponents';
+import AssetView from './components/AssetView';
+import AssetListItem from './components/AssetListItem';
+import ToggleButton from './components/ToggleButton';
+import { ICWalletList } from './components/ICWalletList';
+import { UserObject } from './hooks/walletFunctions';
+
+interface Asset {
+  key: string;
+  url: string;
+}
 
 export function Parent() {
-
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [globalLoading, setGlobalLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Asset | null>(null);
+  const [dragging, setDragging] = useState<boolean>(false);
+  const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
+  const [bucketName, setBucketName] = useState<string | null>(null);
+  const [showUserFiles, setShowUserFiles] = useState<boolean>(false);
+  const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
 
-  // This function is passed to the ICWalletList component to handle the user auth process.
-  const giveToParent = (principal: string, agent: HttpAgent, provider: string) => {
-    setCurrentUser({principal, agent, provider});
-  }
+  const giveToParent = useCallback(
+    (principal: string, agent: HttpAgent, provider: string) => {
+      setCurrentUser({ principal, agent, provider });
+      setBucketName(principal);
+    },
+    []
+  );
 
-  // This creates an instance of the asset canister actor.
-  const createAssetActor = async() : Promise<AssetManager> => {
-    const assetActor = new AssetManager({agent: currentUser!.agent as HttpAgent, canisterId: "zks6t-giaaa-aaaap-qb7fa-cai"});
-    return assetActor;
-  }
+  const createAssetActor = useCallback(async (): Promise<AssetManager> => {
+    if (!currentUser || !bucketName) throw new Error('CurrentUser or bucketName is not set.');
+    return new AssetManager({
+      agent: currentUser.agent as HttpAgent,
+      canisterId: 'zks6t-giaaa-aaaap-qb7fa-cai',
+    });
+  }, [currentUser, bucketName]);
 
-  const deleteAsset = async(key: string) => {
-    const actor = await createAssetActor();
-    const response = await actor.delete(key);
-    alert(response);
-  }
-
-  // This lists the available files in the asset canister.
-  const loadList = async() => {
-    const actor = await createAssetActor();
-    const list = await actor.list();
-    const stuff = document.getElementById("stuff");
-    if (stuff) {
-      const listDiv = document.createElement("div");
-      listDiv.style.display = "flex";
-      listDiv.style.flexDirection = "column";
-      listDiv.style.alignItems = "center";
-      listDiv.style.justifyContent = "center";
-      list.forEach((file) => {
-        const name = document.createElement("img");
-        const header = "https://zks6t-giaaa-aaaap-qb7fa-cai.raw.icp0.io/";
-        // if file key starts with a slash just remove it
-        if (file.key.startsWith("/")) {
-          name.src = header + file.key.slice(1);
-        } else {
-          name.src = header + file.key;
-        }
-        name.style.width = "100px";
-        name.style.height = "100px";
-        name.style.margin = "10px";
-        name.style.borderRadius = "10px";
-        name.onclick = async() => {
-          const rootDiv = document.getElementById("options");
-          if (rootDiv) {
-            rootDiv.innerHTML = "";
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete";
-            deleteButton.style.backgroundColor = "red";
-            deleteButton.style.color = "white";
-            deleteButton.style.padding = "10px";
-            deleteButton.style.border = "none";
-            deleteButton.style.borderRadius = "10px";
-            deleteButton.style.margin = "10px";
-            deleteButton.style.cursor = "pointer";
-            deleteButton.onclick = async() => {
-              await deleteAsset(file.key);
-              rootDiv.innerHTML = "";
-              await loadList();
-            }
-            rootDiv.appendChild(deleteButton);
-          }
-        }
-        
-        listDiv.appendChild(name);
-      }
-      )
-      stuff.appendChild(listDiv);
-    }
-  }
-
-  // This function creates a temporary file upload interface.
-  // Todo: Needs styling and error handling.
-  const createFileUploadInterface = async() => {
-    const rootDiv = document.getElementById("root");
-    const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-    overlay.style.zIndex = "1000";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    rootDiv?.appendChild(overlay);
-
-    const container = document.createElement("div");
-    // make the div appear in the center and have a file upload button
-    container.style.position = "fixed";
-    container.style.top = "50%";
-    container.style.left = "50%";
-    container.style.transform = "translate(-50%, -50%)";
-    container.style.backgroundColor = "white";
-    container.style.padding = "20px";
-    container.style.border = "2px solid black";
-    container.style.borderRadius = "10px";
-    container.style.zIndex = "1000";
-    container.style.display = "flex";
-    container.style.flexDirection = "column";
-    container.style.alignItems = "center";
-    container.style.justifyContent = "center";
-    container.style.width = "300px";
-    container.style.height = "300px";
-    container.style.overflow = "hidden";
-    container.style.boxShadow = "0px 0px 10px 0px black";
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.style.display = "none";
-    const fileButton = document.createElement("button");
-    fileButton.textContent = "Select File";
-    fileButton.style.backgroundColor = "blue";
-    fileButton.style.color = "white";
-    fileButton.style.padding = "10px";
-    fileButton.style.border = "none";
-    fileButton.style.borderRadius = "10px";
-    fileButton.style.margin = "10px";
-    fileButton.style.cursor = "pointer";
-    fileButton.onclick = () => {
-      fileInput.click();
-    }
-    const submitButton = document.createElement("button");
-    submitButton.textContent = "Submit";
-    submitButton.style.backgroundColor = "green";
-    submitButton.style.color = "white";
-    submitButton.style.padding = "10px";
-    submitButton.style.border = "none";
-    submitButton.style.borderRadius = "10px";
-    submitButton.style.margin = "10px";
-    submitButton.style.cursor = "pointer";
-    submitButton.onclick = async() => {
+  const loadList = useCallback(async () => {
+    setGlobalLoading(true);
+    setLoadingMessage('Loading assets...');
+    try {
       const actor = await createAssetActor();
-      const file = fileInput.files![0];
-      const response = await actor.store(file);
-      alert(response);
-      overlay.remove();
+      const list = await actor.list();
+      const filteredList = showUserFiles
+        ? list.filter((file) => file.key.startsWith(`/${currentUser?.principal}/`))
+        : list;
+      setAssets(
+        filteredList.map((file) => ({
+          key: file.key,
+          url: `https://zks6t-giaaa-aaaap-qb7fa-cai.raw.icp0.io/${file.key.slice(1)}`,
+        }))
+      );
+      setError(null);
+    } catch (err) {
+      setError('Failed to load assets.');
+    } finally {
+      setGlobalLoading(false);
+    }
+  }, [createAssetActor, currentUser, showUserFiles]);
+
+  const handleDeleteAsset = useCallback(async () => {
+    if (!confirmDelete) return;
+    setGlobalLoading(true);
+    setLoadingMessage('Deleting asset...');
+    try {
+      const actor = await createAssetActor();
+      await actor.delete(confirmDelete.key);
       await loadList();
+      setConfirmDelete(null);
+    } catch (err) {
+      setError(`Failed to delete asset: ${confirmDelete.key}`);
+      setConfirmDelete(null);
+    } finally {
+      setGlobalLoading(false);
     }
-    // fileInput.onchange = () => {
-    //   if (fileInput.files) {
-    //     const file = fileInput.files[0];
-    //     const reader = new FileReader();
-    //     reader.onload = () => {
-    //       const fileData = reader.result;
-    //       alert(fileData);
-    //     }
-    //     reader.readAsText(file);
-    //   }
-    // }
-    const cancelButton = document.createElement("button");
-    cancelButton.textContent = "Cancel";
-    cancelButton.style.backgroundColor = "red";
-    cancelButton.style.color = "white";
-    cancelButton.style.padding = "10px";
-    cancelButton.style.border = "none";
-    cancelButton.style.borderRadius = "10px";
-    cancelButton.style.margin = "10px";
-    cancelButton.style.cursor = "pointer";
-    cancelButton.onclick = () => {
-      overlay.remove();
+  }, [confirmDelete, createAssetActor, loadList]);
+
+  const handleFileUpload = useCallback(async (file: File) => {
+    if (!currentUser || !currentUser.principal) {
+      setError('User not authenticated.');
+      return;
     }
-    container.appendChild(fileButton);
-    container.appendChild(submitButton);
-    container.appendChild(cancelButton);
-    container.appendChild(fileInput);
-    overlay.appendChild(container);
-  }
 
-  const whitelist: Array<string> = ["zks6t-giaaa-aaaap-qb7fa-cai"];
-
-  const uploadFile = async() => {
-    await createFileUploadInterface();
-  }
+    setGlobalLoading(true);
+    setLoadingMessage('Uploading file...');
+    try {
+      const actor = await createAssetActor();
+      const key = `${currentUser.principal}/${file.name}`;
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
+      await actor.store(uint8Array, { fileName: key });
+      await loadList();
+    } catch (err) {
+      setError('Failed to upload file.');
+    } finally {
+      setGlobalLoading(false);
+    }
+  }, [currentUser, createAssetActor, loadList]);
 
   useEffect(() => {
     if (currentUser) {
       loadList();
     }
-  } , [currentUser]);
- 
+  }, [currentUser, loadList]);
+
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const { clientX, clientY } = e;
+    if (
+      clientX >= rect.left &&
+      clientX <= rect.right &&
+      clientY >= rect.top &&
+      clientY <= rect.bottom
+    ) {
+      setDragging(true);
+    }
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!e.relatedTarget || e.relatedTarget === document.body) {
+      setDragging(false);
+    }
+  }, []);
+
+  const handleDragEnd = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragging(false);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setDragging(false);
+  }, []);
+
+  const openAssetView = useCallback((asset: Asset) => {
+    setViewingAsset(asset);
+  }, []);
+
+  const closeAssetView = useCallback(() => {
+    setViewingAsset(null);
+  }, []);
+
+  const toggleUserFiles = useCallback(() => {
+    setShowUserFiles((prevState) => !prevState);
+  }, []);
+
   return (
-    <div className="app">
-      {!currentUser && 
-      <ICWalletList giveToParent={giveToParent} whitelist={whitelist} />
-      }
-      {
-        currentUser && 
-        <div className="overlay">
-          <button onClick={uploadFile} >File Upload</button>
-          <div id="stuff"></div>
-          <div id='options'></div>
-        </div>
-      }
+    <div
+      className="app"
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragging(false);
+        const file = e.dataTransfer.files[0];
+        if (file) {
+          handleFileUpload(file);
+        }
+      }}
+      onMouseLeave={handleMouseLeave}
+    >
+      {globalLoading && <LoadingOverlay message={loadingMessage} />}
+      {error && <ErrorNotification message={error} onClose={() => setError(null)} />}
+      {confirmDelete && (
+        <DeleteConfirmation
+          asset={confirmDelete}
+          onConfirm={handleDeleteAsset}
+          onCancel={() => setConfirmDelete(null)}
+        />
+      )}
+      {!currentUser ? (
+        <ICWalletList giveToParent={giveToParent} whitelist={['zks6t-giaaa-aaaap-qb7fa-cai']} />
+      ) : (
+        <>
+          <UploadButton onUpload={handleFileUpload} disabled={globalLoading} />
+          <ToggleButton label="Show Only My Files" checked={showUserFiles} onChange={toggleUserFiles} />
+          <div className={`assets-container ${dragging ? 'dragging' : ''}`}>
+            {dragging && <div className="overlay">Drop file here to upload</div>}
+            <div className="logged-in-info">Logged in as: {currentUser.principal}</div>
+            {assets.map((asset) => (
+              <AssetListItem
+                key={asset.key}
+                asset={asset}
+                onMouseEnter={() => setHoveredAsset(asset)}
+                onMouseLeave={() => setHoveredAsset(null)}
+                onClick={() => openAssetView(asset)}
+              />
+            ))}
+            {hoveredAsset && (
+              <div className="tooltip" style={{ left: tooltipPosition.left, top: tooltipPosition.top }}>
+                <p>Key: {hoveredAsset.key}</p>
+                <p>URL: {hoveredAsset.url}</p>
+              </div>
+            )}
+          </div>
+          {viewingAsset && (
+            <AssetView
+              asset={viewingAsset}
+              onClose={closeAssetView}
+              onDelete={() => {
+                setConfirmDelete(viewingAsset);
+                setViewingAsset(null);
+              }}
+            />
+          )}
+        </>
+      )}
     </div>
-  )
+  );
 }
