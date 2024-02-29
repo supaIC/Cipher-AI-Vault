@@ -2,4 +2,9 @@ General Todo List:
 
 Milestone 2:
 
-- 
+- Structure and modularize makeshift inventory.
+- Remove style generation code, replace with dedicated CSS.
+- Modify the UI to be more user friendly.
+- Add separate button component that requests payment from Plug for the cycles distro canister.
+- Test and parse results of the cycles distro canister.
+- Create intuitive documentation.
