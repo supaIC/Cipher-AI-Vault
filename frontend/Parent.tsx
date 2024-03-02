@@ -1,3 +1,5 @@
+// TODO: Modularize the AssetManager and Canister Top-up features into their own hooks
+
 // Importing React and necessary hooks for component functionality.
 import React, { useEffect, useState, useCallback } from "react";
 
