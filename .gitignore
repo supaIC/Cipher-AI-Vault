@@ -2,7 +2,7 @@
 .vscode/
 .idea/
 **/*~
-./env
+.env
 
 /wasm_files
 # Mac OSX temporary files
