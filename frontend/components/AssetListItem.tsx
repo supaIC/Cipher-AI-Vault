@@ -32,6 +32,9 @@ const AssetListItem: React.FC<AssetListItemProps> = ({
   onClick,
 }) => {
   // Renders the asset item with an image thumbnail and a truncated name if it's too long.
+  const fileName = asset.key.split('/').pop();
+  const displayFileName = fileName && fileName.length > 30 ? `${fileName.substring(0, 30)}...` : fileName;
+
   return (
     <div
       className="asset-item"
@@ -40,9 +43,7 @@ const AssetListItem: React.FC<AssetListItemProps> = ({
       onClick={onClick}
     >
       <img src={asset.url} alt="Asset" className="asset-image" />
-      <p className="asset-name">
-        {asset.key.length > 20 ? `${asset.key.substring(0, 20)}...` : asset.key}
-      </p>
+      <p className="asset-name" style={{ fontSize: '12px' }}>{displayFileName}</p>
     </div>
   );
 };

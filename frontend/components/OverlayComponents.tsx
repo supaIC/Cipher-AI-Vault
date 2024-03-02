@@ -60,7 +60,7 @@ export const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       {/* Confirmation message */}
       <div className="confirm-actions">
         <button onClick={onConfirm} className="confirm-delete">
-          Yes, Delete {/* Button for confirming deletion */}
+          Delete {/* Button for confirming deletion */}
         </button>
         <button onClick={onCancel} className="cancel-delete">
           Cancel {/* Button for cancelling deletion */}

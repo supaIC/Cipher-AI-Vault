@@ -1,8 +1,5 @@
 /* Global styles */
-html,
-body,
-#root,
-.app {
+html, body, #root, .app {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -11,7 +8,6 @@ body,
     font-size: 16px;
     color: #f5f5f7;
     background-color: #121212;
-    /* Enhancing the background color for deep contrast */
 }
 
 .app {
@@ -19,19 +15,25 @@ body,
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 20px;
     gap: 20px;
+    padding-top: 44px;
+    box-sizing: border-box;
 }
 
 button {
+
     min-height: 35px;
     padding: 0 15px;
     color: #FFF;
-    background-color: #007bff;
+    background-color: #343434;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
+}
+
+button:first-child {
+    margin-top: 0;
 }
 
 button:hover {
@@ -43,7 +45,7 @@ button:hover {
     display: inline-block;
     cursor: pointer;
     padding: 10px 25px;
-    background-color: #4CAF50;
+    background-color: #343434;
     border-radius: 5px;
     transition: background-color 0.2s;
 }
@@ -270,6 +272,13 @@ button:hover {
     transition: transform 0.3s ease;
 }
 
+.asset-name {
+    font-size: 12px;
+    padding-bottom: 5px;
+    margin: 0; 
+    text-align: center;
+}
+
 .asset-item:hover {
     transform: scale(1.03);
     z-index: 1;
@@ -325,12 +334,12 @@ button {
 .tooltip {
     position: fixed;
     z-index: 999;
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: #34343434;
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: black;
+    color: rgb(244, 244, 244);
+    font-size: 12px;
     /* Adjust text color */
 }
 
@@ -387,7 +396,7 @@ button {
 }
 
 .asset-view-actions button {
-    background-color: #4285f4;
+    background-color: #343434;
     color: #fff;
     padding: 8px 16px;
     border: none;
@@ -416,4 +425,5 @@ button {
     /* Rounded corners */
     z-index: 9999;
     /* Ensure it's above other elements */
+    font-size: 12px
 }

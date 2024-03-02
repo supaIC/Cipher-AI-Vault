@@ -367,9 +367,9 @@ export function Parent() {
           onClick={cyclesTopUp}
           style={{
             position: "absolute",
-            top: "22px",
+            top: "44px",
             left: "37%",
-            zIndex: 998,
+            zIndex: 9,
           }}
         >
           Donate Cycles
@@ -424,7 +424,6 @@ export function Parent() {
                 className="tooltip"
                 style={{ left: tooltipPosition.left, top: tooltipPosition.top }}
               >
-                <p>Key: {hoveredAsset.key}</p>
                 <p>URL: {hoveredAsset.url}</p>
               </div>
             )}
