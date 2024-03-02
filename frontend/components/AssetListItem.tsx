@@ -1,18 +1,37 @@
-import React from 'react';
+import React from "react";
 
+// Defines the structure for the Asset type.
 interface Asset {
-  key: string;
-  url: string;
+  key: string; // Unique identifier for the asset.
+  url: string; // URL pointing to the asset's location.
 }
 
+// Specifies the properties expected by the AssetListItem component.
 interface AssetListItemProps {
-  asset: Asset;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-  onClick: () => void;
+  asset: Asset; // Asset object containing key and URL.
+  onMouseEnter: () => void; // Function to call when the mouse enters the item area.
+  onMouseLeave: () => void; // Function to call when the mouse leaves the item area.
+  onClick: () => void; // Function to call when the item is clicked.
 }
 
-const AssetListItem: React.FC<AssetListItemProps> = ({ asset, onMouseEnter, onMouseLeave, onClick }) => {
+/**
+ * AssetListItem component renders an individual asset item, showing a thumbnail
+ * and the asset's name. It supports mouse interaction events including entering,
+ * leaving, and clicking the asset item.
+ *
+ * Props:
+ * - asset: Contains the information about the asset to be displayed.
+ * - onMouseEnter: Handler for mouse enter event.
+ * - onMouseLeave: Handler for mouse leave event.
+ * - onClick: Handler for click event.
+ */
+const AssetListItem: React.FC<AssetListItemProps> = ({
+  asset,
+  onMouseEnter,
+  onMouseLeave,
+  onClick,
+}) => {
+  // Renders the asset item with an image thumbnail and a truncated name if it's too long.
   return (
     <div
       className="asset-item"

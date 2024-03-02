@@ -1,5 +1,8 @@
 /* Global styles */
-html, body, #root, .app {
+html,
+body,
+#root,
+.app {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -7,7 +10,8 @@ html, body, #root, .app {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     color: #f5f5f7;
-    background-color: #121212; /* Enhancing the background color for deep contrast */
+    background-color: #121212;
+    /* Enhancing the background color for deep contrast */
 }
 
 .app {
@@ -35,7 +39,7 @@ button:hover {
     transform: translateY(-2px);
 }
 
-.file-input + .file-label {
+.file-input+.file-label {
     display: inline-block;
     cursor: pointer;
     padding: 10px 25px;
@@ -44,7 +48,7 @@ button:hover {
     transition: background-color 0.2s;
 }
 
-.file-input + .file-label:hover {
+.file-input+.file-label:hover {
     background-color: #45a049;
 }
 
@@ -52,7 +56,8 @@ button:hover {
     display: none;
 }
 
-.loading, .error {
+.loading,
+.error {
     margin-top: 20px;
 }
 
@@ -212,7 +217,8 @@ button:hover {
     margin-top: 20px;
 }
 
-.confirm-delete, .cancel-delete {
+.confirm-delete,
+.cancel-delete {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -278,12 +284,17 @@ button:hover {
 }
 
 /* Adjusting the overlay and loading for consistency */
-.overlay, .loading, .error-notification {
+.overlay,
+.loading,
+.error-notification {
     z-index: 30;
 }
 
 /* Additional UI enhancements */
-.app, .loading, .error-notification, .walletList {
+.app,
+.loading,
+.error-notification,
+.walletList {
     transition: all 0.3s ease;
 }
 
@@ -319,7 +330,8 @@ button {
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: black; /* Adjust text color */
+    color: black;
+    /* Adjust text color */
 }
 
 .tooltip p {
@@ -336,24 +348,30 @@ button {
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 9999;
     display: flex;
-    flex-direction: column; /* Ensure content and buttons are stacked vertically */
+    flex-direction: column;
+    /* Ensure content and buttons are stacked vertically */
     justify-content: center;
     align-items: center;
 }
 
 .asset-view-content {
-    background-color: rgba(33, 33, 33, 0.33); /* Transparent white background */
+    background-color: rgba(33, 33, 33, 0.33);
+    /* Transparent white background */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    width: 66%; /* About 2/3rds of the screen width */
-    height: 66%; /* About 2/3rds of the screen height */
+    width: 66%;
+    /* About 2/3rds of the screen width */
+    height: 66%;
+    /* About 2/3rds of the screen height */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Ensure the image does not overflow */
-    position: relative; /* Make the container relative for absolute positioning of buttons */
+    overflow: hidden;
+    /* Ensure the image does not overflow */
+    position: relative;
+    /* Make the container relative for absolute positioning of buttons */
 }
 
 .asset-view-content img {
@@ -364,7 +382,8 @@ button {
 }
 
 .asset-view-actions {
-    margin-top: 30px; /* Push buttons to the bottom */
+    margin-top: 30px;
+    /* Push buttons to the bottom */
 }
 
 .asset-view-actions button {
@@ -374,7 +393,8 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin: 0 5px; /* Add margin between buttons */
+    margin: 0 5px;
+    /* Add margin between buttons */
     transition: background-color 0.3s ease;
 }
 
@@ -384,11 +404,16 @@ button {
 
 .logged-in-info {
     position: fixed;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
-    background-color: rgba(33, 33, 33, 0.8); /* Background color with opacity */
-    padding: 5px 10px; /* Padding for better visibility */
-    border-radius: 5px; /* Rounded corners */
-    z-index: 9999; /* Ensure it's above other elements */
-  }
-  
+    top: 10px;
+    /* Adjust as needed */
+    right: 10px;
+    /* Adjust as needed */
+    background-color: rgba(33, 33, 33, 0.8);
+    /* Background color with opacity */
+    padding: 5px 10px;
+    /* Padding for better visibility */
+    border-radius: 5px;
+    /* Rounded corners */
+    z-index: 9999;
+    /* Ensure it's above other elements */
+}
