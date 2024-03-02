@@ -1,0 +1,11 @@
+type Balances = record { assets : int; frontend : int };
+type ManualReply = variant { Ok : bool; Err : text };
+type ManualReply_1 = record { assets : int; frontend : int };
+type ManualReply_2 = variant { Ok : Balances; Err : text };
+type ManualReply_3 = variant { Ok : text; Err : text };
+service : () -> {
+  addCycles : (int) -> (ManualReply);
+  addCyclesToAll : (int) -> (ManualReply_1);
+  getBalances : () -> (ManualReply_2);
+  getCanisterStatus : () -> (ManualReply_3);
+}
