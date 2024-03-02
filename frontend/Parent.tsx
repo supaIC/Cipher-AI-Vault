@@ -21,7 +21,6 @@ import AssetView from "./components/AssetView";
 import AssetListItem from "./components/AssetListItem";
 import ToggleButton from "./components/ToggleButton";
 import { ICWalletList } from "./components/ICWalletList";
-import { Principal } from "@dfinity/principal";
 
 // Importing hooks for wallet functions.
 import { UserObject } from "./hooks/walletFunctions";
