@@ -8,11 +8,6 @@
         "dist/"
       ],
       "type": "assets"
-    },
-    "storage": {
-      "type": "rust",
-      "package": "storage",
-      "candid": "src/storage/storage.did"
     }
   },
   "defaults": {
