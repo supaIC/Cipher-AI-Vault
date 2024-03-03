@@ -1,5 +1,3 @@
-// ICWalletList.tsx
-
 import React from "react";
 import "../styles/index.css";
 import * as logins from "../hooks/authFunctions";
@@ -13,7 +11,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
     giveToParent(UserObject.principal, UserObject.agent, UserObject.provider);
   };
 
-  // Calls the plug login function and returns it to the parent.
   const handlePlug = async () => {
     try {
       const userObject = await logins.plugLogin(whitelist);
@@ -22,7 +19,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
       console.log(error);
     }
   };
-  // Calls the stoic login function and returns the userObject to the parent.
 
   const handleStoic = async () => {
     try {
@@ -32,7 +28,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
       console.log(error);
     }
   };
-  // Calls the NFID login function and returns the userObject to the parent.
 
   const handleNFID = async () => {
     try {
@@ -40,17 +35,15 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
     } catch (error) {
       console.log(error);
     }
-    // giveToParent(userObject.principal, userObject.agent, "NFID");
   };
 
   const handleII = async () => {
     await logins.identityLogin(grabUserObject);
-    // giveToParent(userObject.principal, userObject.agent, "Identity");
   };
 
   return (
     <div className="app">
-      <div className="header">{/* <img src={branding} /> */}</div>
+      <div className="header"></div>
       <div className="walletList">
         <h2>Please Login</h2>
         <button onClick={handlePlug}>

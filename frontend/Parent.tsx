@@ -17,7 +17,17 @@ import { HttpAgent } from "@dfinity/agent";
 import { whitelist } from "./whitelist";
 
 export function Parent() {
+  // State variables for managing the current user and assets
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
+  const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
+  const [tooltipPosition] = useState<{
+    left: number;
+    top: number;
+  }>({ left: 0, top: 0 });
+  const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  // Custom hook to manage asset-related operations
   const {
     assets,
     globalLoading,
@@ -32,14 +42,8 @@ export function Parent() {
     showUserFiles,
     toggleUserFiles,
   } = useAssetManager(currentUser, currentUser?.principal || null);
-  const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
-  const [tooltipPosition] = useState<{
-    left: number;
-    top: number;
-  }>({ left: 0, top: 0 });
-  const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
 
+  // Function to pass user information to the parent component
   const giveToParent = useCallback(
     (principal: string, agent: HttpAgent, provider: string) => {
       setCurrentUser({ principal, agent, provider });
@@ -47,12 +51,14 @@ export function Parent() {
     []
   );
 
+  // Effect to load the list of assets when currentUser changes
   useEffect(() => {
     if (currentUser) {
       loadList();
     }
   }, [currentUser, loadList, showUserFiles]);
 
+  // Effect to load images when assets change
   useEffect(() => {
     const imagesToLoad = assets.length;
     let loadedCount = 0;
@@ -79,32 +85,39 @@ export function Parent() {
     };
   }, [assets]);
 
+  // Function to open the asset view
   const openAssetView = useCallback((asset: Asset) => {
     setViewingAsset(asset);
   }, []);
 
+  // Function to close the asset view
   const closeAssetView = useCallback(() => {
     setViewingAsset(null);
   }, []);
 
+  // Function to handle cycles top-up
   const handleCyclesTopUp = async () => {
     if (currentUser) {
       await cyclesTopUp(currentUser);
     }
   };
 
+  // Function to handle logout
   const handleLogout = useCallback(() => {
     setCurrentUser(null);
   }, []);
 
+  // State variable to manage settings visibility
   const [settingsVisible, setSettingsVisible] = useState(false);
 
+  // Function to toggle settings visibility
   const toggleSettings = () => {
     setSettingsVisible((prevState) => !prevState);
   };
 
   return (
     <div className="app">
+      {/* Render settings button and dropdown if currentUser exists */}
       {currentUser && (
         <>
           <button className="settings-btn" onClick={toggleSettings}>
@@ -112,7 +125,7 @@ export function Parent() {
           </button>
 
           {settingsVisible && (
-            <div className={`settings-dropdown ${settingsVisible && 'active'}`}>
+            <div className={`settings-dropdown ${settingsVisible && "active"}`}>
               <button onClick={handleCyclesTopUp}>Donate Cycles</button>
               <button onClick={handleLogout}>Logout</button>
             </div>
@@ -120,6 +133,7 @@ export function Parent() {
         </>
       )}
 
+      {/* Render loading overlay, error notification, and delete confirmation */}
       {globalLoading && <LoadingOverlay message={loadingMessage} />}
       {error && (
         <ErrorNotification message={error} onClose={() => setError(null)} />
@@ -132,12 +146,11 @@ export function Parent() {
         />
       )}
 
+      {/* Render ICWalletList if currentUser doesn't exist */}
       {!currentUser ? (
-        <ICWalletList
-          giveToParent={giveToParent}
-          whitelist={whitelist}
-        />
+        <ICWalletList giveToParent={giveToParent} whitelist={whitelist} />
       ) : (
+        // Render upload button, toggle button, drag and drop container, asset list, and asset view
         <>
           <UploadButton
             onUpload={(file) =>
@@ -164,6 +177,7 @@ export function Parent() {
               <div className="logged-in-info">
                 Logged in as: {currentUser.principal}
               </div>
+              {/* Render AssetListItem for each asset */}
               {assets.map((asset) => (
                 <AssetListItem
                   key={asset.key}
@@ -173,6 +187,7 @@ export function Parent() {
                   onClick={() => openAssetView(asset)}
                 />
               ))}
+              {/* Render tooltip for hovered asset */}
               {hoveredAsset && (
                 <div
                   className="tooltip"
@@ -187,6 +202,7 @@ export function Parent() {
             </div>
           </DragAndDropContainer>
 
+          {/* Render AssetView for viewing asset */}
           {viewingAsset && (
             <AssetView
               asset={viewingAsset}
@@ -198,6 +214,7 @@ export function Parent() {
             />
           )}
 
+          {/* Render loading overlay if images are not loaded */}
           {!imagesLoaded && <LoadingOverlay message="Loading assets..." />}
         </>
       )}

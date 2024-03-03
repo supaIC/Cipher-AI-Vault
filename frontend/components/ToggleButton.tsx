@@ -1,12 +1,9 @@
-// ToggleButton.tsx
-
 import React from "react";
 
-// Defines the props expected by the ToggleButton component.
 interface ToggleButtonProps {
-  label: string; // Text label for the toggle button.
-  checked: boolean; // Indicates whether the toggle is in the "on" position.
-  onChange: (checked: boolean) => void; // Function to call when the toggle state changes.
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({

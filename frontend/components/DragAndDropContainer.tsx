@@ -44,7 +44,7 @@ function DragAndDropContainer({ onDrop, children }: DragAndDropContainerProps) {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={`drag-and-drop-container ${dragging ? "dragging" : ""}`}
-      style={{ width: "100%", height: "100%" }} // Set width and height to cover the entire space
+      style={{ width: "100%", height: "100%" }}
     >
       {children}
       {dragging && <div className="overlay">Drop file here to upload</div>}
