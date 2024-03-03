@@ -114,10 +114,6 @@ export const identityLogin = async (grabUserObject: any): Promise<void> => {
 };
 
 // Actor creation functions for backend and frontend to be used interchangeably
-// Tip: Run "dfx generate" when you go to build/deploy your backend canisters to generate the interface folder.
-// Then, you can copy that folder somewhere into your frontend and reference it for this function
-// By using "import * as backend from './backend'" and then calling "functions.getBackendActor(agent, backend.idlFactory)
-// To receive the actor./
 export const getBackendActor = async (
   agent: HttpAgent,
   canisterId: string,
