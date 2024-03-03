@@ -1,4 +1,3 @@
-// Import necessary dependencies and components
 import React, { useEffect, useState, useCallback } from "react";
 import UploadButton from "./components/UploadButton";
 import {
@@ -13,11 +12,10 @@ import { ICWalletList } from "./components/ICWalletList";
 import { UserObject } from "./hooks/walletFunctions";
 import { useAssetManager, Asset } from "./hooks/useAssetManager";
 import { cyclesTopUp } from "./hooks/useCyclesTopup";
+import DragAndDropContainer from "./components/DragAndDropContainer";
 import { HttpAgent } from "@dfinity/agent";
 
-// Define the Parent component
 export function Parent() {
-  // State variables for managing user, assets, loading, errors, etc.
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
   const {
     assets,
@@ -33,15 +31,14 @@ export function Parent() {
     showUserFiles,
     toggleUserFiles,
   } = useAssetManager(currentUser, currentUser?.principal || null);
-  const [dragging, setDragging] = useState<boolean>(false);
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{
     left: number;
     top: number;
   }>({ left: 0, top: 0 });
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Callback to set user information
   const giveToParent = useCallback(
     (principal: string, agent: HttpAgent, provider: string) => {
       setCurrentUser({ principal, agent, provider });
@@ -49,40 +46,38 @@ export function Parent() {
     []
   );
 
-  // Effect to load assets when user changes
   useEffect(() => {
     if (currentUser) {
       loadList();
     }
   }, [currentUser, loadList, showUserFiles]);
 
-  // Event handlers for drag and drop functionality
-  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const rect = e.currentTarget.getBoundingClientRect();
-    const { clientX, clientY } = e;
-    if (
-      clientX >= rect.left &&
-      clientX <= rect.right &&
-      clientY >= rect.top &&
-      clientY <= rect.bottom
-    ) {
-      setDragging(true);
-    }
-  }, []);
+  useEffect(() => {
+    const imagesToLoad = assets.length;
+    let loadedCount = 0;
 
-  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (!e.relatedTarget || e.relatedTarget === document.body) {
-      setDragging(false);
-    }
-  }, []);
+    const handleImageLoad = () => {
+      loadedCount++;
+      if (loadedCount === imagesToLoad) {
+        setImagesLoaded(true);
+      }
+    };
 
-  const handleMouseLeave = useCallback(() => {
-    setDragging(false);
-  }, []);
+    assets.forEach((asset) => {
+      const image = new Image();
+      image.onload = handleImageLoad;
+      image.src = asset.url;
+    });
 
-  // Function to open and close asset view
+    return () => {
+      assets.forEach((asset) => {
+        const image = new Image();
+        image.onload = null;
+        image.src = "";
+      });
+    };
+  }, [assets]);
+
   const openAssetView = useCallback((asset: Asset) => {
     setViewingAsset(asset);
   }, []);
@@ -91,45 +86,39 @@ export function Parent() {
     setViewingAsset(null);
   }, []);
 
-  // Function to handle cycles top-up
   const handleCyclesTopUp = async () => {
     if (currentUser) {
       await cyclesTopUp(currentUser);
     }
   };
 
-  // JSX structure of the Parent component
+  const handleLogout = useCallback(() => {
+    setCurrentUser(null);
+  }, []);
+
+  const [settingsVisible, setSettingsVisible] = useState(false);
+
+  const toggleSettings = () => {
+    setSettingsVisible((prevState) => !prevState);
+  };
+
   return (
-    <div
-      className="app"
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={(e) => {
-        e.preventDefault();
-        setDragging(false);
-        const file = e.dataTransfer.files[0];
-        if (file) {
-          handleFileUpload(file, currentUser?.principal || "");
-        }
-      }}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Button to donate cycles */}
+    <div className="app">
       {currentUser && (
-        <button
-          onClick={handleCyclesTopUp}
-          style={{
-            position: "absolute",
-            top: "47px",
-            left: "2%",
-            zIndex: 9,
-          }}
-        >
-          Donate Cycles
-        </button>
+        <>
+          <button className="settings-btn" onClick={toggleSettings}>
+            Settings
+          </button>
+
+          {settingsVisible && (
+            <div className={`settings-dropdown ${settingsVisible && 'active'}`}>
+              <button onClick={handleCyclesTopUp}>Donate Cycles</button>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          )}
+        </>
       )}
 
-      {/* Loading overlay, error notification, and delete confirmation */}
       {globalLoading && <LoadingOverlay message={loadingMessage} />}
       {error && (
         <ErrorNotification message={error} onClose={() => setError(null)} />
@@ -142,7 +131,6 @@ export function Parent() {
         />
       )}
 
-      {/* Render ICWalletList component if no user is logged in */}
       {!currentUser ? (
         <ICWalletList
           giveToParent={giveToParent}
@@ -153,7 +141,6 @@ export function Parent() {
         />
       ) : (
         <>
-          {/* UploadButton and ToggleButton components */}
           <UploadButton
             onUpload={(file) =>
               handleFileUpload(file, currentUser.principal || "")
@@ -166,36 +153,42 @@ export function Parent() {
             onChange={toggleUserFiles}
           />
 
-          {/* Assets container */}
-          <div className={`assets-container ${dragging ? "dragging" : ""}`}>
-            {dragging && (
-              <div className="overlay">Drop file here to upload</div>
-            )}
-            <div className="logged-in-info">
-              Logged in as: {currentUser.principal}
-            </div>
-            {/* Render AssetListItem components for each asset */}
-            {assets.map((asset) => (
-              <AssetListItem
-                key={asset.key}
-                asset={asset}
-                onMouseEnter={() => setHoveredAsset(asset)}
-                onMouseLeave={() => setHoveredAsset(null)}
-                onClick={() => openAssetView(asset)}
-              />
-            ))}
-            {/* Tooltip for hovered asset */}
-            {hoveredAsset && (
-              <div
-                className="tooltip"
-                style={{ left: tooltipPosition.left, top: tooltipPosition.top }}
-              >
-                <p>URL: {hoveredAsset.url}</p>
+          <DragAndDropContainer
+            onDrop={(e) => {
+              e.preventDefault();
+              const file = e.dataTransfer.files[0];
+              if (file) {
+                handleFileUpload(file, currentUser?.principal || "");
+              }
+            }}
+          >
+            <div className={`assets-container`}>
+              <div className="logged-in-info">
+                Logged in as: {currentUser.principal}
               </div>
-            )}
-          </div>
+              {assets.map((asset) => (
+                <AssetListItem
+                  key={asset.key}
+                  asset={asset}
+                  onMouseEnter={() => setHoveredAsset(asset)}
+                  onMouseLeave={() => setHoveredAsset(null)}
+                  onClick={() => openAssetView(asset)}
+                />
+              ))}
+              {hoveredAsset && (
+                <div
+                  className="tooltip"
+                  style={{
+                    left: tooltipPosition.left,
+                    top: tooltipPosition.top,
+                  }}
+                >
+                  <p>URL: {hoveredAsset.url}</p>
+                </div>
+              )}
+            </div>
+          </DragAndDropContainer>
 
-          {/* Render AssetView component if viewing an asset */}
           {viewingAsset && (
             <AssetView
               asset={viewingAsset}
@@ -206,6 +199,8 @@ export function Parent() {
               }}
             />
           )}
+
+          {!imagesLoaded && <LoadingOverlay message="Loading assets..." />}
         </>
       )}
     </div>

@@ -1,8 +1,8 @@
-// Import necessary hooks and dependencies
 import { useCallback, useState, useEffect } from "react";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
 import { UserObject } from "./walletFunctions";
+import { canisterId } from "../config";
 
 // Define interface for Asset object
 export interface Asset {
@@ -37,7 +37,7 @@ export function useAssetManager(
     // Return a new instance of AssetManager
     return new AssetManager({
       agent: currentUser.agent as HttpAgent,
-      canisterId: "zks6t-giaaa-aaaap-qb7fa-cai",
+      canisterId: canisterId, // Use the Canister ID from the config file
     });
   }, [currentUser, bucketName]);
 
@@ -63,9 +63,7 @@ export function useAssetManager(
       setAssets(
         filteredList.map((file) => ({
           key: file.key,
-          url: `https://zks6t-giaaa-aaaap-qb7fa-cai.raw.icp0.io/${file.key.slice(
-            1
-          )}`,
+          url: `https://${canisterId}.raw.icp0.io/${file.key.slice(1)}`, // Update the URL with the Canister ID from the config file
         }))
       );
       console.log("Assets set:", assets);
