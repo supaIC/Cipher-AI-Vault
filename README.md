@@ -79,3 +79,107 @@ const actor = await getBackendActor(UserObject.agent, canisterId, idl)
 ```
 
 Note: This documentation is dynamically expanding and will be expected to change.
+
+### `useAssetManager` Hook
+
+`useAssetManager` is a custom React hook designed for managing assets (loading, uploading, and deleting) on the Dfinity Internet Computer platform. It integrates with the @dfinity/assets package to handle asset-related operations efficiently.
+
+#### Features
+
+- Manage asset loading, uploading, and deletion.
+- Toggle between user-specific and global asset views.
+- Handle operation states and errors.
+
+#### Usage
+
+Import and initialize the hook with the current user object and bucket name:
+
+```tsx
+import { useAssetManager } from './useAssetManager';
+
+const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles, globalLoading, loadingMessage, error } = useAssetManager(currentUser, bucketName);
+```
+
+#### API Overview
+
+- `assets`: Array of assets.
+- `handleDeleteAsset(asset: Asset)`: Deletes an asset.
+- `handleFileUpload(file: File, principal: string)`: Uploads a new asset.
+- `toggleUserFiles()`: Toggles asset visibility.
+- `globalLoading`, `loadingMessage`, `error`: Operation state and error handling.
+
+#### Example
+
+```tsx
+if (globalLoading) return <p>{loadingMessage}</p>;
+if (error) return <p>Error: {error}</p>;
+
+return (
+  <div>
+    <button onClick={toggleUserFiles}>Toggle Files</button>
+    {assets.map((asset) => (
+      <div key={asset.key}>
+        <p>{asset.url}</p>
+        <button onClick={() => handleDeleteAsset(asset)}>Delete</button>
+      </div>
+    ))}
+    <input type="file" onChange={(e) => handleFileUpload(e.target.files[0], currentUser.principal)} />
+  </div>
+);
+```
+
+This simplified section provides a basic guide to using the `useAssetManager` hook for asset management in your project.
+
+### Cycles Top-Up and Actor Interaction
+
+The provided code snippets facilitate interaction with the Internet Computer (IC) platform, specifically for managing cycles top-up, creating actors for canisters, and verifying transactions on the ledger.
+
+#### Overview
+
+- **Actor Creation**: Simplifies the process of creating actors for interacting with specific canisters (cycles, ledger, and distribution).
+- **Cycles Top-Up**: Demonstrates how to convert ICP to cycles, initiate payments, and verify transactions.
+- **Transaction Verification**: Outlines steps to verify a transaction's legitimacy on the ledger.
+
+#### Actors Overview
+
+1. **Cycles Actor**: Manages operations related to cycles, such as converting ICP to cycles and querying conversion rates.
+   
+   Canister ID: `rkp4c-7iaaa-aaaaa-aaaca-cai`
+
+2. **Ledger Actor**: Facilitates ledger operations, including querying transactions and verifying transaction details.
+   
+   Canister ID: `ryjl3-tyaaa-aaaaa-aaaba-cai`
+
+3. **Distribution Actor**: Handles the distribution of cycles across different canisters, managing balances and top-up processes.
+   
+   Canister ID: `jeb4e-myaaa-aaaak-aflga-cai`
+
+#### Usage
+
+1. **Create Actors**: Utilize `createActors` to instantiate actors for cycles, ledger, and distribution canisters with the current user's agent.
+
+```ts
+const { cycles, ledger, distro } = await createActors(currentUser);
+```
+
+2. **Cycles Top-Up Process**:
+   - Convert ICP to cycles using the conversion rate.
+   - Initiate a payment (example shown uses Plug Wallet).
+   - Verify the transaction on the ledger.
+   - Top up cycles across all canisters.
+
+```ts
+await cyclesTopUp(currentUser);
+```
+
+3. **Verify Transaction**: Pass the transaction block height and the amount sent to `verifyTransaction` to ensure the transaction's accuracy.
+
+```ts
+const isVerified = await verifyTransaction(blockHeight, amountSent, ledgerActor);
+```
+
+#### Integration
+
+These functions are designed for seamless integration into your application, enabling efficient management of cycles and secure interactions with the ledger and other canisters on the Internet Computer.
+
+
