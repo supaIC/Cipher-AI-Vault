@@ -1,5 +1,3 @@
-// Importing React and necessary hooks for component functionality.
-import { useState } from "react";
 // Importing IC agent and asset manager for interacting with the Internet Computer.
 import { HttpAgent, Actor } from "@dfinity/agent";
 // Importing interfaces for cycles top-up feature..
@@ -73,8 +71,7 @@ export const cyclesTopUp = async (currentUser: any) => {
 
   // Convert ICP to cycles
   console.log("Converting rate...");
-  const conversionRate: any =
-    await actors.cycles.get_icp_xdr_conversion_rate();
+  const conversionRate: any = await actors.cycles.get_icp_xdr_conversion_rate();
   const actualRate = conversionRate.data.xdr_permyriad_per_icp.toString();
   const requiredZeros = "00000000";
   const finalRate = Number(actualRate + requiredZeros);
@@ -87,8 +84,7 @@ export const cyclesTopUp = async (currentUser: any) => {
 
   // Initiate payment using the Plug Wallet
   console.log("Handling plug payment...");
-  const to =
-    "7zdi6-6h2gk-g4j54-cigti-iiu4u-lj4vy-bewjf-oouoc-dnlck-fyfy5-aae";
+  const to = "7zdi6-6h2gk-g4j54-cigti-iiu4u-lj4vy-bewjf-oouoc-dnlck-fyfy5-aae";
   const amount = amountOfICP * 100000000;
   console.log(amount);
   const memo = "Testing";

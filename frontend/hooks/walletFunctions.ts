@@ -5,7 +5,6 @@ import { AuthClient } from "@dfinity/auth-client";
 import { StoicIdentity } from "ic-stoic-identity";
 
 // Declaration of UserObject to be returned to the parent frontend
-
 export type UserObject = {
   principal: string;
   agent: HttpAgent | Actor | undefined;
@@ -15,7 +14,6 @@ export type UserObject = {
 // Individual login handlers for each provider
 
 // Plug
-
 export const plugLogin = async (whitelist: string[]): Promise<UserObject> => {
   await (window as any).ic.plug.requestConnect({ whitelist });
   const agent = (window as any).ic.plug.agent;
@@ -31,7 +29,6 @@ export const plugLogin = async (whitelist: string[]): Promise<UserObject> => {
 };
 
 // Stoic
-
 export const stoicLogin = async (whitelist: string[]): Promise<UserObject> => {
   let identity;
   //@ts-ignore
@@ -50,7 +47,6 @@ export const stoicLogin = async (whitelist: string[]): Promise<UserObject> => {
 };
 
 // NFID
-
 export const nfidLogin = async (grabUserObject: any): Promise<void> => {
   const appName = "supabase-IC";
   const appLogo = "https://nfid.one/icons/favicon-96x96.png";
@@ -89,7 +85,6 @@ export const nfidLogin = async (grabUserObject: any): Promise<void> => {
 };
 
 // Internet Identity
-
 export const identityLogin = async (grabUserObject: any): Promise<void> => {
   let identity;
   const handleUserObject = async (identity: Identity) => {
@@ -123,7 +118,6 @@ export const identityLogin = async (grabUserObject: any): Promise<void> => {
 // Then, you can copy that folder somewhere into your frontend and reference it for this function
 // By using "import * as backend from './backend'" and then calling "functions.getBackendActor(agent, backend.idlFactory)
 // To receive the actor./
-
 export const getBackendActor = async (
   agent: HttpAgent,
   canisterId: string,
