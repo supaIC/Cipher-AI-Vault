@@ -5,6 +5,9 @@ import * as cycles from "../interfaces/cmc/cmc";
 import * as ledger from "../interfaces/ledger/index";
 import * as distro from "../interfaces/distro/index";
 
+// Importing the wallet address along with the canisterId
+import { walletAddress } from "../config";
+
 // Function to create actors for interacting with various canisters
 export const createActors = async (currentUser: any) => {
   // Create actors for cycles, ledger, and distro canisters
@@ -78,7 +81,7 @@ export const cyclesTopUp = async (currentUser: any) => {
 
   // Initiate payment using the Plug Wallet
   console.log("Handling plug payment...");
-  const to = "7zdi6-6h2gk-g4j54-cigti-iiu4u-lj4vy-bewjf-oouoc-dnlck-fyfy5-aae";
+  const to = walletAddress;
   const amount = amountOfICP * 100000000;
   console.log(amount);
   const memo = "Testing";
