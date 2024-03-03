@@ -14,6 +14,7 @@ import { useAssetManager, Asset } from "./hooks/useAssetManager";
 import { cyclesTopUp } from "./hooks/useCyclesTopup";
 import DragAndDropContainer from "./components/DragAndDropContainer";
 import { HttpAgent } from "@dfinity/agent";
+import { whitelist } from "./whitelist";
 
 export function Parent() {
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
@@ -134,10 +135,7 @@ export function Parent() {
       {!currentUser ? (
         <ICWalletList
           giveToParent={giveToParent}
-          whitelist={[
-            "zks6t-giaaa-aaaap-qb7fa-cai",
-            "jeb4e-myaaa-aaaak-aflga-cai",
-          ]}
+          whitelist={whitelist}
         />
       ) : (
         <>
