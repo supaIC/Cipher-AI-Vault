@@ -28,6 +28,8 @@ export function Parent() {
     loadList,
     handleDeleteAsset,
     handleFileUpload,
+    showUserFiles,
+    toggleUserFiles,
   } = useAssetManager(currentUser, currentUser?.principal || null);
   const [dragging, setDragging] = useState<boolean>(false);
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
@@ -35,7 +37,6 @@ export function Parent() {
     left: number;
     top: number;
   }>({ left: 0, top: 0 });
-  const [showUserFiles, setShowUserFiles] = useState<boolean>(false);
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
 
   const giveToParent = useCallback(
@@ -47,7 +48,7 @@ export function Parent() {
 
   useEffect(() => {
     if (currentUser) {
-      loadList(showUserFiles);
+      loadList();
     }
   }, [currentUser, loadList, showUserFiles]);
 
@@ -87,10 +88,6 @@ export function Parent() {
 
   const closeAssetView = useCallback(() => {
     setViewingAsset(null);
-  }, []);
-
-  const toggleUserFiles = useCallback(() => {
-    setShowUserFiles((prevState) => !prevState);
   }, []);
 
   const handleCyclesTopUp = async () => {
