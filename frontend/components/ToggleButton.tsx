@@ -26,17 +26,21 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
   checked,
   onChange,
 }) => {
-  // Event handler for when the toggle is clicked.
   const handleToggle = () => {
-    onChange(!checked); // Inverts the current state and triggers the onChange callback.
+    onChange(!checked);
   };
 
-  // Render the checkbox input as a toggle button with an associated label.
   return (
     <div className="toggle-button">
       <label>
-        <input type="checkbox" checked={checked} onChange={handleToggle} />
-        {label} {/* Display the label text next to the toggle */}
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={handleToggle}
+          className="toggle-checkbox"
+        />
+        <span className="toggle-switch"></span>
+        {label}
       </label>
     </div>
   );
