@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from "react";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
-import { UserObject } from "./walletFunctions";
+import { UserObject } from "./authFunctions";
 import { canisterId } from "../config";
 
 // Define interface for Asset object

@@ -8,17 +8,6 @@ interface UploadButtonProps {
   disabled: boolean; // Boolean to enable or disable the upload functionality.
 }
 
-/**
- * UploadButton component provides an interface for users to upload files either
- * by selecting them through a file input or by dragging and dropping them onto the component.
- *
- * Props:
- * - onUpload: A function that is called when a file is selected or dropped onto the component.
- * - disabled: A boolean that disables the input and changes the label if true.
- *
- * The component listens for drag-and-drop events as well as changes to the file input field to trigger uploads.
- * It is designed to be flexible and reusable in any part of the application that requires file uploading capability.
- */
 const UploadButton: React.FC<UploadButtonProps> = ({ onUpload, disabled }) => {
   // Handles the drop event by preventing the default action, retrieving the file from the event, and calling onUpload.
   const handleDrop = useCallback(

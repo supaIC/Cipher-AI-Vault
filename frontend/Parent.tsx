@@ -9,7 +9,7 @@ import AssetView from "./components/AssetView";
 import AssetListItem from "./components/AssetListItem";
 import ToggleButton from "./components/ToggleButton";
 import { ICWalletList } from "./components/ICWalletList";
-import { UserObject } from "./hooks/walletFunctions";
+import { UserObject } from "./hooks/authFunctions";
 import { useAssetManager, Asset } from "./hooks/useAssetManager";
 import { cyclesTopUp } from "./hooks/useCyclesTopup";
 import DragAndDropContainer from "./components/DragAndDropContainer";

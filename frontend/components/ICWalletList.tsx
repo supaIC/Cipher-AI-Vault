@@ -2,7 +2,7 @@
 
 import React from "react";
 import "../styles/index.css";
-import * as logins from "../hooks/walletFunctions";
+import * as logins from "../hooks/authFunctions";
 import dfinity from "../logos/dfinity.png";
 import plug from "../logos/plug.png";
 import stoic from "../logos/stoic.png";
@@ -14,7 +14,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
   };
 
   // Calls the plug login function and returns it to the parent.
-
   const handlePlug = async () => {
     try {
       const userObject = await logins.plugLogin(whitelist);
@@ -23,7 +22,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
       console.log(error);
     }
   };
-
   // Calls the stoic login function and returns the userObject to the parent.
 
   const handleStoic = async () => {
@@ -34,7 +32,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
       console.log(error);
     }
   };
-
   // Calls the NFID login function and returns the userObject to the parent.
 
   const handleNFID = async () => {

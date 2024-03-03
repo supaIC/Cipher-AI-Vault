@@ -14,17 +14,6 @@ interface AssetListItemProps {
   onClick: () => void; // Function to call when the item is clicked.
 }
 
-/**
- * AssetListItem component renders an individual asset item, showing a thumbnail
- * and the asset's name. It supports mouse interaction events including entering,
- * leaving, and clicking the asset item.
- *
- * Props:
- * - asset: Contains the information about the asset to be displayed.
- * - onMouseEnter: Handler for mouse enter event.
- * - onMouseLeave: Handler for mouse leave event.
- * - onClick: Handler for click event.
- */
 const AssetListItem: React.FC<AssetListItemProps> = ({
   asset,
   onMouseEnter,

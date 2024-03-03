@@ -15,15 +15,6 @@ interface AssetViewProps {
   onDelete: () => void; // Function to call to delete the asset.
 }
 
-/**
- * AssetView component provides a detailed view of a selected asset. It includes
- * functionality to view the asset in a new tab, close the asset view, and delete the asset.
- *
- * Props:
- * - asset: Contains the information about the asset to be displayed in detail.
- * - onClose: Handler for closing the asset view.
- * - onDelete: Handler for initiating the deletion process of the asset.
- */
 const AssetView: React.FC<AssetViewProps> = ({ asset, onClose, onDelete }) => {
   return (
     <div className="asset-view">

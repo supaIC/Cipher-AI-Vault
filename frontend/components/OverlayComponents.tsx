@@ -7,10 +7,6 @@ interface LoadingOverlayProps {
   message: string; // The message to display within the loading overlay.
 }
 
-/**
- * LoadingOverlay component displays a simple overlay with a loading message.
- * Useful for indicating to the user that an asynchronous operation is in progress.
- */
 export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ message }) => (
   <div className="overlay">
     <div className="loading">{message}</div>
@@ -23,10 +19,6 @@ interface ErrorNotificationProps {
   onClose: () => void; // Handler for closing the error notification.
 }
 
-/**
- * ErrorNotification component shows an error message with a close button.
- * Allows users to be informed of errors and dismiss the notification.
- */
 export const ErrorNotification: React.FC<ErrorNotificationProps> = ({
   message,
   onClose,
@@ -45,10 +37,6 @@ interface DeleteConfirmationProps {
   onCancel: () => void; // Handler for cancelling the deletion.
 }
 
-/**
- * DeleteConfirmation component presents a confirmation dialog to the user
- * when they attempt to delete an asset. Includes options to confirm or cancel the action.
- */
 export const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
   asset,
   onConfirm,
