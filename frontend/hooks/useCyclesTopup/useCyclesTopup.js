@@ -17,9 +17,9 @@ const CONVERSION_DETAILS = {
 };
 
 // Function to create actors for interacting with various canisters
-export const createActors = async (currentUser: any) => {
+export const createActors = async (currentUser) => {
   try {
-    const actors: { [key: string]: any } = {};
+    const actors = {};
 
     const canisters = [
       { name: "cycles", id: CANISTER_IDS.cycles, factory: cycles.idlFactory },
@@ -29,7 +29,7 @@ export const createActors = async (currentUser: any) => {
 
     for (const { name, id, factory } of canisters) {
       actors[name] = Actor.createActor(factory, {
-        agent: currentUser.agent as HttpAgent,
+        agent: currentUser.agent,
         canisterId: id,
       });
     }
@@ -43,17 +43,17 @@ export const createActors = async (currentUser: any) => {
 
 // Function to verify a transaction on the ledger
 export const verifyTransaction = async (
-  block_height: number,
-  amount_sent: number,
-  actor: any
+  block_height,
+  amount_sent,
+  actor
 ) => {
   try {
     const ledgerActor = actor;
-    const result: any = await ledgerActor.query_blocks({
+    const result = await ledgerActor.query_blocks({
       start: block_height,
       length: 1,
     });
-    const transferInfo = result!.blocks[0].transaction.operation[0].Transfer;
+    const transferInfo = result.blocks[0].transaction.operation[0].Transfer;
     const transferredAmount = Number(transferInfo.amount.e8s);
     return transferredAmount === amount_sent;
   } catch (error) {
@@ -63,12 +63,12 @@ export const verifyTransaction = async (
 };
 
 // Function to handle the cycles top-up process
-export const cyclesTopUp = async (currentUser: any) => {
+export const cyclesTopUp = async (currentUser) => {
   try {
     const actors = await createActors(currentUser);
 
     console.log("Converting rate...");
-    const conversionRate: any =
+    const conversionRate =
       await actors.cycles.get_icp_xdr_conversion_rate();
     const actualRate = conversionRate.data.xdr_permyriad_per_icp.toString();
     const finalRate = Number(actualRate + CONVERSION_DETAILS.zeros);
@@ -79,7 +79,7 @@ export const cyclesTopUp = async (currentUser: any) => {
 
     console.log("Handling plug payment...");
     const amount = CONVERSION_DETAILS.rate * 100000000;
-    const result = await (window as any).ic.plug.requestTransfer({
+    const result = await window.ic.plug.requestTransfer({
       to: walletAddress,
       amount,
       memo: "Testing",
