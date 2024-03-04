@@ -30,6 +30,7 @@
     }
   },
   "include": [
-    "./frontend/"
+    "./frontend/",
+    "src/**/*.ts", "src/**/*.d.ts"
   ]
 }

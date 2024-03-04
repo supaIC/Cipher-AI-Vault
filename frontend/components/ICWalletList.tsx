@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/index.css";
-import * as logins from "../hooks/authFunctions";
+import * as logins from "../hooks/authFunctions/authFunctions";
 import dfinity from "../logos/dfinity.png";
 import plug from "../logos/plug.png";
 import stoic from "../logos/stoic.png";

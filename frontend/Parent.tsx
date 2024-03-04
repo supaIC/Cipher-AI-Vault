@@ -9,12 +9,11 @@ import AssetView from "./components/AssetView";
 import AssetListItem from "./components/AssetListItem";
 import ToggleButton from "./components/ToggleButton";
 import { ICWalletList } from "./components/ICWalletList";
-import { UserObject } from "./hooks/authFunctions";
-import { useAssetManager, Asset } from "./hooks/useAssetManager";
-import { cyclesTopUp } from "./hooks/useCyclesTopup";
+import { useAssetManager, Asset, UserObject } from "./hooks/assetManager/assetManager";
+import { cyclesTopUp } from "./hooks/useCyclesTopup/useCyclesTopup";
 import DragAndDropContainer from "./components/DragAndDropContainer";
 import { HttpAgent } from "@dfinity/agent";
-import { whitelist } from "./whitelist";
+import { whitelist } from "./config";
 
 export function Parent() {
   // State variables for managing the current user and assets
@@ -36,7 +35,7 @@ export function Parent() {
     setError,
     confirmDelete,
     setConfirmDelete,
-    loadList,
+    loadAssetList,
     handleDeleteAsset,
     handleFileUpload,
     showUserFiles,
@@ -54,9 +53,10 @@ export function Parent() {
   // Effect to load the list of assets when currentUser changes
   useEffect(() => {
     if (currentUser) {
-      loadList();
+      loadAssetList(); // Replace loadList with loadAssetList
     }
-  }, [currentUser, loadList, showUserFiles]);
+  }, [currentUser, loadAssetList, showUserFiles]);
+
 
   // Effect to load images when assets change
   useEffect(() => {
