@@ -1,10 +1,10 @@
 import React from "react";
 import "../styles/index.css";
 import * as logins from "../hooks/authFunctions/authFunctions";
-import dfinity from "../logos/dfinity.png";
-import plug from "../logos/plug.png";
-import stoic from "../logos/stoic.png";
-import nfid from "../logos/nfid.png";
+import dfinity from "../assets/logos/dfinity.png";
+import plug from "../assets/logos/plug.png";
+import stoic from "../assets/logos/stoic.png";
+import nfid from "../assets/logos/nfid.png";
 
 export function ICWalletList({ giveToParent, whitelist }: any) {
   const grabUserObject = async (UserObject: logins.UserObject) => {

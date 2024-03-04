@@ -1,5 +1,5 @@
 // Imports
-import { HttpAgent, Actor } from "@dfinity/agent";
+import { Actor } from "@dfinity/agent";
 import * as cycles from "./interfaces/cmc/cmc";
 import * as ledger from "./interfaces/ledger/index";
 import * as distro from "./interfaces/distro/index";
