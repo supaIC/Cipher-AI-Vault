@@ -99,3 +99,16 @@ The Parent component serves as the central UI for the module, integrating authen
 
 The IC Storage Module offers a robust solution for developers looking to integrate authentication, asset management, and cycles top-up functionality within their DApps on the Internet Computer platform. By leveraging this module, developers can streamline user interactions, manage digital assets efficiently, and handle resource allocation seamlessly.
 
+
+
+### TO DO
+
+- Add an Azle HTPP outcall canister as its own canister, similar to how we brought in the distro canister. we need to adapt it so that it no longer requires its own frontend, but instead just exposes the /chat canister api endpoint. we then will call this from our frontend/ canister.
+
+- We should then make a seperate UI page for talking to the /chat endpoint thats within our frontend/ code 
+
+- We should add the ability to upload and display documents into the storage
+
+- We need to add the Vectra package so that we can vectorize the docs 
+
+- from there, we need to feed the memory into the openai api calls so the AI can have memory

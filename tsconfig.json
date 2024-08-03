@@ -30,7 +30,7 @@
     }
   },
   "include": [
-    "./frontend/",
+    "src/frontendd",
     "src/**/*.ts", "src/**/*.d.ts"
-  ]
+, "frontend/hooks/chatAzleFetchetch"  ]
 }
