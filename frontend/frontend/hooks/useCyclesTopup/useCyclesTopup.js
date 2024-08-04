@@ -87,7 +87,7 @@ export const cyclesTopUp = async (currentUser) => {
     console.log("The result of the transfer is:", result);
 
     const verified = await verifyTransaction(
-      result.height,
+      result.height.height,
       amount,
       actors.ledger
     );

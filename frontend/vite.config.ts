@@ -77,6 +77,7 @@ export default defineConfig({
     fs: {
       allow: ["."],
     },
+    port: 3000,
     proxy: {
       // This proxies all http requests made to /api to our running dfx instance
       "/api": {
