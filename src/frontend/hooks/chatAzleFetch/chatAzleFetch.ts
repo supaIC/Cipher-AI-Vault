@@ -4,7 +4,7 @@ import { ic, query, Server } from 'azle';
 import { HttpTransformArgs, HttpResponse } from 'azle/canisters/management';
 import express from 'express';
 
-const OPENAI_API_KEY = 'sk-proj-whgDkiJEtTtnVI8bedrGT3BlbkFJ5vf2GkO1NjtZKSfKLTgK'; // Replace with your OpenAI API key
+const OPENAI_API_KEY = 'add-openai-key-here'; // Replace with your OpenAI API key
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
 const chatAzleFetch = Server(
