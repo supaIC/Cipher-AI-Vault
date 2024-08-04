@@ -5,11 +5,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "setup": "npm run setup-distro && npm run setup-frontend",
-    "setup-frontend": "cd frontend && npm run setup",
-    "deploy frontend": "cd frontend && npm run deploy",
-    "setup-distro": "cd distro-canister && npm install && npm audit fix && dfx start --clean --background && dfx deploy && dfx stop && echo 'Your project has been successfully setup!'",
-    "deploy-distro": "cd distro-canister && npm run reinstall"
+    "setup": "npm install && npm audit fix && dfx start --clean --background && dfx deploy && dfx stop && echo 'The frontend has been setup successfully!'",
+    "deploy": "dfx deploy --network ic"
   },
   "dependencies": {
     "@dfinity/agent": "0.19.3",
@@ -22,6 +19,7 @@
     "@types/express": "^4.17.21",
     "@types/react-dnd": "^3.0.2",
     "axios": "^1.7.2",
+    "azle": "^0.21.1",
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
