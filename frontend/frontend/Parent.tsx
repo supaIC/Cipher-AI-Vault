@@ -15,6 +15,8 @@ import DragAndDropContainer from "./components/DragAndDropContainer";
 import { HttpAgent } from "@dfinity/agent";
 import { whitelist } from "./config";
 import ChatComponent from "./components/ChatComponent";
+import * as auth from "./hooks/authFunctions/authFunctions";
+import * as distro from "./interfaces/distro";
 
 export function Parent() {
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
@@ -101,6 +103,14 @@ export function Parent() {
     setSettingsVisible((prevState) => !prevState);
   };
 
+  const getBalances = async () => {
+    if (currentUser) {
+      const backendActor = await auth.getBackendActor(currentUser.agent, "jeb4e-myaaa-aaaak-aflga-cai", distro.idlFactory);
+      const balances = await backendActor.getBalances();
+      console.log(balances);
+    }
+  }
+
   return (
     <div className="app">
       {currentUser && (
@@ -113,6 +123,7 @@ export function Parent() {
             <div className={`settings-dropdown ${settingsVisible && "active"}`}>
               <button onClick={handleCyclesTopUp}>Donate Cycles</button>
               <button onClick={handleLogout}>Logout</button>
+              <button onClick={getBalances} >Get Balances</button>
             </div>
           )}
         </>
