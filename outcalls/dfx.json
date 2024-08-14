@@ -1,19 +1,19 @@
 {
     "canisters": {
-        "backend": {
+        "outcalls": {
             "type": "custom",
-            "main": "src/backend/index.ts",
-            "candid": "src/backend/index.did",
+            "main": "src/outcalls/index.ts",
+            "candid": "src/outcalls/index.did",
             "candid_gen": "http",
-            "build": "npx azle backend",
-            "wasm": ".azle/backend/backend.wasm",
+            "build": "npx azle outcalls",
+            "wasm": ".azle/outcalls/outcalls.wasm",
             "gzip": true,
             "assets": [["src/frontend/dist", "dist"]],
             "build_assets": "npm run build",
             "metadata": [
                 {
                     "name": "candid:service",
-                    "path": "src/backend/index.did"
+                    "path": "src/outcalls/index.did"
                 },
                 {
                     "name": "cdk:name",

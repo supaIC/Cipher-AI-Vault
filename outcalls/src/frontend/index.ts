@@ -33,7 +33,10 @@ export class AzleApp extends LitElement {
     });
 
     const responseJson = await response.json();
+    console.log("Custom Response:");
+    console.log(responseJson);
     const message = responseJson.choices?.[0]?.message?.content;
+    console.log(message);
 
     if (message) {
       this.chatHistory += `<p><strong>You:</strong> ${promptInput.value}</p>`;
