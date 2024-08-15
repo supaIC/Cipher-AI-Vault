@@ -2,8 +2,8 @@ import { ic, query, Server } from 'azle';
 import { HttpTransformArgs, HttpResponse } from 'azle/canisters/management';
 import express from 'express';
 
-const OPENAI_API_KEY = 'sk-proj-GSqQr81iwkaLSaH6cwveT3BlbkFJmIM2GEGiZW6Cfmd83iTO';
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+const ANTHROPIC_API_KEY = 'your-key-API-here'; // Your Anthropic API key here
+const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'; // Correct endpoint
 
 export default Server(
     () => {
@@ -12,20 +12,20 @@ export default Server(
         app.use(express.json());
 
         app.post('/chat', async (req, res) => {
-            const { prompt, model, max_tokens, temperature } = req.body;
+            const { messages, max_tokens } = req.body;
 
             try {
-                const response = await fetch(OPENAI_API_URL, {
+                const response = await fetch(ANTHROPIC_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'x-api-key': ANTHROPIC_API_KEY, // API key for authentication
+                        'anthropic-version': '2023-06-01' // Required header for Anthropic API
                     },
                     body: JSON.stringify({
-                        model,
-                        messages: [{ role: 'user', content: prompt }],
-                        max_tokens,
-                        temperature,
+                        model: 'claude-3-5-sonnet-20240620', // Hardcoded model
+                        messages: messages || [], // Ensure messages is an array
+                        max_tokens: max_tokens || 1024, // Default value if not provided
                     }),
                 });
 
