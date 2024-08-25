@@ -15,7 +15,7 @@ export default Server(
         
             try {
                 ic.setOutgoingHttpOptions({
-                    cycles: 30000000000n
+                    cycles: 300000000000n
                 });
 
                 const response = await fetch(PROXY_URL, {
