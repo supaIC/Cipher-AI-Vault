@@ -118,3 +118,11 @@ There are many Azle examples in the [examples directory](https://github.com/deme
 -   [ic_evm_rpc](https://github.com/demergent-labs/azle/tree/main/examples/ic_evm_rpc)
 -   [sqlite](https://github.com/demergent-labs/azle/tree/main/examples/sqlite)
 -   [web_assembly](https://github.com/demergent-labs/azle/tree/main/examples/web_assembly)
+
+
+
+
+
+Useful Commands:
+
+- dfx canister status --all

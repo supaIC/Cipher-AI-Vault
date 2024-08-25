@@ -2,8 +2,7 @@ import { ic, query, Server } from 'azle';
 import { HttpTransformArgs, HttpResponse } from 'azle/canisters/management';
 import express from 'express';
 
-const ANTHROPIC_API_KEY = 'your-key-API-here'; // Your Anthropic API key here
-const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'; // Correct endpoint
+const PROXY_URL = 'https://us-central1-openai-proxy-ea66c.cloudfunctions.net/openai/chat/completions';
 
 export default Server(
     () => {
@@ -12,24 +11,38 @@ export default Server(
         app.use(express.json());
 
         app.post('/chat', async (req, res) => {
-            const { messages, max_tokens } = req.body;
-
+            const { prompt, model, max_tokens, temperature } = req.body;
+        
             try {
-                const response = await fetch(ANTHROPIC_API_URL, {
+                ic.setOutgoingHttpOptions({
+                    cycles: 30000000000n
+                });
+
+                const response = await fetch(PROXY_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': ANTHROPIC_API_KEY, // API key for authentication
-                        'anthropic-version': '2023-06-01' // Required header for Anthropic API
+                        'idempotency-key': req.get('idempotency-key') || 'default-key',
                     },
                     body: JSON.stringify({
-                        model: 'claude-3-5-sonnet-20240620', // Hardcoded model
-                        messages: messages || [], // Ensure messages is an array
-                        max_tokens: max_tokens || 1024, // Default value if not provided
+                        model,
+                        messages: [{ role: 'user', content: prompt }],
+                        max_tokens,
+                        temperature,
                     }),
                 });
-
+                console.log(response);
+        
+                if (!response.ok) {
+                    // Log the status code, status text, and response body
+                    const errorText = await response.text();
+                    console.error('OpenAI API error:', response.status, response.statusText, errorText);
+                    res.status(response.status).json({ error: 'OpenAI API error', details: errorText });
+                    return;
+                }
+        
                 const responseJson = await response.json();
+                console.log('OpenAI API response JSON:', responseJson);
                 res.json(responseJson);
             } catch (error) {
                 console.error('Error:', error);
