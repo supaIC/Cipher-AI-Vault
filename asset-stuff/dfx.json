@@ -1,8 +1,8 @@
 {
   "canisters": {
-    "temp_frontend": {
+    "src": {
       "source": [
-        "src/temp_frontend/dist"
+        "dist"
       ],
       "type": "assets"
     }
