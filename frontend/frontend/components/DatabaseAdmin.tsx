@@ -94,7 +94,7 @@ const DatabaseAdmin: React.FC = () => {
 
       const queryEmbedding = await getEmbedding(searchQuery);
       // @ts-ignore
-      const results: SearchResult[] = await index.search(queryEmbedding, { topK: 5, useStorage: "indexedDB" });
+      const results: SearchResult[] = await index.search(queryEmbedding, { topK: 3, useStorage: "indexedDB" });
 
       setSearchResult(results || []);
       log(`Search completed for: "${searchQuery}".`);
@@ -301,8 +301,6 @@ const DatabaseAdmin: React.FC = () => {
               searchResult.map((result, index) => (
                 <div key={index}>
                   <p>
-                    <strong>Match:</strong> {result.input} <br />
-                    <strong>Distance:</strong> {result.distance} <br />
                     <strong>Metadata:</strong> {JSON.stringify(result.object)}
                   </p>
                 </div>
@@ -377,13 +375,23 @@ const DatabaseAdmin: React.FC = () => {
 
         {status === "ready" && (
           <div ref={chatContainerRef} className="chat-section-wrapper">
-            <div className="chat-messages-wrapper">
-              {messages.map((msg, index) => (
-                <p key={index}>
-                  <strong>{msg.role}:</strong> {msg.content}
+            {messages.length === 0 ? (
+              <div className="welcome-message-wrapper">
+                <h2>Welcome to CipherVault IC!</h2>
+                <p>
+                  The model has successfully loaded. You can now start interacting with the AI.
+                  Type a message in the box below to begin!
                 </p>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <div className="chat-messages-wrapper">
+                {messages.map((msg, index) => (
+                  <p key={index}>
+                    <strong>{msg.role}:</strong> {msg.content}
+                  </p>
+                ))}
+              </div>
+            )}
             <p className="chat-info-text">
               {tps && messages.length > 0 && (
                 <>

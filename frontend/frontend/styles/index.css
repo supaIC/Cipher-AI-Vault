@@ -87,7 +87,7 @@ button:hover {
     /* 1200px */
     max-height: calc(100vh - 8.75rem);
     /* Adjust the height as needed */
-    overflow-y: auto;
+    overflow-y: hidden;
     padding: 1.25rem;
     /* 20px */
 }
