@@ -18,7 +18,7 @@ You will need to have DFX and NodeJS set up to use this repo. This project uses 
 
 To set up and run the current version, ensure you have the following installed:
 - **NodeJS:** v20.11.1
-- **DFX:** v0.20.1
+- **DFX:** v0.21.0
 
 Run these commands to get your environment up and running:
 
