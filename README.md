@@ -54,6 +54,7 @@ npm run dev
 or
 
 ```bash
+cd frontend
 dfx start --background --clean
 dfx deploy
 dfx stop

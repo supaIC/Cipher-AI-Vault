@@ -3,6 +3,8 @@
 
 This canister is in charge of automatically topping up Upstreet canisters.
 
+Findn the Cycles Distro open source code [here](https://github.com/supaIC/cycles-distro).
+
 ### Getting Setup:
 
 As long as you have already installed and configured Node, Rust, and DFX, the easy setup command should take care of everything for you.
