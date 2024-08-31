@@ -81,8 +81,8 @@ const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles } = useAsse
 
 ### 🧠 VectorDB + LLM Integration
 
-- The code for the LLM can be found in the [`llm.js`](#) file (link the file from GitHub [here](#)).
-- The code for the VectorDB is located in the [`DatabaseAdmin.tsx`](#) file (link the file from GitHub [here](#)).
+- The code for the LLM can be found in the [`llm.js`](#) file [here](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/components/llm.js).
+- The code for the VectorDB is located in the [`DatabaseAdmin.tsx`](#) file [here](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/components/DatabaseAdmin.tsx).
 
 This integration leverages the following packages:
 - [`@Xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers)
