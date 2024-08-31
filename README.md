@@ -67,7 +67,7 @@ For comprehensive usage instructions and examples, please refer to the [ic-auth 
 
 ### 🗂️ Asset Management
 
-The [`useAssetManager`](#) hook (add the GitHub code link [here](#)) is the core utility for managing assets, offering robust functionality to efficiently load, upload, and delete assets.
+The [`useAssetManager`](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/hooks/assetManager/assetManager.js) hook is the core utility for managing assets, offering robust functionality to efficiently load, upload, and delete assets.
 
 **Features:**
 - Load and display assets with support for various file types and use cases.
