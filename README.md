@@ -1,14 +1,18 @@
-# CipherVault IC
-## Version 1.0.0
+# 🔐 CipherVault IC 🚀
+## Version 1.1.1
 
-Welcome to the CipherVault IC demo repo, a comprehensive demo for ic-auth, asset storage, in-memory vectorDB + LLM, and cycles-distro top-up integrations for the Internet Computer (IC).
+Welcome to the **CipherVault IC** demo repository—a fully in-browser, in-memory showcase of the Internet Computer's (IC) cutting-edge capabilities. This demo seamlessly integrates `ic-auth` for secure authentication, asset storage, an in-memory VectorDB with LLM, and cycles-distro top-up functionality. With zero server-side components, CipherVault IC highlights the power and versatility of the Internet Computer's decentralized architecture, demonstrating its potential to run sophisticated applications entirely within a sandboxed environment.
 
-### Prerequisites
-- DFX 0.20.1
-- Dfinity package versions 0.19.3
-- Recommended Node.js version (versions 20+)
+*The demo is a proof of concept and is not intended for production use. This project is part of a [Developer Grant from the DFINITY Foundation](https://dfinity.org/grants).*
 
-### Setup Instructions
+*The demo canister is currently running on the following canister url: https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/*
+
+### ⚙️ Prerequisites
+
+- **DFX 0.20.1**: Ensure you have the correct version of DFX installed to support the demo's functionality.
+- **Node.js (version 20+)**: Use the recommended version of Node.js to ensure compatibility and optimal performance.
+
+### 🛠️ Setup Instructions
 
 **Clone and Set Up:**
 ```bash
@@ -16,57 +20,69 @@ git clone https://github.com/supaIC/ic-storage-module.git
 cd ic-storage-module
 npm run setup
 ```
-*Note: Enter your DFX identity password if prompted during setup.*
+*Note: You may be prompted to enter your DFX identity password during setup.*
 
-**Developer Mode:**
+**👨‍💻 Developer Mode:**
 ```bash
 npm run dev
 ```
 
-### Authentication
+or
 
-The demo uses the `ic-auth` package for managing user authentication. `ic-auth` provides a modular and easy-to-use solution for integrating various wallet providers on the Internet Computer.
+```bash
+dfx start --background --clean
+dfx deploy
+dfx stop
+```
 
-For detailed usage instructions and examples, please refer to the [ic-auth README](https://github.com/cp-daniel-mccoy/ic-auth#readme).
+### 🔑 Authentication
 
-### Asset Management
+This demo leverages the `ic-auth` package to manage user authentication, offering a modular and user-friendly solution for integrating multiple wallet providers on the Internet Computer. Supported wallets include **Plug**, **Stoic**, **NFID**, and **Internet Identity**.
 
-The `useAssetManager` hook is central to managing assets, providing functionality to load, upload, and delete assets efficiently.
+For comprehensive usage instructions and examples, please refer to the [ic-auth README](https://github.com/cp-daniel-mccoy/ic-auth#readme).
+
+### 🗂️ Asset Management
+
+The [`useAssetManager`](#) hook (add the GitHub code link [here](#)) is the core utility for managing assets, offering robust functionality to efficiently load, upload, and delete assets.
 
 **Features:**
-- Load and display assets with support for user-specific and global views.
+- Load and display assets with support for various file types and use cases.
 - Upload new assets and delete existing ones.
-- Manage loading states and error messages dynamically.
+- Dynamically manage loading states and handle error messages.
 
 **Usage:**
 ```typescript
 const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles } = useAssetManager(currentUser, bucketName);
 ```
 
-### VectorDB + LLM Integration
+### 🧠 VectorDB + LLM Integration
 
-The code for the LLM can be found in the llm.js file (link the file form github here).
+- The code for the LLM can be found in the [`llm.js`](#) file (link the file from GitHub [here](#)).
+- The code for the VectorDB is located in the [`DatabaseAdmin.tsx`](#) file (link the file from GitHub [here](#)).
 
-The code for the VectorDB can be found in the DatabaseAdmin.tsx file (link the file form github here).
+This integration leverages the following packages:
+- [`@Xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers)
+- A custom version of [`client-vector-search`](https://github.com/yusufhilmi/client-vector-search)
 
-We use the following packages:
- - [@Xenova/transformers](https://www.npmjs.com/package/@xenova/transformers)
- - A custom version of ["client-vector-search"](https://github.com/yusufhilmi/client-vector-search). The code forthe custom implementation is here (link custom github link here).
+### Models Used:
+- **For embeddings**: [`all-MiniLM-L6-v2`](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
+- **For LLM**: [`Phi-3-mini-4k-instruct-fp16`](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
 
-The models used are:
- - For embeddings -  [all-MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
- - For LLM - [Phi-3-mini-4k-instruct-fp16](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
+### 🔄 Cycles Top-Up
 
-### Cycles Top-Up
+This feature facilitates the conversion of ICP into cycles, enabling seamless payments and transactions within the Internet Computer (IC) ecosystem.
 
-This feature enables the conversion of ICP to cycles, facilitating payments and transactions within the IC ecosystem.
+We have developed an open source stand-alone module for Cycles Distro, which can be found [here](https://github.com/supaIC/cycles-distro).
 
-Update this section to detail the newly used "cycles-distro" package.
+**Usage:**
+```typescript
+await cyclesTopUp(currentUser);
+```
 
-### Creating Actors for Backend Interactions
+### 🎭 Creating Actors for Backend Interactions
 
-To interact with canisters, actors must be created with specific roles:
+To interact with canisters on the Internet Computer, actors need to be created with specific roles:
 
-- **Cycles Actor:** Manages cycle-related operations.
-- **Ledger Actor:** Handles ledger transactions and queries.
-- **Distribution Actor:** Distributes cycles across canisters.
+- **Cycles Actor:** Manages cycle-related operations, ensuring efficient resource management.
+- **Ledger Actor:** Handles ledger transactions and queries, facilitating secure and transparent financial operations.
+- **Distribution Actor:** Distributes cycles across canisters, supporting balanced and scalable resource allocation.
