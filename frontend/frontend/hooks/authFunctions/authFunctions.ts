@@ -1,5 +1,4 @@
-import { Principal } from "@dfinity/principal";
-import { HttpAgent, Actor, Identity } from "@dfinity/agent";
+import { Actor, HttpAgent } from '@dfinity/agent';
 
 // > Todo: Convert this file into a general abstraction.
 

@@ -1,5 +1,7 @@
 # client-vector-search
 
+**This version has been modified to work with the ic-storage-module. Specifically, we adapted the code to use all-Mini-LM-L6-v2 model instead of gte-small, and we set the cache to only use in-memory cache.**
+
 A client side vector search library that can embed, search, and cache. Works on the browser and server side.
 
 It outperforms OpenAI's text-embedding-ada-002 and is way faster than Pinecone and other VectorDBs.
