@@ -1,0 +1,29 @@
+{
+  "name": "cipher_supaic_demo_frontend",
+  "version": "1.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "setup": "npm install && npm audit fix && dfx start --clean --background && dfx deploy && dfx stop && echo 'The frontend has been setup successfully!'",
+    "deploy": "dfx deploy --network ic"
+  },
+  "dependencies": {
+    "@dfinity/agent": "0.19.3",
+    "@dfinity/assets": "^0.19.3",
+    "@dfinity/candid": "0.19.3",
+    "@dfinity/principal": "0.19.3",
+    "@huggingface/transformers": "^3.0.0-alpha.14",
+    "@types/node": "^22.5.1",
+    "ic-auth": "^0.9.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
+    "@vitejs/plugin-react-refresh": "^1.3.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.12"
+  }
+}
