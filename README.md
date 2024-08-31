@@ -9,6 +9,8 @@ Welcome to the **CipherAI Vault IC** demo repository—a fully in-browser, in-me
 
 ### ⚙️ Prerequisites
 
+**WebGPU:** This project runs best in a [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We suggest [Chrome Canary](https://www.google.com/chrome/canary/).
+
 You will need to have DFX and NodeJS set up to use this repo. This project uses the Azle development kit from Demergent Labs. If you need help getting setup, check out these links:
 
 **DFX Setup:** https://internetcomputer.org/docs/current/developer-docs/getting-started/install
@@ -17,7 +19,11 @@ You will need to have DFX and NodeJS set up to use this repo. This project uses 
 <br>
 **Azle Docs:** https://github.com/demergent-labs/azle
 
-**WebGPU:** This project also runs best in a [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We suggest [Chrome Canary](https://www.google.com/chrome/canary/).
+You will need one of the following wallets to  run the demo:
+- [Plug Wallet](https://plugwallet.ooo/)
+- [Stoic Wallet](https://www.stoicwallet.com/)
+- [NFID Wallet](https://nfid.one/)
+- [Internet Identity](https://identity.raw.ic0.app/)
 
 ### 🛠️ Setup Instructions
 
