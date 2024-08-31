@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { getEmbedding, EmbeddingIndex, initializeModel } from "./client-vector-search/src/index";
+import { getEmbedding, EmbeddingIndex, initializeModel } from "../hooks/client-vector-search/src/index";
 
 interface SearchResult {
   input: string;
