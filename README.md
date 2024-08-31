@@ -1,7 +1,7 @@
 # 🔐 CipherAI Vault IC 🚀
 ## Version 2.2.2
 
-Welcome to the **CipherVault IC** demo repository—a fully in-browser, in-memory showcase of the Internet Computer's (IC) cutting-edge capabilities. This demo seamlessly integrates `ic-auth` for secure authentication, asset storage, an in-memory VectorDB with LLM, and cycles-distro top-up functionality. With zero server-side components, CipherVault IC highlights the power and versatility of the Internet Computer's decentralized architecture, demonstrating its potential to run sophisticated applications entirely within a sandboxed environment.
+Welcome to the **CipherAI Vault IC** demo repository—a fully in-browser, in-memory showcase of the Internet Computer's (IC) cutting-edge capabilities. This demo seamlessly integrates `ic-auth` for secure authentication, asset storage, an in-memory VectorDB with LLM, and cycles-distro top-up functionality. With zero server-side components, CipherAI Vault IC highlights the power and versatility of the Internet Computer's decentralized architecture, demonstrating its potential to run sophisticated applications entirely within a sandboxed environment.
 
 *The demo is a proof of concept and is not intended for production use. This project is part of a [Developer Grant from the DFINITY Foundation](https://dfinity.org/grants).*
 
@@ -16,13 +16,14 @@ You will need to have DFX and NodeJS set up to use this repo. This project uses 
 **NodeJS Setup:** https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 <br>
 **Azle Docs:** https://github.com/demergent-labs/azle
-<br>
+
+**WebGPU:** This project also runs best in a [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We suggest [Chrome Canary](https://www.google.com/chrome/canary/).
 
 ### 🛠️ Setup Instructions
 
 #### Clone The Repo:
 ```bash
-git clone https://github.com/supaIC/ic-storage-module.git
+git clone https://github.com/supaIC/CipherAI-Vault-IC.git
 cd ic-storage-module
 ```
 
