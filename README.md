@@ -9,16 +9,40 @@ Welcome to the **CipherVault IC** demo repository—a fully in-browser, in-memor
 
 ### ⚙️ Prerequisites
 
-- **DFX 0.20.1**: Ensure you have the correct version of DFX installed to support the demo's functionality.
-- **Node.js (version 20+)**: Use the recommended version of Node.js to ensure compatibility and optimal performance.
+You will need to have DFX and NodeJS set up to use this repo. This project uses the Azle development kit from Demergent Labs. If you need help getting setup, check out these links:
+
+**DFX Setup:** https://internetcomputer.org/docs/current/developer-docs/getting-started/install
+<br>
+**NodeJS Setup:** https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+<br>
+**Azle Docs:** https://github.com/demergent-labs/azle
+<br>
 
 ### 🛠️ Setup Instructions
 
-**Clone and Set Up:**
+#### Clone The Repo:
 ```bash
 git clone https://github.com/supaIC/ic-storage-module.git
 cd ic-storage-module
+```
+
+#### Project Setup:
+
+As long as you have already installed and configured Node and DFX, the easy setup command should take care of everything for you:
+
+```
 npm run setup
+```
+
+If for some reason the automatic command doesn't work, you can use the manual commands:
+
+```
+npm install && npm audit fix
+dfx start --clean --background
+dfx canister create --all
+dfx build
+dfx deploy
+dfx stop
 ```
 *Note: You may be prompted to enter your DFX identity password during setup.*
 
@@ -86,3 +110,7 @@ To interact with canisters on the Internet Computer, actors need to be created w
 - **Cycles Actor:** Manages cycle-related operations, ensuring efficient resource management.
 - **Ledger Actor:** Handles ledger transactions and queries, facilitating secure and transparent financial operations.
 - **Distribution Actor:** Distributes cycles across canisters, supporting balanced and scalable resource allocation.
+
+### Future Plans:
+
+- List of planned features and improvements.
