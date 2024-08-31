@@ -22,23 +22,31 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete })
     let isMounted = true;
 
     const fetchJsonSnippets = async () => {
-      const snippets: { [key: string]: string } = { ...jsonSnippets }; // Use existing snippets as a base
+      const snippets: { [key: string]: string } = {};
+      const newSnippets: { [key: string]: string } = {}; // Track new snippets
+
       for (const asset of jsonAssets) {
-        if (asset.url.endsWith(".json") && !snippets[asset.key]) { // Only fetch if not already cached
+        if (asset.url.endsWith(".json") && !jsonSnippets[asset.key]) {
           try {
             const response = await fetch(asset.url);
             const data = await response.json();
             const snippet = JSON.stringify(data, null, 2).substring(0, 100) + "...";
-            if (isMounted) {
-              snippets[asset.key] = syntaxHighlight(snippet);
-            }
+            snippets[asset.key] = syntaxHighlight(snippet);
+            newSnippets[asset.key] = syntaxHighlight(snippet);
           } catch (error) {
             console.error("Error fetching JSON data:", error);
           }
+        } else if (jsonSnippets[asset.key]) {
+          snippets[asset.key] = jsonSnippets[asset.key];
         }
       }
-      if (isMounted) {
-        setJsonSnippets(snippets);
+
+      if (isMounted && Object.keys(newSnippets).length > 0) {
+        // Only update state if there are new snippets to add
+        setJsonSnippets((prevSnippets) => ({
+          ...prevSnippets,
+          ...newSnippets,
+        }));
       }
     };
 
@@ -47,7 +55,7 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete })
     return () => {
       isMounted = false;
     };
-  }, [jsonAssets, jsonSnippets]);
+  }, [jsonAssets]);
 
   const handleAssetClick = async (asset: Asset) => {
     setViewingAsset(asset);
@@ -96,30 +104,17 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete })
   const copyToClipboard = () => {
     if (!fullJsonData) return;
 
-    let isMounted = true;
     navigator.clipboard.writeText(fullJsonData).then(
       () => {
-        if (isMounted) {
-          setCopySuccess("Copied to clipboard!");
-          setTimeout(() => {
-            if (isMounted) setCopySuccess(null);
-          }, 2000); // Clear message after 2 seconds
-        }
+        setCopySuccess("Copied to clipboard!");
+        setTimeout(() => setCopySuccess(null), 2000); // Clear message after 2 seconds
       },
       (err) => {
-        if (isMounted) {
-          setCopySuccess("Failed to copy!");
-          setTimeout(() => {
-            if (isMounted) setCopySuccess(null);
-          }, 2000); // Clear message after 2 seconds
-        }
+        setCopySuccess("Failed to copy!");
+        setTimeout(() => setCopySuccess(null), 2000); // Clear message after 2 seconds
         console.error("Failed to copy JSON to clipboard", err);
       }
     );
-
-    return () => {
-      isMounted = false;
-    };
   };
 
   return (

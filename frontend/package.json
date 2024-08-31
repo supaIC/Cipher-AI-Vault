@@ -14,6 +14,7 @@
     "@dfinity/candid": "2.0.0",
     "@dfinity/principal": "2.0.0",
     "@huggingface/transformers": "^3.0.0-alpha.14",
+    "@msgpack/msgpack": "^3.0.0-beta2",
     "@types/node": "^22.5.1",
     "ic-auth": "^0.9.1",
     "react": "18.3.1",

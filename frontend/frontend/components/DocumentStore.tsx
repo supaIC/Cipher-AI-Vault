@@ -24,22 +24,31 @@ const DocumentStore: React.FC<DocumentStoreProps> = ({ assets, onAssetHover, onD
     let isMounted = true;
 
     const loadTextPreviews = async () => {
-      const previews: { [key: string]: string } = { ...textPreviews }; // Use existing previews as base
+      const previews: { [key: string]: string } = {};
+      const newPreviews: { [key: string]: string } = {}; // Track new previews
 
       for (const asset of documentAssets) {
-        if (asset.url.endsWith(".txt") && !previews[asset.key]) {
+        if (asset.url.endsWith(".txt") && !textPreviews[asset.key]) {
           try {
             const response = await fetch(asset.url);
             const text = await response.text();
-            previews[asset.key] = text.slice(0, 100) + (text.length > 100 ? "..." : "");
+            const preview = text.slice(0, 100) + (text.length > 100 ? "..." : "");
+            previews[asset.key] = preview;
+            newPreviews[asset.key] = preview;
           } catch (error) {
             console.error("Failed to load text file:", error);
           }
+        } else if (textPreviews[asset.key]) {
+          previews[asset.key] = textPreviews[asset.key];
         }
       }
 
-      if (isMounted) {
-        setTextPreviews(previews);
+      if (isMounted && Object.keys(newPreviews).length > 0) {
+        // Only update state if there are new previews to add
+        setTextPreviews((prevPreviews) => ({
+          ...prevPreviews,
+          ...newPreviews,
+        }));
       }
     };
 
@@ -48,7 +57,7 @@ const DocumentStore: React.FC<DocumentStoreProps> = ({ assets, onAssetHover, onD
     return () => {
       isMounted = false;
     };
-  }, [documentAssets, textPreviews]);
+  }, [documentAssets]);
 
   const handleAssetClick = async (asset: Asset) => {
     setViewingAsset(asset);
@@ -73,30 +82,17 @@ const DocumentStore: React.FC<DocumentStoreProps> = ({ assets, onAssetHover, onD
   const copyToClipboard = () => {
     if (!fullTextData) return;
 
-    let isMounted = true;
     navigator.clipboard.writeText(fullTextData).then(
       () => {
-        if (isMounted) {
-          setCopySuccess("Copied to clipboard!");
-          setTimeout(() => {
-            if (isMounted) setCopySuccess(null);
-          }, 2000); // Clear message after 2 seconds
-        }
+        setCopySuccess("Copied to clipboard!");
+        setTimeout(() => setCopySuccess(null), 2000); // Clear message after 2 seconds
       },
       (err) => {
-        if (isMounted) {
-          setCopySuccess("Failed to copy!");
-          setTimeout(() => {
-            if (isMounted) setCopySuccess(null);
-          }, 2000); // Clear message after 2 seconds
-        }
+        setCopySuccess("Failed to copy!");
+        setTimeout(() => setCopySuccess(null), 2000); // Clear message after 2 seconds
         console.error("Failed to copy text to clipboard", err);
       }
     );
-
-    return () => {
-      isMounted = false;
-    };
   };
 
   const renderDocumentPreview = (asset: Asset) => {
