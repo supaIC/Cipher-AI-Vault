@@ -1,4 +1,4 @@
-# 🔐 CipherVault IC Frontend Canister 🚀
+# 🔐 CipherAI Vault IC Frontend Canister 🚀
 ## Version 2.2.2
 
 *This demo is intended as a proof of concept and is not suitable for production use. It is supported by a [Developer Grant from the DFINITY Foundation](https://dfinity.org/grants).*
