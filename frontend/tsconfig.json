@@ -31,6 +31,6 @@
   },
   "include": [
     "frontend",
-    "./**/*.ts", "src/**/*.d.ts",
+    "./**/*.ts", "src/**/*.d.ts", "vite.config.mts",
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "cipher_supaic_demo",
+  "name": "cipherai_vault_ic",
   "version": "1.1.0",
   "scripts": {
     "dev": "cd frontend && npm run dev",
