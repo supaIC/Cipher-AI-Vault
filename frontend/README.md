@@ -38,7 +38,7 @@ dfx deploy --network ic
 
 ### ⚙️ Configuration
 
-Our [config.js](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/config.ts) can be set up to configure the canister and user whitelists:
+Our [config.js](https://github.com/supaIC/CipherAI-Vault-IC/blob/main/frontend/frontend/config.ts) can be set up to configure the canister and user whitelists:
 
 ```typescript
 // Existing canister ID
@@ -61,7 +61,7 @@ For comprehensive usage instructions and examples, please refer to the [ic-auth 
 
 ### 🗂️ Asset Management
 
-The [`useAssetManager`](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/hooks/assetManager/assetManager.js) hook is the core utility for managing assets, offering robust functionality to efficiently load, upload, and delete assets.
+The [`useAssetManager`](https://github.com/supaIC/CipherAI-Vault-IC/blob/main/frontend/frontend/hooks/assetManager/assetManager.js) hook is the core utility for managing assets, offering robust functionality to efficiently load, upload, and delete assets.
 
 **Features:**
 - Load and display assets with support for various file types and use cases.
@@ -75,12 +75,12 @@ const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles } = useAsse
 
 ### 🧠 VectorDB + LLM Integration
 
-- The code for the LLM can be found in [`llm.js`](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/components/llm.js)
-- The code for the VectorDB is located in [`DatabaseAdmin.tsx`](https://github.com/supaIC/ic-storage-module/blob/main/frontend/frontend/components/DatabaseAdmin.tsx)
+- The code for the LLM can be found in [`llm.js`](https://github.com/supaIC/CipherAI-Vault-IC/blob/main/frontend/frontend/hooks/modelManager/llm.js)
+- The code for the VectorDB is located in [`DatabaseAdmin.tsx`](https://github.com/supaIC/CipherAI-Vault-IC/blob/main/frontend/frontend/components/DatabaseAdmin.tsx)
 
 This integration leverages the following packages:
 - [`@Xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers)
-- A custom version of [`client-vector-search`](https://github.com/yusufhilmi/client-vector-search)
+- A custom version of [`client-vector-search`](https://github.com/yusufhilmi/client-vector-search), our version is located [here](https://github.com/supaIC/CipherAI-Vault-IC/tree/main/frontend/frontend/hooks/client-vector-search)
 
 ### Models Used:
 - **For embeddings**: [`all-MiniLM-L6-v2`](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
