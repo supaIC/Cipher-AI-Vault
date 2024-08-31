@@ -1,0 +1,42 @@
+{
+  "name": "client-vector-search",
+  "version": "0.2.0",
+  "description": "A client side vector search library",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "release": "npm run build && changeset publish",
+    "lint": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusufhilmi/client-vector-search.git"
+  },
+  "keywords": [
+    "vector",
+    "search",
+    "embeddings",
+    "nlp",
+    "models"
+  ],
+  "author": "yusufhilmi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yusufhilmi/client-vector-search/issues"
+  },
+  "homepage": "https://github.com/yusufhilmi/client-vector-search#readme",
+  "devDependencies": {
+    "@changesets/cli": "^2.26.2",
+    "fake-indexeddb": "^4.0.2",
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "@xenova/transformers": "^2.5.2",
+    "lru-cache": "^10.0.1"
+  }
+}

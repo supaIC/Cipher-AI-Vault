@@ -101,6 +101,10 @@ button:hover {
     position: relative;
     width: 200px;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .asset-image {
@@ -109,6 +113,58 @@ button:hover {
     border-radius: 0.3125rem;
     /* 5px */
     cursor: pointer;
+}
+
+.json-preview {
+    background-color: #2d2d2d;
+    padding: 0.5rem;
+    border-radius: 0.3125rem;
+    height: 80%;
+    overflow: hidden;
+    white-space: pre-wrap;
+    color: #f5f5f7;
+    font-size: 0.66rem;
+    /* 12px */
+    line-height: 1.2rem;
+    /* 19px */
+    text-overflow: ellipsis;
+}
+
+.json-snippet {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding: 0.5rem;
+    border-radius: 0.3125rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 150px;
+    /* Limit height for previews */
+}
+
+.json-snippet .string {
+    color: #ce9178;
+    /* Strings in JSON */
+}
+
+.json-snippet .number {
+    color: #b5cea8;
+    /* Numbers in JSON */
+}
+
+.json-snippet .boolean {
+    color: #569cd6;
+    /* Boolean values in JSON */
+}
+
+.json-snippet .null {
+    color: #569cd6;
+    /* Null values in JSON */
+}
+
+.json-snippet .key {
+    color: #9cdcfe;
+    /* Keys in JSON */
 }
 
 .delete-button {
@@ -262,7 +318,7 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 20;
+    z-index: 99999;
 }
 
 .confirm-box {
@@ -460,7 +516,52 @@ button {
     align-items: center;
     overflow: hidden;
     position: relative;
+    color: #f5f5f7;
 }
+
+.asset-view-content pre {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: #1e1e1e;
+    padding: 1rem;
+    border-radius: 0.3125rem;
+    /* 5px */
+    color: #f5f5f7;
+    font-size: 0.875rem;
+    /* 14px */
+    line-height: 1.25rem;
+    /* 20px */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.asset-view-content .string {
+    color: #ce9178;
+    /* Strings in JSON */
+}
+
+.asset-view-content .number {
+    color: #b5cea8;
+    /* Numbers in JSON */
+}
+
+.asset-view-content .boolean {
+    color: #569cd6;
+    /* Boolean values in JSON */
+}
+
+.asset-view-content .null {
+    color: #569cd6;
+    /* Null values in JSON */
+}
+
+.asset-view-content .key {
+    color: #9cdcfe;
+    /* Keys in JSON */
+}
+
 
 .asset-view-content img {
     max-width: 100%;
@@ -579,15 +680,15 @@ button {
     /* Adjust button padding */
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
-  }
-  
-  .settings-btn:hover {
+}
+
+.settings-btn:hover {
     background-color: #0056b3;
     transform: translateY(-0.125rem);
     /* Adjust button hover effect */
-  }
-  
-  .settings-dropdown {
+}
+
+.settings-dropdown {
     display: none;
     position: absolute;
     top: 4rem;
@@ -598,13 +699,13 @@ button {
     /* Adjust dropdown padding */
     z-index: 10;
     margin-top: 0.6%;
-  }
-  
-  .settings-dropdown.active {
+}
+
+.settings-dropdown.active {
     display: block;
-  }
-  
-  .settings-dropdown button {
+}
+
+.settings-dropdown button {
     display: block;
     margin-bottom: 0.625rem;
     /* Adjust button margin */
@@ -616,10 +717,316 @@ button {
     /* Adjust button padding */
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
-  }
-  
-  .settings-dropdown button:hover {
+}
+
+.settings-dropdown button:hover {
     background-color: #0056b3;
     transform: translateY(-0.125rem);
     /* Adjust button hover effect */
+}
+
+.view-toggle-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    /* Adjust to position below the toggle button */
+}
+
+.view-toggle-button {
+    background-color: #343434;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    /* Padding to create a rectangular button */
+    border-radius: 0.3125rem;
+    /* Slightly rounded corners */
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    /* 16px */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.view-toggle-button.active {
+    background-color: #3367d6;
+}
+
+.view-toggle-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-0.125rem);
+    /* -2px */
+}
+
+.assets-container {
+    margin-top: 1rem;
+    /* Space between buttons and assets */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 75rem;
+    /* 1200px */
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    color: #f5f5f7;
+    font-family: 'Roboto', sans-serif;
   }
+  
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .status-results-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    background-color: #101010;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .status-section {
+    flex: 1;
+    padding-right: 1rem;
+  }
+  
+  .results-section {
+    flex: 2;
+    padding-left: 1rem;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  
+  .actions-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .actions-wrapper h2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+  }
+  
+  .button-group button {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .button-group button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  .button-group button:hover:not(:disabled) {
+    background-color: #4682b4;
+    transform: scale(1.05);
+  }  
+  
+  .actions-wrapper button {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .actions-wrapper button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  .actions-wrapper button:hover:not(:disabled) {
+    background-color: #4682b4;
+    transform: scale(1.05);
+  }
+  
+  .model-load-wrapper {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #1a1a1a;
+  }
+  
+  .model-info-section {
+    margin-bottom: 1rem;
+  }
+  
+  .model-title-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f5f5f7;
+  }
+  
+  .model-subtitle-text {
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: #ccc;
+  }
+  
+  .model-description-section {
+    font-size: 1rem;
+    color: #aaa;
+  }
+  
+  .external-link {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+  
+  .external-link:hover {
+    text-decoration: underline;
+  }
+  
+  .model-load-button {
+    padding: 0.5rem 1rem;
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .model-load-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  .model-load-button:hover:not(:disabled) {
+    background-color: #4682b4;
+    transform: scale(1.05);
+  }
+  
+  .loading-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .loading-text {
+    margin-bottom: 0.5rem;
+    color: #aaa;
+  }
+  
+  .progress-item-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .chat-section-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1rem;
+  }
+  
+  .chat-messages-wrapper {
+    background-color: #202020;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #f5f5f7;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .chat-info-text {
+    color: #ccc;
+}
+
+.tps-info-text {
+  font-weight: bold;
+  color: #fff;
+}
+
+.reset-button {
+  background: none;
+  border: none;
+  color: #1E90FF;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 1rem 0;
+}
+
+.chat-input-box {
+  width: 100%;
+  padding: 1rem;
+  background-color: #202020;
+  border: none;
+  border-radius: 8px;
+  color: #f5f5f7;
+  resize: none;
+  font-size: 1rem;
+}
+
+.input-button-stop, .input-button-send {
+  padding: 0.5rem 1rem;
+  margin-left: 0.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.input-button-stop {
+  background-color: #ff4c4c;
+  color: white;
+}
+
+.input-button-send {
+  background-color: #1e90ff;
+  color: white;
+}
+
+.input-button-stop:hover, .input-button-send:hover {
+  transform: scale(1.05);
+}
+
+.input-button-stop:disabled, .input-button-send:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.disclaimer-text {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+

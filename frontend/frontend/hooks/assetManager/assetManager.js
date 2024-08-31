@@ -81,11 +81,29 @@ function useAssetManager(currentUser, bucketName) {
         setError("User not authenticated.");
         return;
       }
+  
       await handleApiRequest(async () => {
         const assetManager = await createAssetManager();
-        const key = `${principal}/${file.name}`;
+  
+        // Determine the correct bucket based on the file type
+        let bucketPath;
+        if (file.type.startsWith("image/")) {
+          bucketPath = "image-store";
+        } else if (file.type === "application/json") {
+          bucketPath = "data-store";
+        } else if (file.type === "application/pdf" || file.type === "text/plain") {
+          bucketPath = "document-store"; // Updated to support PDFs and text files
+        } else {
+          setError("Unsupported file type.");
+          return;
+        }
+  
+        // Construct the key using the bucket path
+        const key = `${principal}/${bucketPath}/${file.name}`;
         const arrayBuffer = await file.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
+  
+        // Store the file using the AssetManager
         await assetManager.store(uint8Array, { fileName: key });
         await loadAssetList();
         console.log("File uploaded successfully.");

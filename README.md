@@ -112,3 +112,8 @@ The IC Storage Module offers a robust solution for developers looking to integra
 - We need to add the Vectra package so that we can vectorize the docs 
 
 - from there, we need to feed the memory into the openai api calls so the AI can have memory
+
+
+
+
+
