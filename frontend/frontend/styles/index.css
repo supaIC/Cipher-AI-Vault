@@ -1040,3 +1040,25 @@ button {
     font-size: 0.8rem;
     color: #aaa;
 }
+
+/* Styling for the file selection dropdown */
+.file-selection {
+    margin-bottom: 20px;
+  }
+  
+  .file-selection label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  #fileSelect:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  #fileSelect option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+  }

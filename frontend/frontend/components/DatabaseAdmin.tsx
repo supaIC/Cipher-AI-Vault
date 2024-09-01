@@ -10,7 +10,16 @@ interface SearchResult {
   };
 }
 
-const DatabaseAdmin: React.FC = () => {
+interface Asset {
+  key: string;
+  url: string;
+}
+
+interface DatabaseAdminProps {
+  assets: Array<Asset>;
+}
+
+const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
   const [searchResult, setSearchResult] = useState<any[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [status, setStatus] = useState<string | null>(null);
@@ -22,6 +31,7 @@ const DatabaseAdmin: React.FC = () => {
   const [tps, setTps] = useState<number | null>(null);
   const [numTokens, setNumTokens] = useState<number | null>(null);
   const [index, setIndex] = useState<EmbeddingIndex | null>(null);
+  const [selectedFile, setSelectedFile] = useState<string>("");
 
   const worker = useRef<Worker | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -31,15 +41,23 @@ const DatabaseAdmin: React.FC = () => {
     console.log(`[Client Log] ${message}`);
   };
 
+  // Filter JSON file names from the provided assets
+  const jsonAssets = assets.filter((asset) => asset.key.includes("/data-store/"));
+
   const initializeDB = async () => {
-    if (isRunning) return; // Prevent multiple initializations
+    if (isRunning || !selectedFile) return; // Prevent multiple initializations or if no file is selected
 
     setIsRunning(true);
     try {
       console.log("Initializing database...");
       setStatusMessage("Initializing database...");
 
-      const response = await fetch("https://zks6t-giaaa-aaaap-qb7fa-cai.raw.icp0.io/zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe/data-store/data1.json");
+      const selectedAsset = jsonAssets.find((asset) => asset.key.endsWith(selectedFile));
+      if (!selectedAsset) {
+        throw new Error(`Selected file not found in assets: ${selectedFile}`);
+      }
+
+      const response = await fetch(selectedAsset.url);
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
@@ -294,7 +312,7 @@ const DatabaseAdmin: React.FC = () => {
             <h2>Status:</h2>
             <p>{statusMessage || "No actions performed yet."}</p>
           </div>
-
+  
           <div className="results-section">
             <h2>Search Results:</h2>
             {searchResult.length > 0 ? (
@@ -310,11 +328,26 @@ const DatabaseAdmin: React.FC = () => {
             )}
           </div>
         </div>
-
+  
         <div className="actions-wrapper">
           <h2>Initialization</h2>
+          <div className="file-selection">
+            <label htmlFor="fileSelect">Select Data File: </label>
+            <select
+              id="fileSelect"
+              value={selectedFile}
+              onChange={(e) => setSelectedFile(e.target.value)}
+            >
+              <option value="">--Select a file--</option>
+              {jsonAssets.map((asset, index) => (
+                <option key={index} value={asset.key.split("/").pop()}>
+                  {asset.key.split("/").pop()}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="button-group">
-            <button onClick={initializeDB} disabled={status === "loading"}>
+            <button onClick={initializeDB} disabled={status === "loading" || !selectedFile}>
               Initialize Database
             </button>
             <button onClick={clearDatabase} disabled={status === "loading"}>
@@ -325,7 +358,7 @@ const DatabaseAdmin: React.FC = () => {
             </button>
           </div>
         </div>
-
+  
         {status === null && messages.length === 0 && (
           <div className="model-load-wrapper">
             <div className="model-info-section">
@@ -360,7 +393,7 @@ const DatabaseAdmin: React.FC = () => {
             </div>
           </div>
         )}
-
+  
         {status === "loading" && (
           <div className="loading-wrapper">
             <p className="loading-text">{loadingMessage}</p>
@@ -372,7 +405,7 @@ const DatabaseAdmin: React.FC = () => {
             ))}
           </div>
         )}
-
+  
         {status === "ready" && (
           <div ref={chatContainerRef} className="chat-section-wrapper">
             {messages.length === 0 ? (
@@ -423,7 +456,7 @@ const DatabaseAdmin: React.FC = () => {
             </p>
           </div>
         )}
-
+  
         <div className="input-wrapper">
           <textarea
             ref={textareaRef}
@@ -449,12 +482,11 @@ const DatabaseAdmin: React.FC = () => {
             </button>
           )}
         </div>
-
+  
         <p className="disclaimer-text">Disclaimer: Generated content may be inaccurate or false.</p>
       </div>
     </div>
-  );
-
+  );   
 };
 
 export default DatabaseAdmin;

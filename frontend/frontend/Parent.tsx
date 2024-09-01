@@ -182,7 +182,7 @@ export function Parent() {
                   }}
                 />
               ) : (
-                <DatabaseAdmin />
+                <DatabaseAdmin assets={assets} />
               )}
             </div>
 
