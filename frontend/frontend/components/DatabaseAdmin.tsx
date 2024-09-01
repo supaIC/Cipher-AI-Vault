@@ -32,6 +32,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
   const [numTokens, setNumTokens] = useState<number | null>(null);
   const [index, setIndex] = useState<EmbeddingIndex | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
+  const [lastQuery, setLastQuery] = useState<string | null>(null);
 
   const worker = useRef<Worker | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -106,7 +107,6 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
 
     setIsRunning(true);
     try {
-      setSearchResult([]);
       log(`Initiating search for: "${searchQuery}"...`);
       setStatusMessage(`Searching for: "${searchQuery}"...`);
 
@@ -145,7 +145,13 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
       "Grant",
     ];
 
-    const randomQuery = testQueries[Math.floor(Math.random() * testQueries.length)];
+    let randomQuery;
+    do {
+      randomQuery = testQueries[Math.floor(Math.random() * testQueries.length)];
+    } while (randomQuery === lastQuery);
+
+    setLastQuery(randomQuery);  // Update lastQuery with the new query
+
     await handleSearch(randomQuery);
   };
 
