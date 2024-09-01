@@ -796,11 +796,15 @@ button {
     background-color: #101010;
     border-radius: 8px;
     margin-bottom: 1rem;
+    max-height: 6.725rem;
 }
 
 .status-section {
     flex: 1;
     padding-right: 1rem;
+    font-size: 0.66rem;
+    font-family: "Courier New", "Lucida Console", monospace;
+    font-weight: 550;
 }
 
 .results-section {
@@ -808,7 +812,8 @@ button {
     padding-left: 1rem;
     max-height: 150px;
     overflow-y: auto;
-
+    font-size: 0.66rem;
+    font-family: "Courier New", "Lucida Console", monospace;
     /* For WebKit-based browsers (Chrome, Safari, newer Edge) */
     scrollbar-width: thin;
     scrollbar-color: grey transparent;
@@ -887,19 +892,19 @@ button {
 }
 
 .model-title-text {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: #f5f5f7;
 }
 
 .model-subtitle-text {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: normal;
     color: #ccc;
 }
 
 .model-description-section {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #aaa;
 }
 

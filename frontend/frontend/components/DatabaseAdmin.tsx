@@ -312,7 +312,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             <h2>Status:</h2>
             <p>{statusMessage || "No actions performed yet."}</p>
           </div>
-  
+
           <div className="results-section">
             <h2>Search Results:</h2>
             {searchResult.length > 0 ? (
@@ -328,7 +328,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             )}
           </div>
         </div>
-  
+
         <div className="actions-wrapper">
           <h2>Initialization</h2>
           <div className="file-selection">
@@ -358,18 +358,18 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </button>
           </div>
         </div>
-  
+
         {status === null && messages.length === 0 && (
           <div className="model-load-wrapper">
             <div className="model-info-section">
-              <h1 className="model-title-text">Phi-3 WebGPU</h1>
+              <h1 className="model-title-text">WebGPU AI Chatbot with Memory</h1>
               <h2 className="model-subtitle-text">
-                A private and powerful AI chatbot that runs locally in your browser.
+                Experience a powerful and private AI chatbot that operates entirely within your browser, hosted 100% in an Internet Computer canister smart contract.
               </h2>
             </div>
             <div className="model-description-section">
               <p>
-                You are about to load{" "}
+                You’re about to load {" "}
                 <a
                   href="https://huggingface.co/Xenova/Phi-3-mini-4k-instruct"
                   target="_blank"
@@ -378,7 +378,10 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
                 >
                   Phi-3-mini-4k-instruct
                 </a>
-                , a 3.82 billion parameter LLM optimized for inference on the web. Once downloaded, the model (2.3&nbsp;GB) will be cached and reused when you revisit the page.
+                , a large language model (3.82 billion parameters) optimized for web-based inference. Once downloaded (2.3 GB), the model will be cached for quicker access in future sessions. Loading times will be faster in WebGPU-enabled browsers.
+              </p>
+              <p>
+                Before loading the model, you have the option to load a data file from your data store to initialize the vector database. This will enable the chatbot to provide answers based on your specific data.
               </p>
               <button
                 className="model-load-button"
@@ -388,12 +391,12 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
                 }}
                 disabled={status !== null}
               >
-                Load model
+                Load Model
               </button>
             </div>
           </div>
         )}
-  
+
         {status === "loading" && (
           <div className="loading-wrapper">
             <p className="loading-text">{loadingMessage}</p>
@@ -405,12 +408,12 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             ))}
           </div>
         )}
-  
+
         {status === "ready" && (
           <div ref={chatContainerRef} className="chat-section-wrapper">
             {messages.length === 0 ? (
               <div className="welcome-message-wrapper">
-                <h2>Welcome to CipherVault IC!</h2>
+                <h2>Welcome to CipherAI Vault IC!</h2>
                 <p>
                   The model has successfully loaded. You can now start interacting with the AI.
                   Type a message in the box below to begin!
@@ -456,7 +459,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </p>
           </div>
         )}
-  
+
         <div className="input-wrapper">
           <textarea
             ref={textareaRef}
@@ -482,11 +485,11 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </button>
           )}
         </div>
-  
+
         <p className="disclaimer-text">Disclaimer: Generated content may be inaccurate or false.</p>
       </div>
     </div>
-  );   
+  );
 };
 
 export default DatabaseAdmin;
