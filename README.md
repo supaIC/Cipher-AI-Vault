@@ -30,7 +30,7 @@ You will need one of the following wallets to  run the demo:
 #### Clone The Repo:
 ```bash
 git clone https://github.com/supaIC/Cipher-AI-Vault.git
-cd ic-storage-module
+cd Cipher-AI-Vault
 ```
 
 #### Project Setup:
