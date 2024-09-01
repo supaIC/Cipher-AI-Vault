@@ -1,5 +1,5 @@
 {
-  "name": "cipherai_vault_ic_frontend",
+  "name": "cipher_ai_vault_frontend",
   "version": "1.1.0",
   "scripts": {
     "dev": "vite",
