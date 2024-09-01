@@ -963,6 +963,8 @@ button {
     color: #f5f5f7;
     max-height: 300px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: grey transparent;
 }
 
 .chat-info-text {
