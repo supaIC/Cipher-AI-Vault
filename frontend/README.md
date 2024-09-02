@@ -69,6 +69,8 @@ export const whitelist: string[] = [
 
 This demo leverages the **`ic-auth`** package to manage user authentication, offering a modular and user-friendly solution for integrating multiple wallet providers on the Internet Computer. Supported wallets include **Plug**, **Stoic**, **NFID**, and **Internet Identity**.
 
+The code for integrating the **`ic-auth`** package can be found in the [**`authFunctions.ts`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/authFunctions/authFunctions.ts) hook and the [**`ICWalletList.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/ICWalletList.tsx) component.
+
 For comprehensive usage instructions and examples, please refer to the [**ic-auth README**](https://github.com/supaIC/ic-auth).
 
 ## Asset Management
