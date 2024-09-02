@@ -44,7 +44,7 @@ dfx stop
 To run the demo using `npm`, run the following commands:
 
 ```bash
-## Ensure that you are in the root directory
+## Ensure that you are in the frontend directory
 
 npm install
 npm run dev

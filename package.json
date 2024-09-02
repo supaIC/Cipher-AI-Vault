@@ -2,7 +2,6 @@
   "name": "cipher_ai_vault",
   "version": "1.0.0",
   "scripts": {
-    "dev": "cd frontend && npm run dev",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "setup": "npm run setup-distro && npm run setup-frontend",
