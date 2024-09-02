@@ -14,9 +14,7 @@
 You will need to have DFX and NodeJS set up to use this repo. This project uses the Azle development kit from Demergent Labs. If you need help getting setup, check out these links:
 
 - [**DFX Setup**](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
-<br>
 - [**NodeJS Setup**](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-<br>
 - [**Azle Docs**](https://github.com/demergent-labs/azle)
 
 You will need one of the following wallets to  run the demo:
