@@ -1,7 +1,7 @@
-## Upstreet Cycles Distro Canister
+## Cipher AI Vault Cycles Distro Canister
 ### Azle Version 0.17.1
 
-This canister is in charge of automatically topping up Upstreet canisters.
+This canister is in charge of automatically topping up Cipher AI Vault demo canisters.
 
 Findn the Cycles Distro open source code [here](https://github.com/supaIC/cycles-distro).
 
