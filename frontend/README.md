@@ -11,6 +11,7 @@ The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2i
 ## Developer Setup
 
 To set up and run the current version, ensure you have the following installed:
+
 - **NodeJS:** v20.11.1
 - **DFX:** v0.21.0
 
@@ -39,7 +40,10 @@ dfx deploy
 dfx stop
 ```
 
-**WARNING! THIS PROJECT IS NOT BUILT FOR PRODUCTION USE**: For Mainnet deployment, you will ned to update the **`canister_ids.json`** file with the canister ID of the canister you are deploying to. Then run the following command:
+> ⚠️ **WARNING: THIS PROJECT IS NOT BUILT FOR PRODUCTION USE**  
+> For Mainnet deployment, you will need to update the `canister_ids.json` file with the canister ID of the canister you are deploying to.  
+> Then run the following command:
+
 ```bash
 dfx deploy --network ic
 ```
@@ -96,7 +100,7 @@ If you are interested in testing the LLM or the VectorDB by themselves, you can 
 ### Packages Used:
 
 This integration leverages the following packages:
-- [**`@Xenova/transformers`**](https://www.npmjs.com/package/@xenova/transformers)
+- [**`@huggingface/transformers`**](https://www.npmjs.com/package/@huggingface/transformers)
 - A custom version of [**`client-vector-search`**](https://github.com/yusufhilmi/client-vector-search), our version is located [**here**](https://github.com/supaIC/Cipher-AI-Vault/tree/main/frontend/frontend/hooks/client-vector-search)
 
 ### Models Used:
