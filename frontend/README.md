@@ -43,7 +43,7 @@ dfx deploy
 dfx stop
 ```
 
-or to run the demo using `npm`:
+To run the demo using `npm`, run the following commands:
 
 ```bash
 ## Ensure that you are in the root directory
