@@ -64,7 +64,7 @@ export const whitelist: string[] = [
 
 This demo leverages the `ic-auth` package to manage user authentication, offering a modular and user-friendly solution for integrating multiple wallet providers on the Internet Computer. Supported wallets include **Plug**, **Stoic**, **NFID**, and **Internet Identity**.
 
-For comprehensive usage instructions and examples, please refer to the [ic-auth README](https://github.com/cp-daniel-mccoy/ic-auth#readme).
+For comprehensive usage instructions and examples, please refer to the [ic-auth README](https://github.com/supaIC/ic-auth).
 
 ### 🗂️ Asset Management
 
