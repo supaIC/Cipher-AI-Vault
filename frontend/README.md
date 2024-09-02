@@ -1,4 +1,4 @@
-# 🔐 Cipher AI Vault Frontend Canister
+# Cipher AI Vault Frontend Canister
 
 This canister is the frontend for the Cipher AI Vault demo.
 
