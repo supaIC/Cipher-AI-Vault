@@ -13,17 +13,17 @@
 
 You will need to have DFX and NodeJS set up to use this repo. This project uses the Azle development kit from Demergent Labs. If you need help getting setup, check out these links:
 
-**DFX Setup:** https://internetcomputer.org/docs/current/developer-docs/getting-started/install
+- [**DFX Setup**](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
 <br>
-**NodeJS Setup:** https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- [**NodeJS Setup**](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 <br>
-**Azle Docs:** https://github.com/demergent-labs/azle
+- [**Azle Docs**](https://github.com/demergent-labs/azle)
 
 You will need one of the following wallets to  run the demo:
-- [Plug Wallet](https://plugwallet.ooo/)
-- [Stoic Wallet](https://www.stoicwallet.com/)
-- [NFID Wallet](https://nfid.one/)
-- [Internet Identity](https://identity.raw.ic0.app/)
+- [**Plug Wallet**](https://plugwallet.ooo/)
+- [**Stoic Wallet**](https://www.stoicwallet.com/)
+- [**NFID Wallet**](https://nfid.one/)
+- [**Internet Identity**](https://identity.raw.ic0.app/)
 
 ### 🛠️ Setup Instructions
 
@@ -68,8 +68,8 @@ dfx stop
 ```
 
 This Project has two main canisters, each provided with their own dfx.json file:
-- The Frontend Canister: `frontend`
-- The Cycles Distro Canister: `distro-canister`
+- **Frontend Canister:** `frontend` - Read the README in the frontend directory here: [frontend/README.md](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/README.md)
+- **Cycles Distro Canister:** `distro-canister` - Read the README in the distro-canister directory here: [distro-canister/README.md](https://github.com/supaIC/Cipher-AI-Vault/blob/main/distro-canister/README.md)
 
 ### Future Plans:
 

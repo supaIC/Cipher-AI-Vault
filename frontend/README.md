@@ -24,6 +24,7 @@ Run these commands to get your environment up and running:
 
 ```bash
 ## Ensure that you are in the frontend directory
+cd frontend
 
 npm install
 dfx start --background --clean
