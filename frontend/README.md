@@ -85,12 +85,15 @@ export const whitelist: string[] = [
 
 ## Authentication
 
-This demo utilizes the **`ic-auth`** package to manage user authentication, providing a modular and user-friendly solution for integrating multiple wallet providers on the Internet Computer. Supported wallets include **Plug**, **Stoic**, **NFID**, and **Internet Identity**.
+This demo leverages the **`ic-auth`** package to manage user authentication, offering a modular solution for integrating multiple wallet providers on the Internet Computer. Supported wallets include **Plug**, **Stoic**, **NFID**, and **Internet Identity**.
 
 ### Integration
 
-- **Authentication Functions:** The integration of the **`ic-auth`** package is implemented in the [**`authFunctions.ts`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/authFunctions/authFunctions.ts) hook.
-- **Wallet List Component:** The wallet selection interface is managed by the [**`ICWalletList.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/ICWalletList.tsx) component.
+- **Authentication Functions:** The authentication functionality is handled by the `ic-auth` package, which facilitates the login process for various wallet providers. The integration is implemented in the [**`ICWalletList.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/ICWalletList.tsx) component, where different login methods are provided for each wallet.
+
+- **Backend Actor Creation:** Actor creation, which is used to interact with backend canisters, is managed through the [**`authFunctions.ts`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/authFunctions/authFunctions.ts) file. This file provides a general abstraction for creating backend actors using `HttpAgent` and `Actor` from `@dfinity/agent`.
+
+The wallet selection interface in the `ICWalletList` component allows users to authenticate with their preferred wallet, passing the user’s principal, agent, and provider information back to the parent component for further use in the application.
 
 ### Documentation
 
