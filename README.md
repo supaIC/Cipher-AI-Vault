@@ -4,7 +4,7 @@
 
 *Please note that this demo is a proof of concept and is not intended for production use. This project was developed as part of a [**Developer Grant from the DFINITY Foundation**](https://dfinity.org/grants).*
 
-## Demo Canisters snd Repositories
+## Demo Canisters and Repositories
 
 The demo canister is live and can be accessed [**here**](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/).
 
@@ -14,6 +14,15 @@ The demo canister is live and can be accessed [**here**](https://qehbq-rqaaa-aaa
 ### Grant Deliverables Repositories
 - [**ic-auth**](https://github.com/supaIC/ic-auth)
 - [**Cycles Distro**](https://github.com/supaIC/cycles-distro)
+
+## Core Features
+
+- **Frontend Canister**: The main entry point for user interactions.
+- **In-memory VectorDB**: Stores and manages embeddings for efficient retrieval.
+- **In-memory LLM**: Processes natural language queries and interacts with the VectorDB.
+- **Secure Asset Storage**: A dedicated module that securely stores assets.
+- **Cycles Distro Canister**: Manages cycles and top-ups.
+- **ic-auth**: Handles authentication with various wallets such as Plug, Stoic, NFID, and Internet Identity.
 
 ## Prerequisites
 
