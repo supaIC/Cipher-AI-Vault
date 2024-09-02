@@ -5,7 +5,16 @@
 
 *The demo is a proof of concept and is not intended for production use. This project is part of a [**Developer Grant from the DFINITY Foundation**](https://dfinity.org/grants).*
 
-*The demo canister is currently running on the following canister url: **https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/***
+### Cipher AI Vault Demo Canisters
+
+The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/)
+
+**Other standalone demo canisters:**
+- [**WebGPU LLM demo**](https://f45ub-wiaaa-aaaap-ahskq-cai.icp0.io/)
+
+**Other repos that are part of this grant project:**
+- [**ic-auth**](https://github.com/supaIC/ic-auth)
+- [**Cycles Distro**](https://github.com/supaIC/cycles-distro)
 
 ### ⚙️ Prerequisites
 
