@@ -5,7 +5,9 @@ This canister is the frontend for the Cipher AI Vault demo.
 
 *This demo is intended as a proof of concept and is not suitable for production use. It is supported by a [**Developer Grant from the DFINITY Foundation**](https://dfinity.org/grants).*
 
-*The demo canister is available at: **https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/**
+### Cipher AI Vault Demo Canisters
+
+The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/)
 
 ### 👨‍💻 Developer Setup
 
