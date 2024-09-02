@@ -4,24 +4,20 @@ This canister is the frontend for the Cipher AI Vault demo.
 
 *This demo is intended as a proof of concept and is not suitable for production use. It is supported by a [**Developer Grant from the DFINITY Foundation**](https://dfinity.org/grants).*
 
-## Cipher AI Vault Demo Canisters
+## Prerequisites
 
-The demo canister is currently live and can be accessed [**here**](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/).
+**WebGPU:** For the best experience, use a [**WebGPU**](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We recommend [**Chrome Canary**](https://www.google.com/chrome/canary/).
 
-## Developer Setup
+To use this repository, ensure that DFX and Node.js are installed. This project leverages the Azle development kit from Demergent Labs. For setup assistance, refer to the following resources:
+
+- [**DFX Setup**](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
+- [**Node.js Setup**](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [**Azle Documentation**](https://github.com/demergent-labs/azle)
 
 To set up and run the current version, ensure the following are installed:
 
 - **Node.js:** v20.11.1
 - **DFX:** v0.21.0
-
-### Setup Assistance
-
-For detailed setup instructions, refer to these resources:
-
-- [**DFX Setup**](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
-- [**Node.js Setup**](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [**Azle Documentation**](https://github.com/demergent-labs/azle)
 
 ### Required Wallets
 
@@ -34,7 +30,7 @@ To run the demo, you will need one of the following wallets:
 
 Run these commands to get your environment up and running:
 
-### Local Deployment
+## Local Deployment
 
 To run the demo using local `dfx`, run the following commands:
 
@@ -56,7 +52,7 @@ npm install
 npm run dev
 ```
 
-### Mainnet Deployment
+## Mainnet Deployment
 
 > ⚠️ **WARNING: THIS PROJECT IS NOT BUILT FOR PRODUCTION USE**  
 > For Mainnet deployment, you will need to update the `canister_ids.json` file with the canister ID of the canister you are deploying to.
