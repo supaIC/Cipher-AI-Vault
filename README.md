@@ -75,8 +75,8 @@ dfx stop
 
 For detailed setup and deployment instructions, refer to the following README files within this repository:
 
-- **Frontend Canister**: [**Setup and Configuration**](frontend/README.md)
-- **Cycles Distro Canister**: [**Setup and Configuration**](distro-canister/README.md)
+- **Frontend Canister**: [**Setup and Deployment**](frontend/README.md)
+- **Cycles Distro Canister**: [**Setup and Deployment**](distro-canister/README.md)
 
 ## Roadmap
 
