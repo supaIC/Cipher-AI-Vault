@@ -12,7 +12,7 @@ The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2i
 **Other standalone demo canisters:**
 - [**WebGPU LLM demo**](https://f45ub-wiaaa-aaaap-ahskq-cai.icp0.io/)
 
-**Other repos that are part of this grant project:**
+**Other repos that are part of the grant deliverables:**
 - [**ic-auth**](https://github.com/supaIC/ic-auth)
 - [**Cycles Distro**](https://github.com/supaIC/cycles-distro)
 
