@@ -11,13 +11,14 @@
 
 **WebGPU:** This project runs best in a [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We suggest [Chrome Canary](https://www.google.com/chrome/canary/).
 
-You will need to have DFX and NodeJS set up to use this repo. This project uses the Azle development kit from Demergent Labs. If you need help getting setup, check out these links:
+To use this repository, ensure that DFX and Node.js are installed. This project leverages the Azle development kit from Demergent Labs. For assistance with setup, refer to the following links:
 
 - [**DFX Setup**](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
 - [**NodeJS Setup**](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [**Azle Docs**](https://github.com/demergent-labs/azle)
 
 You will need one of the following wallets to  run the demo:
+
 - [**Plug Wallet**](https://plugwallet.ooo/)
 - [**Stoic Wallet**](https://www.stoicwallet.com/)
 - [**NFID Wallet**](https://nfid.one/)

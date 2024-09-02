@@ -1,24 +1,30 @@
 # 🔐 Cipher AI Vault Frontend Canister
 ## Version 2.2.2
 
+This canister is the frontend for the Cipher AI Vault demo.
+
 *This demo is intended as a proof of concept and is not suitable for production use. It is supported by a [Developer Grant from the DFINITY Foundation](https://dfinity.org/grants).*
 
 *The demo canister is available at: [https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/)*
 
 ### 👨‍💻 Developer Setup
 
-You will need to have DFX and NodeJS set up to use this repo. This project uses the Azle development kit from Demergent Labs. If you need help getting setup, check out these links:
-
-**DFX Setup:** https://internetcomputer.org/docs/current/developer-docs/getting-started/install
-<br>
-**NodeJS Setup:** https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
-<br>
-**Azle Docs:** https://github.com/demergent-labs/azle
-<br>
-
 To set up and run the current version, ensure you have the following installed:
 - **NodeJS:** v20.11.1
 - **DFX:** v0.21.0
+
+For assistance with setup, refer to the following links:
+
+- [**DFX Setup**](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
+- [**NodeJS Setup**](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [**Azle Docs**](https://github.com/demergent-labs/azle)
+
+You will need one of the following wallets to  run the demo:
+
+- [**Plug Wallet**](https://plugwallet.ooo/)
+- [**Stoic Wallet**](https://www.stoicwallet.com/)
+- [**NFID Wallet**](https://nfid.one/)
+- [**Internet Identity**](https://identity.raw.ic0.app/)
 
 Run these commands to get your environment up and running:
 
@@ -109,8 +115,6 @@ To interact with canisters on the Internet Computer, actors need to be created w
 
 ### TODO:
 
-- Configure Data URLs in a config file.
-- Select data file from the Data Store for initialization of the VectorDB.
 - Upload .txt and .pdf files and use LLM to generate a data file that can be used for the VectorDB.
 - Cleanup unused or duplicate style entries in the index.css file.
 - Create css files for the different components.
