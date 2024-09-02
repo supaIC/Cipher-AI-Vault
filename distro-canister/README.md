@@ -3,7 +3,9 @@
 
 This canister is in charge of automatically topping up Cipher AI Vault demo canisters.
 
-Findn the Cycles Distro open source code [here](https://github.com/supaIC/cycles-distro).
+Find the Cycles Distro open source code [here](https://github.com/supaIC/cycles-distro).
+
+This demo uses a private Cycles Distro canister. In order to top up the canisters in this demo, you will need to be a controller of the Cycles Distro canister.
 
 ### Getting Setup:
 

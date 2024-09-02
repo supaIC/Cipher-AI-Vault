@@ -1,5 +1,4 @@
 # 🔐 Cipher AI Vault Frontend Canister
-## Version 2.2.2
 
 This canister is the frontend for the Cipher AI Vault demo.
 
@@ -9,7 +8,7 @@ This canister is the frontend for the Cipher AI Vault demo.
 
 The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/)
 
-### 👨‍💻 Developer Setup
+## Developer Setup
 
 To set up and run the current version, ensure you have the following installed:
 - **NodeJS:** v20.11.1
@@ -45,7 +44,7 @@ dfx stop
 dfx deploy --network ic
 ```
 
-### ⚙️ Configuration
+## Configuration
 
 Our [**config.js**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/config.ts) can be set up to configure the canister and user whitelists:
 
@@ -62,13 +61,13 @@ export const whitelist: string[] = [
   ];
 ```
 
-### 🔑 Authentication
+## Authentication
 
 This demo leverages the **`ic-auth`** package to manage user authentication, offering a modular and user-friendly solution for integrating multiple wallet providers on the Internet Computer. Supported wallets include **Plug**, **Stoic**, **NFID**, and **Internet Identity**.
 
 For comprehensive usage instructions and examples, please refer to the [**ic-auth README**](https://github.com/supaIC/ic-auth).
 
-### 🗂️ Asset Management
+## Asset Management
 
 The [**`useAssetManager`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/assetManager/assetManager.js) hook is the core utility for managing assets on the Internet Computer, offering robust functionality to efficiently load, upload, and delete assets.
 
@@ -82,10 +81,29 @@ The [**`useAssetManager`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/
 const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles } = useAssetManager(currentUser, bucketName);
 ```
 
-### 🧠 VectorDB + LLM Integration
+## VectorDB + LLM Integration
 
 - The code for the LLM can be found in [**`llm.js`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/modelManager/llm.js)
 - The code for the VectorDB is located in [**`DatabaseAdmin.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/DatabaseAdmin.tsx)
+
+**Using Custom Data:**
+
+Data can be initialized into the VectorDB by uploading a JSON file into the Data Store and selecting it within the Database Admin Panel. The JSON file should be structured as follows:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "name here",
+    "description": "description here"
+  },
+  {
+    "id": 2,
+    "name": "name here",
+    "description": "description here"
+  }
+]
+```
 
 This integration leverages the following packages:
 - [**`@Xenova/transformers`**](https://www.npmjs.com/package/@xenova/transformers)
@@ -100,14 +118,14 @@ If you are interested in testing the LLM or the VectorDB by themselves, you can 
 - **For embeddings**: [**`all-MiniLM-L6-v2`**](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
 - **For LLM**: [**`Phi-3-mini-4k-instruct-fp16`**](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
 
-### 🔄 Cycles Top-Up
+## Cycles Top-Up
 
 This feature facilitates the conversion of ICP into cycles, enabling seamless payments and transactions within the Internet Computer (IC) ecosystem.
 
 We have developed an open source stand-alone module for Cycles Distro, which can be found [**here**](https://github.com/supaIC/cycles-distro).
 
 
-### 🎭 Creating Actors for Backend Interactions
+## Creating Actors for Backend Interactions
 
 To interact with canisters on the Internet Computer, actors need to be created with specific roles:
 
@@ -115,7 +133,7 @@ To interact with canisters on the Internet Computer, actors need to be created w
 - **Ledger Actor:** Handles ledger transactions and queries, facilitating secure and transparent financial operations.
 - **Distribution Actor:** Distributes cycles across canisters, supporting balanced and scalable resource allocation.
 
-### TODO:
+## Roadmap
 
 - Upload .txt and .pdf files and use LLM to generate a data file that can be used for the VectorDB.
 - Cleanup unused or duplicate style entries in the index.css file.

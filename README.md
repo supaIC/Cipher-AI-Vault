@@ -5,7 +5,7 @@
 
 *The demo is a proof of concept and is not intended for production use. This project is part of a [**Developer Grant from the DFINITY Foundation**](https://dfinity.org/grants).*
 
-### Cipher AI Vault Demo Canisters
+## Cipher AI Vault Demo Canisters
 
 The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/)
 
@@ -16,7 +16,7 @@ The demo canister is currently running [**here**](https://qehbq-rqaaa-aaaan-ql2i
 - [**ic-auth**](https://github.com/supaIC/ic-auth)
 - [**Cycles Distro**](https://github.com/supaIC/cycles-distro)
 
-### ⚙️ Prerequisites
+## Prerequisites
 
 **WebGPU:** This project runs best in a [**WebGPU**](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We suggest [**Chrome Canary**](https://www.google.com/chrome/canary/).
 
@@ -33,7 +33,7 @@ You will need one of the following wallets to  run the demo:
 - [**NFID Wallet**](https://nfid.one/)
 - [**Internet Identity**](https://identity.raw.ic0.app/)
 
-### 🛠️ Setup Instructions
+## Setup Instructions
 
 #### Clone The Repo:
 ```bash
@@ -61,7 +61,7 @@ dfx stop
 ```
 *Note: You may be prompted to enter your DFX identity password during setup.*
 
-**👨‍💻 Developer Mode:**
+**Developer Mode:**
 ```bash
 npm run dev
 ```
@@ -79,6 +79,6 @@ This Project has two main canisters, each provided with their own dfx.json file:
 - **Frontend Canister:** Read the README in the frontend directory [**here**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/README.md)
 - **Cycles Distro Canister:** Read the README in the distro-canister directory [**here**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/distro-canister/README.md)
 
-### Future Plans:
+## Future Plans:
 
 - List of planned features and improvements.
