@@ -82,6 +82,11 @@ This integration leverages the following packages:
 - [`@Xenova/transformers`](https://www.npmjs.com/package/@xenova/transformers)
 - A custom version of [`client-vector-search`](https://github.com/yusufhilmi/client-vector-search), our version is located [here](https://github.com/supaIC/Cipher-AI-Vault/tree/main/frontend/frontend/hooks/client-vector-search)
 
+If you are interested in testing the LLM or the VectorDB by themselves, you can check out these demo repositories:
+- [WebGPU LLM](https://github.com/supaIC/ic-webgpu-ai-template)
+- [VectorDB](https://github.com/supaIC/ic-vectordb-graph-template)
+- [LLM with VectorDB](https://github.com/supaIC/ic-webgpu-ai-graph-demo)
+
 ### Models Used:
 - **For embeddings**: [`all-MiniLM-L6-v2`](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
 - **For LLM**: [`Phi-3-mini-4k-instruct-fp16`](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
