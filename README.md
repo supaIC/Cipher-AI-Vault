@@ -43,7 +43,7 @@ To run the demo, you will need one of the following wallets:
 - [**NFID Wallet**](https://nfid.one/)
 - [**Internet Identity**](https://identity.raw.ic0.app/)
 
-## Initial Setup Instructions
+## Quick Setup Instructions
 
 ### Clone The Repo:
 ```bash
@@ -51,7 +51,7 @@ git clone https://github.com/supaIC/Cipher-AI-Vault.git
 cd Cipher-AI-Vault
 ```
 
-### Project Setup:
+### Quick Setup:
 
 As long as you have already installed and configured Node and DFX, the easy setup command should take care of everything for you:
 
@@ -71,23 +71,12 @@ dfx stop
 ```
 *Note: You may be prompted to enter your DFX identity password during setup.*
 
-## Running the Demo Locally
+## Detailed Setup and Deployment Instructions
 
-You can quickly test the demo locally using `npm`:
+For detailed setup and deployment instructions, refer to the following README files within this repository:
 
-```bash
-## Ensure that you are in the root directory
-
-npm install
-npm run dev
-```
-
-## Running the Demo Canisters
-
-This project includes two primary canisters, each with its own `dfx.json` configuration:
-
-- **Frontend Canister:** For setup and instructions, refer to the [**`README.md`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/README.md) in the `frontend` directory.
-- **Cycles Distro Canister:** For deployment details, see the [**`README.md`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/distro-canister/README.md) in the `distro-canister` directory.
+- **Frontend Canister**: [**Setup and Configuration**](frontend/README.md)
+- **Cycles Distro Canister**: [**Setup and Configuration**](distro-canister/README.md)
 
 ## Roadmap
 
