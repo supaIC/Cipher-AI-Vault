@@ -41,7 +41,7 @@ dfx stop
 ```
 
 > ⚠️ **WARNING: THIS PROJECT IS NOT BUILT FOR PRODUCTION USE**  
-> For Mainnet deployment, you will need to update the `canister_ids.json` file with the canister ID of the canister you are deploying to.  
+> For Mainnet deployment, you will need to update the `canister_ids.json` file with the canister ID of the canister you are deploying to.
 > Then run the following command:
 
 ```bash
@@ -132,6 +132,10 @@ Data can be initialized into the VectorDB by uploading a JSON file into the Data
 ## Cycles Top-Up
 
 This feature facilitates the conversion of ICP into cycles, enabling seamless payments and transactions within the Internet Computer (IC) ecosystem.
+
+The code for integrating Cycles Top-Up into the frontend can be found in [**`useCyclesTopup`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/useCyclesTopup/useCyclesTopup.js)
+
+View the code for this demos Cycles Distro canister [**here**](https://github.com/supaIC/Cipher-AI-Vault/tree/main/distro-canister).
 
 We have developed an open source stand-alone module for Cycles Distro, which can be found [**here**](https://github.com/supaIC/cycles-distro).
 
