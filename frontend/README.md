@@ -71,12 +71,12 @@ For comprehensive usage instructions and examples, please refer to the [**ic-aut
 
 The [**`useAssetManager`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/assetManager/assetManager.js) hook is the core utility for managing assets on the Internet Computer, offering robust functionality to efficiently load, upload, and delete assets.
 
-**Features:**
+### Features:
 - Load and display assets with support for various file types and use cases.
 - Upload new assets and delete existing ones.
 - Dynamically manage loading states and handle error messages.
 
-**Usage:**
+### Usage:
 ```typescript
 const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles } = useAssetManager(currentUser, bucketName);
 ```
@@ -86,7 +86,25 @@ const { assets, handleDeleteAsset, handleFileUpload, toggleUserFiles } = useAsse
 - The code for the LLM can be found in [**`llm.js`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/modelManager/llm.js)
 - The code for the VectorDB is located in [**`DatabaseAdmin.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/DatabaseAdmin.tsx)
 
-**Using Custom Data:**
+### Standalone Repos:
+
+If you are interested in testing the LLM or the VectorDB by themselves, you can check out these demo repositories:
+- [**WebGPU LLM**](https://github.com/supaIC/ic-webgpu-ai-template)
+- [**VectorDB**](https://github.com/supaIC/ic-vectordb-graph-template)
+- [**LLM with VectorDB**](https://github.com/supaIC/ic-webgpu-ai-graph-demo)
+
+### Packages Used:
+
+This integration leverages the following packages:
+- [**`@Xenova/transformers`**](https://www.npmjs.com/package/@xenova/transformers)
+- A custom version of [**`client-vector-search`**](https://github.com/yusufhilmi/client-vector-search), our version is located [**here**](https://github.com/supaIC/Cipher-AI-Vault/tree/main/frontend/frontend/hooks/client-vector-search)
+
+### Models Used:
+
+- **For embeddings**: [**`all-MiniLM-L6-v2`**](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
+- **For LLM**: [**`Phi-3-mini-4k-instruct-fp16`**](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
+
+### Using Custom Data:
 
 Data can be initialized into the VectorDB by uploading a JSON file into the Data Store and selecting it within the Database Admin Panel. The JSON file should be structured as follows:
 
@@ -104,19 +122,6 @@ Data can be initialized into the VectorDB by uploading a JSON file into the Data
   }
 ]
 ```
-
-This integration leverages the following packages:
-- [**`@Xenova/transformers`**](https://www.npmjs.com/package/@xenova/transformers)
-- A custom version of [**`client-vector-search`**](https://github.com/yusufhilmi/client-vector-search), our version is located [**here**](https://github.com/supaIC/Cipher-AI-Vault/tree/main/frontend/frontend/hooks/client-vector-search)
-
-If you are interested in testing the LLM or the VectorDB by themselves, you can check out these demo repositories:
-- [**WebGPU LLM**](https://github.com/supaIC/ic-webgpu-ai-template)
-- [**VectorDB**](https://github.com/supaIC/ic-vectordb-graph-template)
-- [**LLM with VectorDB**](https://github.com/supaIC/ic-webgpu-ai-graph-demo)
-
-### Models Used:
-- **For embeddings**: [**`all-MiniLM-L6-v2`**](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
-- **For LLM**: [**`Phi-3-mini-4k-instruct-fp16`**](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
 
 ## Cycles Top-Up
 
