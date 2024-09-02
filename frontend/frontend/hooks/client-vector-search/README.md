@@ -1,6 +1,6 @@
 # client-vector-search
 
-**This version has been modified to work with the ic-storage-module. Specifically, we adapted the code to use all-Mini-LM-L6-v2 model instead of gte-small, and we set the cache to only use in-memory cache.**
+**This version has been modified to work with the Cipher AI Vault demo. Specifically, we adapted the code to use all-Mini-LM-L6-v2 model instead of gte-small, and we set the cache to only use in-memory cache.**
 
 A client side vector search library that can embed, search, and cache. Works on the browser and server side.
 
