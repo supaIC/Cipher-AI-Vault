@@ -28,8 +28,6 @@ To run the demo, you will need one of the following wallets:
 - [**NFID Wallet**](https://nfid.one/)
 - [**Internet Identity**](https://identity.raw.ic0.app/)
 
-Run these commands to get your environment up and running:
-
 ## Local Deployment
 
 To run the demo using local `dfx`, run the following commands:
