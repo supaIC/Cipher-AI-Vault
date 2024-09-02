@@ -58,17 +58,6 @@ As long as you have already installed and configured Node and DFX, the easy setu
 ```
 npm run setup
 ```
-
-If for some reason the automatic command doesn't work, you can use the manual commands:
-
-```
-npm install && npm audit fix
-dfx start --clean --background
-dfx canister create --all
-dfx build
-dfx deploy
-dfx stop
-```
 *Note: You may be prompted to enter your DFX identity password during setup.*
 
 ## Detailed Setup and Deployment Instructions
