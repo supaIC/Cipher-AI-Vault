@@ -76,8 +76,8 @@ dfx stop
 ```
 
 This Project has two main canisters, each provided with their own dfx.json file:
-- **Frontend Canister:** `frontend` - Read the README in the frontend directory [**here**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/README.md)
-- **Cycles Distro Canister:** `distro-canister` - Read the README in the distro-canister directory [**here**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/distro-canister/README.md)
+- **Frontend Canister:** Read the README in the frontend directory [**here**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/README.md)
+- **Cycles Distro Canister:** Read the README in the distro-canister directory [**here**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/distro-canister/README.md)
 
 ### Future Plans:
 
