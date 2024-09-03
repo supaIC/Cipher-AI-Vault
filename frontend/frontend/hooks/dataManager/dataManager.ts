@@ -1,4 +1,13 @@
-// hooks/dataManager/dataManager.ts
+/*
+ * hooks/dataManager/dataManager.ts
+ *
+ * This module defines a canister that manages data records within a stable storage solution.
+ * It provides CRUD (Create, Read, Update, Delete) operations for data records.
+ *
+ * TODO: Replace data storage within the Data Store with this stable storage solution.
+ */
+
+// Import necessary modules from the 'azle' package
 import {
     Canister,
     Err,
@@ -16,19 +25,24 @@ import {
     Result,
     Void
 } from 'azle/experimental';
+// Import the UUID library for generating unique IDs
 import { v4 } from 'uuid';
 
+// Define the data structure for a record
 const DataRecord = Record({
-    id: text,
-    name: text,
-    description: text,
-    owner: Principal,
+    id: text,            // Record ID
+    name: text,          // Record name
+    description: text,   // Record description
+    owner: Principal,    // Owner's Principal ID
 });
 type DataRecord = typeof DataRecord.tsType;
 
+// Initialize storage for data records
 let dataRecordMap = StableBTreeMap<string, DataRecord>(0);
 
-const dataManagerCanister = Canister({
+// Define the canister methods
+const dataManager = Canister({
+    // Insert a new record
     insertDataRecord: update([text, text], Result(DataRecord, text), (name, description) => {
         const caller = ic.caller();
         const id = v4();
@@ -37,6 +51,7 @@ const dataManagerCanister = Canister({
         return Ok(newRecord);
     }),
 
+    // Get keys of records owned by the caller
     keysDataRecord: query([nat32], Vec(text), (numToReturn) => {
         const caller = ic.caller();
         const allKeys = dataRecordMap.keys(0, numToReturn);
@@ -46,46 +61,38 @@ const dataManagerCanister = Canister({
         });
     }),
 
+    // Get records owned by the caller
     valuesDataRecord: query([nat32], Vec(DataRecord), (numToReturn) => {
         const caller = ic.caller();
         const allValues = dataRecordMap.values(0, numToReturn);
         return allValues.filter((record) => record.owner.toText() === caller.toText());
     }),
 
+    // Get key-value pairs of records owned by the caller
     itemsDataRecord: query([nat32], Vec(Tuple(text, DataRecord)), (numToReturn) => {
         const caller = ic.caller();
         const allItems = dataRecordMap.items(0, numToReturn);
         return allItems.filter(([key, record]) => record.owner.toText() === caller.toText());
     }),
 
+    // Delete a record by ID
     deleteDataRecord: update([text], Result(Void, text), (id) => {
         const caller = ic.caller();
         const record = dataRecordMap.get(id);
-        if (!record) {
-            return Err(`Record with ID ${id} not found`);
-        }
-
-        if (record.owner.toText() !== caller.toText()) {
-            return Err(`Unauthorized: You do not own this record`);
-        }
-
+        if (!record) return Err(`Record not found`);
+        if (record.owner.toText() !== caller.toText()) return Err(`Unauthorized`);
         dataRecordMap.remove(id);
         return Ok(null);
     }),
 
+    // Get a single record by ID
     getDataRecord: query([text], Result(DataRecord, text), (id) => {
         const caller = ic.caller();
         const record = dataRecordMap.get(id);
-        if (!record) {
-            return Err(`Record with ID ${id} not found`);
-        }
-
-        if (record.owner.toText() !== caller.toText()) {
-            return Err(`Unauthorized: You do not own this record`);
-        }
-
+        if (!record) return Err(`Record not found`);
+        if (record.owner.toText() !== caller.toText()) return Err(`Unauthorized`);
         return Ok(record);
     }),
 });
 
-export default dataManagerCanister;
+export default dataManager;
