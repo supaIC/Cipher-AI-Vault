@@ -1,0 +1,22 @@
+{
+  "name": "data-store",
+  "version": "0.17.1",
+  "description": "A basic Azle template for writing Internet Computer smart contracts in TypeScript.",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm install && dfx start --clean --background && dfx canister create --all && dfx deploy && dfx stop && echo 'Setup Complete!'",
+    "build": "npx azle backend && dfx generate",
+    "test-deploy": "dfx canister install backend --wasm .azle/backend/backend.wasm.gz --mode reinstall -y",
+    "test": "dfx canister call backend hello"
+  },
+  "keywords": [],
+  "author": "Daniel McCoy",
+  "license": "MIT",
+  "dependencies": {
+    "@dfinity/agent": "^0.19.2",
+    "@dfinity/assets": "^0.19.2",
+    "@dfinity/candid": "^0.19.2",
+    "@dfinity/identity": "^0.19.2",
+    "azle": "^0.17.1"
+  }
+}

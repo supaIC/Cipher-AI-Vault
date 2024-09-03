@@ -4,12 +4,15 @@
   "scripts": {
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "setup": "npm run setup-distro && npm run setup-frontend",
+    "setup": "npm run setup-distro && npm run setup-frontend && npm run setup-data",
     "setup-frontend": "cd frontend && npm run setup",
     "deploy frontend": "cd frontend && npm run deploy",
     "setup-distro": "cd distro-canister && npm install && npm audit fix && dfx start --clean --background && dfx deploy && dfx stop && echo 'Your project has been successfully setup!'",
     "deploy-distro": "cd distro-canister && npm run reinstall",
-    "check-distro": "cd distro-canister && dfx canister --network ic status distro"
+    "check-distro": "cd distro-canister && dfx canister --network ic status distro",
+    "setup-data": "cd data-store && npm run setup",
+    "build-data": "cd data-store && npm run build",
+    "deploy-data": "cd data-store && npm run deploy"
   },
   "dependencies": {
     "react": "18.3.1"
