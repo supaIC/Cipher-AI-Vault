@@ -1,4 +1,0 @@
-service: () -> {
-    getFile: (text, nat) -> (variant {Ok:record {id:text; hasNext:bool; chunk:vec nat8; name:text}; Err:variant {NotKnown:text; InvalidPayload:text; NotFound:text; UploadError:text; Unauthorized:text; Conflict:text}}) query;
-    uploadFile: (record {id:text; content:vec nat8; name:text; size:nat}, bool) -> (variant {Ok:bool; Err:variant {NotKnown:text; InvalidPayload:text; NotFound:text; UploadError:text; Unauthorized:text; Conflict:text}});
-}

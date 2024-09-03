@@ -1,6 +1,0 @@
-service: () -> {
-    getFile: (text, text, text, nat) -> (variant {Ok:record {id:text; hasNext:bool; chunk:vec nat8; name:text}; Err:variant {NotKnown:text; InvalidPayload:text; NotFound:text; UploadError:text; Unauthorized:text; Conflict:text}}) query;
-    initializeCanister: (principal) -> (variant {Ok:bool; Err:variant {NotKnown:text; InvalidPayload:text; NotFound:text; UploadError:text; Unauthorized:text; Conflict:text}});
-    loadCanisterCode: (vec nat8) -> (variant {Ok:bool; Err:variant {NotKnown:text; InvalidPayload:text; NotFound:text; UploadError:text; Unauthorized:text; Conflict:text}});
-    uploadFile: (record {id:text; content:vec nat8; name:text; size:nat}, text, bool) -> (variant {Ok:record {id:text; name:text; canisterId:text}; Err:variant {NotKnown:text; InvalidPayload:text; NotFound:text; UploadError:text; Unauthorized:text; Conflict:text}});
-}
