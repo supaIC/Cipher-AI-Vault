@@ -1,0 +1,15 @@
+{
+  "canisters": {
+    "datapond_tracing": {
+      "type": "custom",
+      "main": "src/index.ts",
+      "candid": "src/index.did",
+      "build": "npx azle datapond_tracing",
+      "wasm": ".azle/datapond_tracing/datapond_tracing.wasm",
+      "gzip": true,
+      "declarations": {
+        "output": "./dfx-declarations/datapond_tracing"
+      }
+    }
+  }
+}

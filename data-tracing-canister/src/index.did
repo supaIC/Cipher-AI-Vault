@@ -1,0 +1,9 @@
+service: () -> {
+    addLog: (text, text, text, text) -> (variant {Ok:record {id:principal; action:text; dataId:text; userId:text; createdAt:nat64; dataName:text; serviceId:principal}; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}});
+    generateId: () -> (variant {Ok:principal; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}}) query;
+    getLogs: () -> (variant {Ok:vec record {id:principal; action:text; dataId:text; userId:text; createdAt:nat64; dataName:text; serviceId:principal}; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}}) query;
+    getLogsByAction: (text) -> (variant {Ok:vec record {id:principal; action:text; dataId:text; userId:text; createdAt:nat64; dataName:text; serviceId:principal}; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}}) query;
+    getLogsByDataIdAndAction: (text, text) -> (variant {Ok:vec record {id:principal; action:text; dataId:text; userId:text; createdAt:nat64; dataName:text; serviceId:principal}; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}}) query;
+    initializeCanister: (principal) -> (variant {Ok:record {id:principal; createdAt:nat64}; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}});
+    verifyDocument: (text) -> (variant {Ok:vec record {id:principal; action:text; dataId:text; userId:text; createdAt:nat64; dataName:text; serviceId:principal}; Err:variant {InvalidPayload:text; NotFound:text; Unauthorized:text; Conflict:text}}) query;
+}

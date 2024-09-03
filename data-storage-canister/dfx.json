@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "storage": {
+      "type": "custom",
+      "main": "src/storage.canister.ts",
+      "candid": "src/did/storage.did",
+      "build": "npx azle storage",
+      "wasm": ".azle/storage/storage.wasm",
+      "opt_level": "1",
+      "gzip": true,
+      "declarations": {
+        "output": "./dfx-declarations/storage"
+      }
+    },
+    "facade": {
+      "type": "custom",
+      "main": "src/facade.canister.ts",
+      "candid": "src/did/facade.did",
+      "build": "npx azle facade",
+      "wasm": ".azle/facade/facade.wasm",
+      "gzip": true,
+      "declarations": {
+        "output": "./dfx-declarations/facade"
+      }
+    }
+  }
+}
