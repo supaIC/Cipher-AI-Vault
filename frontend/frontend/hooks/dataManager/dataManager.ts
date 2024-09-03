@@ -3,6 +3,7 @@
  *
  * This module defines a canister that manages data records within a stable storage solution.
  * It provides CRUD (Create, Read, Update, Delete) operations for data records.
+ * It may need to have a separate canister that manages the stable storage solution.
  *
  * TODO: Replace data storage within the Data Store with this stable storage solution.
  */

@@ -69,4 +69,4 @@ For detailed setup and deployment instructions, refer to the following README fi
 
 ## Roadmap
 
-- A list of upcoming features and improvements will be provided soon.
+- Data stored in Stable Memory
