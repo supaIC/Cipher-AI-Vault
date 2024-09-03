@@ -15,8 +15,8 @@ import {
   StableBTreeMap,
   text,
   update,
-} from "azle";
-import { managementCanister } from "azle/canisters/management";
+} from "azle/experimental";
+import { managementCanister } from "azle/experimental/canisters/management";
 
 import {
   Error,

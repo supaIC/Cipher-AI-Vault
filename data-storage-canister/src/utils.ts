@@ -1,8 +1,8 @@
-import { Principal, ic } from "azle";
+import { Principal, ic } from "azle/experimental";
 import {
   managementCanister,
   CanisterStatusResult,
-} from "azle/canisters/management";
+} from "azle/experimental/canisters/management";
 
 export async function getCanisterStatus(
   canisterId: Principal,

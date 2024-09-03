@@ -8,7 +8,7 @@ import {
   text,
   Variant,
   Vec,
-} from "azle";
+} from "azle/experimental";
 
 export const User = Record({
   userId: text,

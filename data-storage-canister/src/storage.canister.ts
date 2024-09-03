@@ -1,5 +1,4 @@
 import {
-  Canister,
   Err,
   Ok,
   Result,
@@ -10,7 +9,8 @@ import {
   query,
   text,
   update,
-} from "azle";
+  Canister
+} from "azle/experimental";
 
 import { Error, File, FileChunkResponse, FilePayload } from "./types";
 import { bigIntToNumber } from "./utils";

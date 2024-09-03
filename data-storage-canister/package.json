@@ -10,9 +10,9 @@
     "format": "prettier --write 'src/**/*.{ts,js}'"
   },
   "dependencies": {
-    "@dfinity/agent": "^0.19.2",
-    "@dfinity/candid": "^0.19.2",
-    "azle": "^0.18.6",
+    "@dfinity/agent": "2.0.0",
+    "@dfinity/candid": "2.0.0",
+    "azle": "0.23.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
