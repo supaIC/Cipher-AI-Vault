@@ -1,4 +1,5 @@
 import {
+  Canister,
   Err,
   Ok,
   Result,
@@ -6,24 +7,18 @@ import {
   bool,
   ic,
   nat,
+  nat64,
+  Principal,
   query,
   text,
   update,
-  Canister
 } from "azle/experimental";
+import { Error, File, FileChunkResponse, FilePayload, Service } from "./types";
 
-import { Error, File, FileChunkResponse, FilePayload } from "./types";
-import { bigIntToNumber } from "./utils";
-
-const fileStorage = StableBTreeMap(text, File, 0);
+const fileStorage = StableBTreeMap<string, File>(0);
+const serviceStorage = StableBTreeMap<Principal, Service>(1);
 
 export default Canister({
-  /**
-   * Function to handle file uploads to the user's canister.
-   * @param file - The file data.
-   * @param isChunked - Boolean indicating whether the file upload is chunked.
-   * @returns Result indicating success or an error.
-   */
   uploadFile: update(
     [FilePayload, bool],
     Result(bool, Error),
@@ -32,7 +27,7 @@ export default Canister({
         return Err({ Unauthorized: "Unauthorized access!" });
       }
 
-      const existingFile = fileStorage.get(file.id).Some;
+      const existingFile = fileStorage.get(file.id);
 
       if (isChunked && existingFile) {
         const updatedContent = new Uint8Array(
@@ -41,69 +36,84 @@ export default Canister({
         updatedContent.set(existingFile.content, 0);
         updatedContent.set(file.content, existingFile.content.length);
 
-        const updateFile: typeof File = {
+        const updatedFile: File = {
           ...existingFile,
           content: updatedContent,
         };
 
-        fileStorage.insert(file.id, updateFile);
+        fileStorage.insert(file.id, updatedFile);
       } else {
-        const newFile: typeof File = {
+        const newFile: File = {
           ...file,
-          createdAt: ic.time(),
+          createdAt: ic.time() as nat64, // nat64 conversion
         };
 
         fileStorage.insert(file.id, newFile);
       }
 
       return Ok(true);
-    },
+    }
   ),
+  
+  initializeCanister: update([Principal], Result(bool, Error), (serviceId) => {
+    if (!ic.caller().compareTo(ic.id())) {
+      return Err({ Unauthorized: "Unauthorized access!" });
+    }
 
-  /**
-   * Function to handle getting files.
-   * @param fileId - The file ID.
-   * @param chunkNumber - The number of the requested chunk.
-   * @returns Result file or an error.
-   */
-  getFile: query(
-    [text, nat],
-    Result(FileChunkResponse, Error),
-    (fileId, chunkNumber) => {
-      if (!ic.isController(ic.caller())) {
-        return Err({ Unauthorized: "Unauthorized access!" });
-      }
+    if (serviceStorage.keys().length > 0) {
+      return Err({
+        Unauthorized: "Canister already has an authorized service ID!",
+      });
+    }
 
-      const file = fileStorage.get(fileId).Some;
+    if (serviceStorage.containsKey(serviceId)) {
+      return Err({ Conflict: "Service already exists!" });
+    }
 
-      if (!file) {
-        return Err({ NotFound: `Could not find file with given id=${fileId}` });
-      }
+    const newService: Service = {
+      id: serviceId,
+      createdAt: ic.time() as nat64, // nat64 conversion
+    };
 
-      const fileContent = file.content;
+    serviceStorage.insert(serviceId, newService);
 
-      const maxChunkSize = 1.8 * 1024 * 1024; // 2MB
+    return Ok(true);
+  }),
 
-      if (fileContent.length < maxChunkSize) {
-        return Ok({
-          id: file.id,
-          name: file.name,
-          chunk: fileContent,
-          hasNext: false,
-        });
-      }
+  getFile: query([text, nat], Result(FileChunkResponse, Error), (fileId, chunkNumber) => {
+    if (!ic.isController(ic.caller())) {
+      return Err({ Unauthorized: "Unauthorized access!" });
+    }
 
-      const offset = bigIntToNumber(chunkNumber) * maxChunkSize;
-      const chunk = fileContent.slice(offset, offset + maxChunkSize);
+    const file = fileStorage.get(fileId);
 
-      const hasNext = offset + maxChunkSize < fileContent.length;
+    if (!file) {
+      return Err({ NotFound: `Could not find file with given id=${fileId}` });
+    }
 
+    const fileContent = file.content;
+
+    const maxChunkSize = 1.8 * 1024 * 1024; // 2MB
+
+    if (fileContent.length < maxChunkSize) {
       return Ok({
         id: file.id,
         name: file.name,
-        chunk: chunk,
-        hasNext: hasNext,
+        chunk: fileContent,
+        hasNext: false,
       });
-    },
-  ),
+    }
+
+    const offset = Number(chunkNumber) * maxChunkSize;
+    const chunk = fileContent.slice(offset, offset + maxChunkSize);
+
+    const hasNext = offset + maxChunkSize < fileContent.length;
+
+    return Ok({
+      id: file.id,
+      name: file.name,
+      chunk,
+      hasNext,
+    });
+  })
 });

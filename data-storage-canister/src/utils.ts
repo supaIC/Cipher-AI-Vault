@@ -6,12 +6,12 @@ import {
 
 export async function getCanisterStatus(
   canisterId: Principal,
-): Promise<typeof CanisterStatusResult> {
+): Promise<CanisterStatusResult> {
   const canisterStatus = await ic.call(managementCanister.canister_status, {
     args: [{ canister_id: canisterId }],
   });
 
-  return canisterStatus;
+  return canisterStatus as unknown as CanisterStatusResult;
 }
 
 export function bigIntToNumber(value: bigint): number {
