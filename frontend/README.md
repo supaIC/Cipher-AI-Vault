@@ -182,3 +182,4 @@ To interact with canisters on the Internet Computer, actors need to be created w
 - Cleanup unused or duplicate style entries in the index.css file.
 - Create css files for the different components.
 - Chose from a variety of LLMs to use for the chatbot.
+- Upgrade data storage to use stable memory.
