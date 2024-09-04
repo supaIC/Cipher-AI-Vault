@@ -1,29 +1,52 @@
 import { blob, nat, int, Principal, Vec, Opt, $query, $update, nat8, StableBTreeMap, $init, ic, Variant, Record, Tuple } from 'azle';
 
+// Data structures / Custom types.
+
+// A single entry of an entire user.
 export type UserData = Record<{
     user: string,
-    data: Vec<DataRecord>
+    allFiles: Vec<FileData> // Array of files each with their own data (FileData).
 }>;
 
-export type DataRecord = Record<{
+// A single file data entry that includes an array of data for each file.
+export type FileData = Record<{
+    fileID: string, // UUID of each single file.
+    fileName: string, // File name.
+    fileData: Vec<SingleFileData>
+}>;
+
+// A single data entry as part of an array that makes up the total data of a single file.
+export type SingleFileData = Record<{
     id: string,
     name: string,
     description: string,
 }>;
 
+export type FileDataQuery = Variant<{
+    fileData: FileData,
+    error: string
+}>;
+
+export type SingleDataQuery = Variant<{
+    data: SingleFileData,
+    error: string
+}>;
+
+// Canister authorization.
+
 let owner = "";
 
 $init
 export function init(): void {
-    owner = ic.caller().toString();
+    owner = ic.caller().toText();
 }
 
 $query
 export function isAuthorized(): boolean {
-    return ic.caller().toString() === owner;
+    return ic.caller().toText() === owner;
 }
 
-// Key is a UUID
+// Key is the user's principal ID.
 let dataRecordMap = new StableBTreeMap<string, UserData>(0, 10000, 100000);
 
 $query
@@ -36,34 +59,59 @@ export function getAllUserData(): Vec<Tuple<[string, UserData]>> {
     return dataRecordMap.items();
 }
 
+// Gives you the user's data including an array of all of the file data.
 $query
 export function getSingleUser(key: string): Opt<UserData> {
     return dataRecordMap.get(key);
 }
 
-// If you get a fucky looking error it means the data record didn't exist.
+// Gets all of the data for a single file.
 $query
-export function getSingleRecordFromUser(key: string, dataId: string): DataRecord {
+export function getFileData(key: string, fileName: string): FileDataQuery {
     const user = dataRecordMap.get(key);
-    const data = user!.Some!.data;
-    const singleRecord = data.find(d => d.id === dataId)!;
-    return singleRecord;
+    if (user === null) {
+        return { error: "User not found."};
+    }
+    const fileData = user?.Some?.allFiles.find(f => f.fileID === fileName);
+    return fileData? { fileData: fileData } : { error: "File not found." };
+}
+
+$query
+export function doesUserExist(user: string): boolean {
+    const allUsers = dataRecordMap.items();
+    const userExists = allUsers.some(u => u[1].user === user);
+    return userExists;
 }
 
 $update
 export async function createUserEntry(): Promise<string> {
     const key = ic.caller().toText();
-    const emptyRecord: DataRecord = {
-        id: "0",
-        name: "Empty",
-        description: "Empty"
+    const userExists = doesUserExist(key);
+    if (userExists) {
+        return 'User already exists.';
     }
-    const value = {
+    const newUser: UserData = {
         user: key,
-        data: [emptyRecord]
-    }
+        allFiles: []
+    };
     try {
-        await dataRecordMap.insert(key, value);
+        await dataRecordMap.insert(key, newUser);
+        return 'Success';
+    } catch (e) {
+        return 'Failed';
+    }
+}
+
+// > Todo: Test this thing.
+$update
+export async function addFileToUser(key: string, data: FileData): Promise<string> {
+    const user = dataRecordMap.get(key);
+    if (user === null) {
+        return 'User not found';
+    }
+    user?.Some?.allFiles.push(data);
+    try {
+        await dataRecordMap.insert(key, user?.Some!);
         return 'Success';
     } catch (e) {
         return 'Failed';
@@ -71,14 +119,18 @@ export async function createUserEntry(): Promise<string> {
 }
 
 $update
-export async function addDataRecordToUser(key: string, data: DataRecord): Promise<string> {
+export async function updateFileForUser(key: string, fileData: FileData): Promise<string> {
     const user = dataRecordMap.get(key);
-    if (user === null) {
+    if (user === null || user.Some === undefined) {
         return 'User not found';
     }
-    user!.Some!.data.push(data);
+    const index = user.Some.allFiles.findIndex(f => f.fileID === fileData.fileID);
+    if (index === -1) {
+        return 'File not found';
+    }
+    user.Some.allFiles[index] = fileData;
     try {
-        await dataRecordMap.insert(key, user!.Some!);
+        await dataRecordMap.insert(key, user.Some);
         return 'Success';
     } catch (e) {
         return 'Failed';
@@ -86,44 +138,69 @@ export async function addDataRecordToUser(key: string, data: DataRecord): Promis
 }
 
 $update
-export async function removeDataRecordFromUser(key: string, dataId: string): Promise<string> {
+export async function removeFileFromUser(key: string, fileName: string): Promise<string> {
     const user = dataRecordMap.get(key);
     if (user === null) {
         return 'User not found';
     }
-    const data = user!.Some!.data;
-    const index = data.findIndex(d => d.id === dataId);
+    const index = user?.Some?.allFiles.findIndex(f => f.fileID === fileName);
+    if (index === -1) {
+        return 'File not found';
+    }
+    user?.Some?.allFiles.splice(index!, 1);
+    try {
+        await dataRecordMap.insert(key, user?.Some!);
+        return 'Success';
+    } catch (e) {
+        return 'Failed';
+    }
+}
+
+// Functions for the data inside each FileData object.
+
+$update
+export async function addDataToFile(key: string, fileID: string, data: SingleFileData): Promise<string> {
+    const user = dataRecordMap.get(key);
+    if (user === null) {
+        return 'User not found';
+    }
+    const file = user?.Some?.allFiles.find(f => f.fileID === fileID);
+    if (file === undefined) {
+        return 'File not found';
+    }
+    file.fileData.push(data);
+    try {
+        await dataRecordMap.insert(key, user?.Some!);
+        return 'Success';
+    } catch (e) {
+        return 'Failed';
+    }
+}
+
+$update
+export async function updateDataForFile(key: string, fileID: string, data: SingleFileData): Promise<string> {
+    const user = dataRecordMap.get(key);
+    if (user === null) {
+        return 'User not found';
+    }
+    const file = user?.Some?.allFiles.find(f => f.fileID === fileID);
+    if (file === undefined) {
+        return 'File not found';
+    }
+    const index = file.fileData.findIndex(d => d.id === data.id);
     if (index === -1) {
         return 'Data not found';
     }
-    data.splice(index, 1);
+    file.fileData[index] = data;
     try {
-        await dataRecordMap.insert(key, user!.Some!);
+        await dataRecordMap.insert(key, user?.Some!);
         return 'Success';
     } catch (e) {
         return 'Failed';
     }
 }
 
-$update
-export async function updateDataRecordFromUser(key: string, data: DataRecord): Promise<string> {
-    const user = dataRecordMap.get(key);
-    if (user === null) {
-        return 'User not found';
-    }
-    const dataArr = user!.Some!.data;
-    const index = dataArr.findIndex(d => d.id === data.id);
-    if (index === -1) {
-        return 'Data not found';
-    }
-    dataArr[index] = data;
-    try {
-        await dataRecordMap.insert(key, user!.Some!);
-        return 'Success';
-    } catch (e) {
-        return 'Failed';
-    }
-}
+// Canister management stuffs.
 
 $update
 export async function deleteUserData(key: string): Promise<string> {
@@ -133,6 +210,23 @@ export async function deleteUserData(key: string): Promise<string> {
     } else {
         try {
             await dataRecordMap.remove(key);
+            return 'Success';
+        } catch (e) {
+            return 'Failed';
+        }
+    }
+}
+
+$update
+export async function resetCanister(): Promise<string> {
+    const auth = isAuthorized();
+    if (!auth) {
+        return 'Unauthorized';
+    } else {
+        try {
+            for (const [key, _] of dataRecordMap.items()) {
+                await dataRecordMap.remove(key);
+            }
             return 'Success';
         } catch (e) {
             return 'Failed';

@@ -180,6 +180,7 @@ export function Parent() {
                   onDelete={(asset) => {
                     setConfirmDelete(asset);
                   }}
+                  userObject={currentUser as any}
                 />
               ) : (
                 <DatabaseAdmin assets={assets} />

@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { HttpAgent, Agent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
+import * as data from "../hooks/dataManager/dataManager";
+import { Types } from 'ic-auth'
 
 interface Asset {
   key: string;
@@ -9,16 +12,19 @@ interface DataStoreProps {
   assets: Array<Asset>;
   onAssetHover: (asset: Asset | null) => void;
   onDelete: (asset: Asset) => void;
+  userObject: Types.UserObject;
 }
 
-const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete }) => {
+const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, userObject }) => {
   const jsonAssets = assets.filter((asset) => asset.key.includes("/data-store/"));
   const [jsonSnippets, setJsonSnippets] = useState<{ [key: string]: string }>({});
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
   const [fullJsonData, setFullJsonData] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
+  const [dataActor, setDataActor] = useState<Actor | null>(null);
 
   useEffect(() => {
+
     let isMounted = true;
 
     const fetchJsonSnippets = async () => {
@@ -56,6 +62,19 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete })
       isMounted = false;
     };
   }, [jsonAssets]);
+
+  useEffect(() => {
+    if (userObject.agent) {
+      const actor = getDataActor();
+      setDataActor(actor as any);
+    }
+  }, [userObject]);
+
+  const getDataActor = async(): Promise<ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>> => {
+    const dataActor = await data.getDataActor(userObject.agent as any);
+    setDataActor(dataActor);
+    return dataActor;
+  }
 
   const handleAssetClick = async (asset: Asset) => {
     setViewingAsset(asset);
@@ -117,8 +136,24 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete })
     );
   };
 
+  const createUser = async() => {
+    console.log("Creating user...");
+    const result = await data.createUser(dataActor);
+    console.log("Result: ", result);
+  }
+
+  const grabUser = async() => {
+    console.log("Grabbing user...");
+    const result = await data.getSingleUser(userObject.principal, dataActor);
+    console.log(result);
+  }
+
   return (
     <>
+    <div>
+      <button onClick={createUser}>Create User</button>
+      <button onClick={grabUser}>Grab User</button>
+    </div>
       {jsonAssets.length > 0 ? (
         jsonAssets.map((asset) => (
           <div
