@@ -109,7 +109,7 @@ The Stable Memory Data Storage feature allows users to store and retrieve data i
 ### Codebase
 
 - The Stable Memory Data Storage is implemented in the [**`dataManager.ts`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/dataManager/dataManager.ts) hook.
-- The UI integration is handled in the [**`DataStore.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/DataStore.tsx) component.
+- The UI integration is handled in the [**`DataStore.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DataStore.tsx) screen.
 - The canister code is located in the following repository: [**`data-store-canister`**](https://github.com/supaIC/data-store-canister).
 
 ## VectorDB + LLM Integration
@@ -185,11 +185,11 @@ To interact with canisters on the Internet Computer, actors need to be created w
 - **Cycles Actor:** Manages cycle-related operations, ensuring efficient resource management.
 - **Ledger Actor:** Handles ledger transactions and queries, facilitating secure and transparent financial operations.
 - **Distribution Actor:** Distributes cycles across canisters, supporting balanced and scalable resource allocation.
+- **Data Actor:** Manages data storage and retrieval, ensuring data integrity and accessibility.
 
-## Roadmap
+## Cipher AI Vault Frontend Roadmap
 
 - Upload .txt and .pdf files and use LLM to generate a data file that can be used for the VectorDB.
 - Cleanup unused or duplicate style entries in the index.css file.
 - Create css files for the different components.
 - Chose from a variety of LLMs to use for the chatbot.
-- Upgrade data storage to use stable memory.

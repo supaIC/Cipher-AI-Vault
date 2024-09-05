@@ -70,10 +70,16 @@ For detailed setup and deployment instructions, refer to the following README fi
 - **Cycles Distro Canister**: [**Setup and Deployment**](distro-canister/README.md)
 - **Data Store Canister**: [**Setup and Deployment**](data-store/README.md)
 
-## Roadmap
+## Cipher AI Vault Roadmap
 
-- Embeddings backed up in Stable Memory
-- Data Store backup canister
-- Edit Data Store file entries
-- Generate a Data File from a document using in-memory LLM
-- Generate images to be stored in the Image Store using in-memory stablediffusion
+- [ ] Data Store backup canister
+- [ ] Edit Data Store file entries
+- [ ] Multiple in-memory LLM support
+- [ ] Models stored in asset canisters
+- [ ] Embeddings backed up in Stable Memory
+- [ ] Generate a Data File from a document using in-memory LLM
+- [ ] Generate images to be stored in the Image Store using in-memory Stable Diffusion
+
+## License
+
+This project is licensed under the MIT License - see the [**LICENSE**](LICENSE) file for details.
