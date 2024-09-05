@@ -1,8 +1,20 @@
 import { HttpAgent, Agent, Actor } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
-import * as dataIDL from './interfaces/backend';
+import * as dataIDL from '../../interfaces/backend';
 
-// Data structures / Custom types.
+// IDL and canister ID.
+const IDL = dataIDL.idlFactory;
+const canisterID = "olf36-uaaaa-aaaan-qmu5q-cai";
+
+// Create a data actor.
+export const getDataActor = async(agent: HttpAgent | Agent) => {
+    const dataActor = Actor.createActor(dataIDL.idlFactory, { agent, canisterId: canisterID });
+    return dataActor;
+}
+
+//=================================//
+// Data structures / Custom types. //
+//=================================//
 
 // A single entry of an entire user.
 export type UserData = {
@@ -24,25 +36,47 @@ export type SingleFileData = {
     description: string,
 };
 
+// Query types.
 export type FileDataQuery = FileData | string;
 export type SingleDataQuery = SingleFileData | string;
 export type FullDataQuery = Array<Map<string, UserData>>;
 
+// Gets all files for all users.
 export const getAllUserData = async(dataActor: any): Promise<FullDataQuery> => {
     return await dataActor.getAllUserData() as FullDataQuery;
 }
 
+// Creates a new user.
 export const createUser = async(dataActor: any): Promise<string> => {
     const result = await dataActor.createUserEntry() as string;
     console.log(result);
     return result;
 }
 
+// Gets all files for a single user.
 export const getSingleUser = async(user: string, dataActor: any): Promise<any> => {
     const userData = await dataActor.getSingleUser(user);
     return userData;
 }
 
-export function getDataActor(arg0: any) {
-  throw new Error("Function not implemented.");
-}
+// Adds a file to a user.
+export const addFileToUser = async (user: string, fileData: FileData, dataActor: any): Promise<string> => {
+    const result = await dataActor.addFileToUser(user, fileData) as string;
+    console.log("Add file result: ", result);
+    return result;
+};
+
+// Removes a file for a user.
+export const removeFileFromUser = async (user: string, fileName: string, dataActor: any): Promise<string> => {
+    const result = await dataActor.removeFileFromUser(user, fileName) as string;
+    console.log("Remove file result: ", result);
+    return result;
+};
+
+// Fetches data for a specific file of a user.
+export const getFileData = async (user: string, fileName: string, dataActor: any): Promise<FileData> => {
+    const result = await dataActor.getFileData(user, fileName) as FileData;
+    console.log("Get file data result: ", result);
+    return result;
+};
+

@@ -1,7 +1,7 @@
 // Imports
 import { Actor } from "@dfinity/agent";
 import * as cycles from "../../interfaces/cmc/cmc";
-import * as ledger from "./interfaces/ledger/index";
+import * as ledger from "../../interfaces/ledger/index";
 import * as distro from "../../interfaces/distro/index";
 import { walletAddress } from "../../config";
 

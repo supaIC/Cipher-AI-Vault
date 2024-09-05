@@ -22,6 +22,7 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
   const [fullJsonData, setFullJsonData] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
   const [dataActor, setDataActor] = useState<Actor | null>(null);
+  const [fileData, setFileData] = useState<string | null>(null);
 
   useEffect(() => {
 
@@ -70,7 +71,8 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
     }
   }, [userObject]);
 
-  const getDataActor = async(): Promise<ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>> => {
+  // Function to get the data actor from the dataManager
+  const getDataActor = async (): Promise<ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>> => {
     const dataActor = await data.getDataActor(userObject.agent as any);
     setDataActor(dataActor);
     return dataActor;
@@ -136,24 +138,87 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
     );
   };
 
-  const createUser = async() => {
+  // Function to create a new user in the data store
+  const createUser = async () => {
+    if (!dataActor) return;
     console.log("Creating user...");
     const result = await data.createUser(dataActor);
-    console.log("Result: ", result);
-  }
+    console.log("Result:", result);
+  };
 
-  const grabUser = async() => {
+  // Function to grab a user from the data store
+  const grabUser = async () => {
+    if (!dataActor) return;
     console.log("Grabbing user...");
     const result = await data.getSingleUser(userObject.principal, dataActor);
     console.log(result);
-  }
+  };
+
+  // Function to fetch all users' data from the data store
+  const getAllUsers = async () => {
+    if (!dataActor) return;
+    console.log("Fetching all user data...");
+    const allUserData = await data.getAllUserData(dataActor);
+    console.log("All User Data: ", allUserData);
+  };
+
+  // Function to add a new file to the user in the data store using test data
+  const addFile = async () => {
+    if (!dataActor) return;
+
+    const fileData = {
+      fileID: "file-uuid-123", // Replace with your file ID logic
+      fileName: "DFINITY Profiles",
+      fileData: [
+        {
+          id: "1",
+          name: "Dominic Williams",
+          description: "Dominic Williams is the founder and chief scientist of the DFINITY Foundation..."
+        },
+        {
+          id: "2",
+          name: "DFINITY Foundation",
+          description: "The DFINITY Foundation is a non-profit research organization based in Zurich, Switzerland..."
+        }
+      ]
+    };
+
+    console.log("Adding file to user...");
+    const result = await data.addFileToUser(userObject.principal, fileData, dataActor);
+    console.log("Add file result: ", result);
+  };
+
+  // Function to remove a file from the user's data
+  const removeFile = async () => {
+    if (!dataActor) return;
+
+    const fileID = "file-uuid-123"; // Replace with the correct fileID that exists in the user's data
+    console.log("Removing file from user...");
+    const result = await data.removeFileFromUser(userObject.principal, fileID, dataActor);
+    console.log("Remove file result: ", result);
+  };
+
+  // Function to get data for a specific file
+  const getFileData = async () => {
+    if (!dataActor) return;
+
+    const fileName = "DFINITY Profiles"; // Replace with the actual file name
+    console.log("Getting file data...");
+    const result = await data.getFileData(userObject.principal, fileName, dataActor);
+    setFileData(JSON.stringify(result, null, 2)); // Store the file data in state
+    console.log("Get file data result: ", result);
+  };
 
   return (
     <>
-    <div>
-      <button onClick={createUser}>Create User</button>
-      <button onClick={grabUser}>Grab User</button>
-    </div>
+      <div>
+        <button onClick={createUser}>Create User</button>
+        <button onClick={grabUser}>Grab User</button>
+        <button onClick={addFile}>Add File</button> {/* New Button with Test Data */}
+        <button onClick={getAllUsers}>Get All Users</button> {/* New Button */}
+        <button onClick={removeFile}>Remove File</button> {/* New Button to Remove File */}
+        <button onClick={getFileData}>Get File Data</button> {/* Button to Get File Data */}
+      </div>
       {jsonAssets.length > 0 ? (
         jsonAssets.map((asset) => (
           <div
