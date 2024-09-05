@@ -66,10 +66,12 @@ For detailed setup and deployment instructions, refer to the following README fi
 
 - **Frontend Canister**: [**Setup and Deployment**](frontend/README.md)
 - **Cycles Distro Canister**: [**Setup and Deployment**](distro-canister/README.md)
-- **Data Store Canister**: [**Setup and Deployment**](data-store-canister/README.md)
+- **Data Store Canister**: [**Setup and Deployment**](data-store/README.md)
 
 ## Roadmap
 
 - Embeddings backed up in Stable Memory
 - Data Store backup canister
 - Edit Data Store file entries
+- Generate a Data File from a document using in-memory LLM
+- Generate images to be stored in the Image Store using in-memory stablediffusion
