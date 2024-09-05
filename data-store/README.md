@@ -135,3 +135,8 @@ Here’s the updated list of DFX command-line test commands using your principal
   - `record { id = "2"; name = "Second Entry"; description = "Details of second entry" }`
 
 You can replace these mock values to suit your specific testing needs.
+
+## TODO:
+
+- Create a standalone repo for the data store canister.
+- Naming conventions for the data store canister.

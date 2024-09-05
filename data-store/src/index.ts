@@ -1,6 +1,8 @@
 import { blob, nat, int, Principal, Vec, Opt, $query, $update, nat8, StableBTreeMap, $init, ic, Variant, Record, Tuple } from 'azle';
 
-// Data structures / Custom types.
+//================================//
+// Data structures / Custom types //
+//================================//
 
 // A single entry of an entire user.
 export type UserData = Record<{
@@ -22,6 +24,7 @@ export type SingleFileData = Record<{
     description: string,
 }>;
 
+// 
 export type FileDataQuery = Variant<{
     fileData: FileData,
     error: string
@@ -36,11 +39,13 @@ export type SingleDataQuery = Variant<{
 
 let owner = "";
 
+// Initializes the data store.
 $init
 export function init(): void {
     owner = ic.caller().toText();
 }
 
+// Checks if the caller is the owner.
 $query
 export function isAuthorized(): boolean {
     return ic.caller().toText() === owner;
@@ -76,6 +81,7 @@ export function getFileData(key: string, fileName: string): FileDataQuery {
     return fileData? { fileData: fileData } : { error: "File not found." };
 }
 
+// Checks if a user exists.
 $query
 export function doesUserExist(user: string): boolean {
     const allUsers = dataRecordMap.items();
@@ -83,6 +89,7 @@ export function doesUserExist(user: string): boolean {
     return userExists;
 }
 
+// Creates a user entry.
 $update
 export async function createUserEntry(): Promise<string> {
     const key = ic.caller().toText();
@@ -118,6 +125,7 @@ export async function addFileToUser(key: string, data: FileData): Promise<string
     }
 }
 
+// Updates a file for a user.
 $update
 export async function updateFileForUser(key: string, fileData: FileData): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -137,6 +145,7 @@ export async function updateFileForUser(key: string, fileData: FileData): Promis
     }
 }
 
+// Removes a file for a user.
 $update
 export async function removeFileFromUser(key: string, fileName: string): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -156,7 +165,9 @@ export async function removeFileFromUser(key: string, fileName: string): Promise
     }
 }
 
-// Functions for the data inside each FileData object.
+//====================================================//
+// Functions for the data inside each FileData object //
+//====================================================//
 
 $update
 export async function addDataToFile(key: string, fileID: string, data: SingleFileData): Promise<string> {
@@ -199,8 +210,9 @@ export async function updateDataForFile(key: string, fileID: string, data: Singl
         return 'Failed';
     }
 }
-
-// Canister management stuffs.
+//============================//
+// Canister management stuffs //
+//============================//
 
 $update
 export async function deleteUserData(key: string): Promise<string> {
