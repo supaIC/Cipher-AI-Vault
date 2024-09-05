@@ -1,0 +1,24 @@
+type FileData = record {
+  fileData : vec SingleFileData;
+  fileName : text;
+  fileID : text;
+};
+type FileDataQuery = variant { fileData : FileData; error : text };
+type SingleFileData = record { id : text; name : text; description : text };
+type UserData = record { user : text; allFiles : vec FileData };
+service : () -> {
+  addDataToFile : (text, text, SingleFileData) -> (text);
+  addFileToUser : (text, FileData) -> (text);
+  createUserEntry : () -> (text);
+  deleteUserData : (text) -> (text);
+  doesUserExist : (text) -> (bool) query;
+  getAllUserData : () -> (vec record { text; UserData }) query;
+  getFileData : (text, text) -> (FileDataQuery) query;
+  getSingleUser : (text) -> (opt UserData) query;
+  isAuthorized : () -> (bool) query;
+  isDataMapEmpty : () -> (bool) query;
+  removeFileFromUser : (text, text) -> (text);
+  resetCanister : () -> (text);
+  updateDataForFile : (text, text, SingleFileData) -> (text);
+  updateFileForUser : (text, FileData) -> (text);
+}

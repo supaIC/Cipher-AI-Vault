@@ -2,9 +2,9 @@
 // agent.d.ts
 
 import { HttpAgent } from "@dfinity/agent";
-import { Cycles } from "./interfaces/cmc/cmc";
+import { Cycles } from "../../interfaces/cmc/cmc";
 import { Ledger } from "./interfaces/ledger/index";
-import { Distro } from "./interfaces/distro/index";
+import { Distro } from "../../interfaces/distro/index";
 
 declare const walletAddress: string;
 

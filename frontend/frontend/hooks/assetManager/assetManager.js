@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import { AssetManager } from "@dfinity/assets";
-import { canisterId } from "../../config";
+import { canisterId } from "../../configs/config";
 
 function useAssetManager(currentUser, bucketName) {
   const [assets, setAssets] = useState([]);

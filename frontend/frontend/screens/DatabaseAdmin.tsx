@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getEmbedding, EmbeddingIndex, initializeModel } from "../hooks/client-vector-search/src/index";
+import * as data from "../hooks/dataManager/dataManager";
 
 interface SearchResult {
   input: string;
@@ -17,9 +18,10 @@ interface Asset {
 
 interface DatabaseAdminProps {
   assets: Array<Asset>;
+  privateData: data.FullDataQuery | null;
 }
 
-const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
+const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) => {
   const [searchResult, setSearchResult] = useState<any[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [status, setStatus] = useState<string | null>(null);
@@ -33,6 +35,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
   const [index, setIndex] = useState<EmbeddingIndex | null>(null);
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [lastQuery, setLastQuery] = useState<string | null>(null);
+  const [selectedFileType, setSelectedFileType] = useState<'public' | 'private'>('public');
 
   const worker = useRef<Worker | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -42,27 +45,42 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
     console.log(`[Client Log] ${message}`);
   };
 
-  // Filter JSON file names from the provided assets
-  const jsonAssets = assets.filter((asset) => asset.key.includes("/data-store/"));
+  // Filter JSON file names from the provided assets (public files)
+  const publicJsonAssets = assets.filter((asset) => asset.key.includes("/data-store/"));
+
+  // Extract private files from privateData
+  const privateJsonAssets = privateData ? 
+    privateData.flatMap(userDataMap => 
+      Array.isArray(userDataMap) ? userDataMap[1].allFiles : []
+    ) : [];
 
   const initializeDB = async () => {
-    if (isRunning || !selectedFile) return; // Prevent multiple initializations or if no file is selected
+    if (isRunning || !selectedFile) return;
 
     setIsRunning(true);
     try {
       console.log("Initializing database...");
       setStatusMessage("Initializing database...");
 
-      const selectedAsset = jsonAssets.find((asset) => asset.key.endsWith(selectedFile));
-      if (!selectedAsset) {
-        throw new Error(`Selected file not found in assets: ${selectedFile}`);
-      }
+      let initialObjects;
 
-      const response = await fetch(selectedAsset.url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.statusText}`);
+      if (selectedFileType === 'public') {
+        const selectedAsset = publicJsonAssets.find((asset) => asset.key.endsWith(selectedFile));
+        if (!selectedAsset) {
+          throw new Error(`Selected public file not found: ${selectedFile}`);
+        }
+        const response = await fetch(selectedAsset.url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch public data: ${response.statusText}`);
+        }
+        initialObjects = await response.json();
+      } else {
+        const selectedPrivateFile = privateJsonAssets.find(file => file.fileName === selectedFile);
+        if (!selectedPrivateFile) {
+          throw new Error(`Selected private file not found: ${selectedFile}`);
+        }
+        initialObjects = selectedPrivateFile.fileData;
       }
-      const initialObjects = await response.json();
 
       if (!Array.isArray(initialObjects)) {
         throw new Error("The fetched data is not an array");
@@ -272,7 +290,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
 
       if (results.length > 0) {
         // Add the relevant search results to the context of the message
-        const contextMessage = `Here’s some relevant information I found that might help: ${results
+        const contextMessage = `Here's some relevant information I found that might help: ${results
           .map(result => `${result.object.name} is ${result.object.description.toLowerCase()}`)
           .join('. ')}.\n\n`;
 
@@ -318,7 +336,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             <h2>Status:</h2>
             <p>{statusMessage || "No actions performed yet."}</p>
           </div>
-
+  
           <div className="results-section">
             <h2>Search Results:</h2>
             {searchResult.length > 0 ? (
@@ -334,10 +352,20 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             )}
           </div>
         </div>
-
+  
         <div className="actions-wrapper">
           <h2>Initialization</h2>
           <div className="file-selection">
+            <label htmlFor="fileTypeSelect">Select File Type: </label>
+            <select
+              id="fileTypeSelect"
+              value={selectedFileType}
+              onChange={(e) => setSelectedFileType(e.target.value as 'public' | 'private')}
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+            
             <label htmlFor="fileSelect">Select Data File: </label>
             <select
               id="fileSelect"
@@ -345,11 +373,18 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
               onChange={(e) => setSelectedFile(e.target.value)}
             >
               <option value="">--Select a file--</option>
-              {jsonAssets.map((asset, index) => (
-                <option key={index} value={asset.key.split("/").pop()}>
-                  {asset.key.split("/").pop()}
-                </option>
-              ))}
+              {selectedFileType === 'public' 
+                ? publicJsonAssets.map((asset, index) => (
+                    <option key={index} value={asset.key.split("/").pop()}>
+                      {asset.key.split("/").pop()}
+                    </option>
+                  ))
+                : privateJsonAssets.map((file, index) => (
+                    <option key={index} value={file.fileName}>
+                      {file.fileName}
+                    </option>
+                  ))
+              }
             </select>
           </div>
           <div className="button-group">
@@ -364,7 +399,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </button>
           </div>
         </div>
-
+  
         {status === null && messages.length === 0 && (
           <div className="model-load-wrapper">
             <div className="model-info-section">
@@ -375,7 +410,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </div>
             <div className="model-description-section">
               <p>
-                You’re about to load {" "}
+                You're about to load {" "}
                 <a
                   href="https://huggingface.co/Xenova/Phi-3-mini-4k-instruct"
                   target="_blank"
@@ -402,7 +437,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </div>
           </div>
         )}
-
+  
         {status === "loading" && (
           <div className="loading-wrapper">
             <p className="loading-text">{loadingMessage}</p>
@@ -414,7 +449,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             ))}
           </div>
         )}
-
+  
         {status === "ready" && (
           <div ref={chatContainerRef} className="chat-section-wrapper">
             {messages.length === 0 ? (
@@ -465,7 +500,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </p>
           </div>
         )}
-
+  
         <div className="input-wrapper">
           <textarea
             ref={textareaRef}
@@ -491,7 +526,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets }) => {
             </button>
           )}
         </div>
-
+  
         <p className="disclaimer-text">Disclaimer: Generated content may be inaccurate or false.</p>
       </div>
     </div>

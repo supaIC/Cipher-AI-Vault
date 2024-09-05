@@ -66,7 +66,10 @@ For detailed setup and deployment instructions, refer to the following README fi
 
 - **Frontend Canister**: [**Setup and Deployment**](frontend/README.md)
 - **Cycles Distro Canister**: [**Setup and Deployment**](distro-canister/README.md)
+- **Data Store Canister**: [**Setup and Deployment**](data-store-canister/README.md)
 
 ## Roadmap
 
-- A list of upcoming features and improvements will be provided soon.
+- Embeddings backed up in Stable Memory
+- Data Store backup canister
+- Edit Data Store file entries

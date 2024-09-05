@@ -1,6 +1,5 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
-import type { IDL } from '@dfinity/candid';
 
 export interface Balances { 'assets' : bigint, 'frontend' : bigint }
 export type ManualReply = { 'Ok' : boolean } |
@@ -16,5 +15,3 @@ export interface _SERVICE {
   'getBalances' : ActorMethod<[], ManualReply_2>,
   'getCanisterStatus' : ActorMethod<[], ManualReply_3>,
 }
-export declare const idlFactory: IDL.InterfaceFactory;
-export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

@@ -1,0 +1,152 @@
+[
+    {
+        "id": "1",
+        "name": "Dominic Williams",
+        "description": "Dominic Williams is the founder and chief scientist of the DFINITY Foundation, pioneering the development of the Internet Computer."
+    },
+    {
+        "id": "2",
+        "name": "DFINITY Foundation",
+        "description": "The DFINITY Foundation is a non-profit research organization based in Zurich, Switzerland, focused on building the Internet Computer."
+    },
+    {
+        "id": "3",
+        "name": "Internet Computer",
+        "description": "The Internet Computer is a decentralized computing platform powered by blockchain technology, enabling the creation of scalable, secure web applications."
+    },
+    {
+        "id": "4",
+        "name": "Canister",
+        "description": "Canisters are smart contracts that run on the Internet Computer, allowing developers to create decentralized applications (dApps)."
+    },
+    {
+        "id": "5",
+        "name": "ICP",
+        "description": "ICP is the native utility token of the Internet Computer network, used for governance, computation, and network transactions."
+    },
+    {
+        "id": "6",
+        "name": "Motoko",
+        "description": "Motoko is a programming language specifically designed for building applications on the Internet Computer blockchain."
+    },
+    {
+        "id": "7",
+        "name": "Chain Key Technology",
+        "description": "Chain Key Technology is the cryptographic breakthrough enabling the Internet Computer to scale to millions of nodes with seamless upgrades."
+    },
+    {
+        "id": "8",
+        "name": "NNS",
+        "description": "The Network Nervous System (NNS) is the autonomous governance system that manages the Internet Computer and its network upgrades."
+    },
+    {
+        "id": "9",
+        "name": "Neuron",
+        "description": "A Neuron is a governance entity on the NNS, allowing users to vote on proposals and earn rewards for their participation."
+    },
+    {
+        "id": "10",
+        "name": "Genesis Block",
+        "description": "The Genesis Block marks the official launch of the Internet Computer network in May 2021, ushering in a new era of decentralized computing."
+    },
+    {
+        "id": "11",
+        "name": "WebAssembly",
+        "description": "WebAssembly (Wasm) is a low-level binary instruction format used by the Internet Computer to execute canister smart contracts efficiently."
+    },
+    {
+        "id": "12",
+        "name": "Threshold Relay",
+        "description": "Threshold Relay is a consensus mechanism used by the Internet Computer to ensure high-speed transaction processing across the network."
+    },
+    {
+        "id": "13",
+        "name": "ICP Holders",
+        "description": "ICP holders participate in the governance of the Internet Computer by staking their tokens and voting on network proposals."
+    },
+    {
+        "id": "14",
+        "name": "DFINITY ICP Utility",
+        "description": "ICP tokens are used to pay for network transactions, deploy canisters, and participate in the governance of the Internet Computer."
+    },
+    {
+        "id": "15",
+        "name": "Subnet",
+        "description": "Subnets are independent blockchain networks within the Internet Computer that handle smart contract execution and scale the system."
+    },
+    {
+        "id": "16",
+        "name": "DFINITY SDK",
+        "description": "The DFINITY SDK is a set of tools and libraries that developers use to build, test, and deploy applications on the Internet Computer."
+    },
+    {
+        "id": "17",
+        "name": "Cycles",
+        "description": "Cycles are the fuel used to power canisters on the Internet Computer, allowing developers to run decentralized applications."
+    },
+    {
+        "id": "18",
+        "name": "Decentralized Finance",
+        "description": "Decentralized Finance (DeFi) refers to financial applications built on blockchain technology, such as lending and trading, now possible on the Internet Computer."
+    },
+    {
+        "id": "19",
+        "name": "ICP Governance",
+        "description": "ICP governance is a decentralized process where stakeholders submit and vote on proposals that shape the development of the Internet Computer."
+    },
+    {
+        "id": "20",
+        "name": "Internet Identity",
+        "description": "Internet Identity is a privacy-preserving authentication framework that allows users to securely log into dApps on the Internet Computer."
+    },
+    {
+        "id": "21",
+        "name": "Smart Contracts",
+        "description": "Smart contracts on the Internet Computer are executed in canisters, enabling trustless, programmable transactions and logic on the blockchain."
+    },
+    {
+        "id": "22",
+        "name": "Scaling",
+        "description": "The Internet Computer's architecture allows for unlimited scalability by adding new subnets, supporting mass adoption and global applications."
+    },
+    {
+        "id": "23",
+        "name": "Quantum-safe Cryptography",
+        "description": "Quantum-safe cryptography ensures that the Internet Computer remains secure even in the face of future quantum computing advancements."
+    },
+    {
+        "id": "24",
+        "name": "DFINITY Roadmap",
+        "description": "The DFINITY roadmap outlines the future development milestones of the Internet Computer, focusing on scalability, governance, and ecosystem growth."
+    },
+    {
+        "id": "25",
+        "name": "Cycle Wallet",
+        "description": "A Cycle Wallet holds cycles, which are used to power canisters on the Internet Computer and maintain the execution of dApps."
+    },
+    {
+        "id": "26",
+        "name": "Web 3.0",
+        "description": "Web 3.0 is the next generation of the internet, driven by decentralized technologies like the Internet Computer to enable a user-controlled web."
+    },
+    {
+        "id": "27",
+        "name": "ICP Staking",
+        "description": "Staking ICP allows users to lock their tokens in neurons, participate in governance, and earn rewards for voting on proposals."
+    },
+    {
+        "id": "28",
+        "name": "Open Internet Services",
+        "description": "Open Internet Services are decentralized applications and platforms built on the Internet Computer, offering users control and ownership of their data."
+    },
+    {
+        "id": "29",
+        "name": "Reverse Gas Model",
+        "description": "The Reverse Gas Model in the Internet Computer allows users to interact with dApps without paying gas fees directly, as developers cover the costs."
+    },
+    {
+        "id": "30",
+        "name": "WebGPU",
+        "description": "WebGPU is a new graphics API supported by the Internet Computer, allowing for the development of high-performance, graphics-intensive dApps."
+    }
+]

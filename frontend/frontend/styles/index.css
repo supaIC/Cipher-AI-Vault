@@ -1067,3 +1067,67 @@ button {
     background-color: #fff;
     color: #333;
   }
+
+/* Ensure the page container separates sections */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Top section with tabs and action buttons */
+  .top-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .tab:hover {
+    background-color: #3367d6;
+  }
+  
+  .tab.active {
+    background-color: #3367d6; /* Highlight color for the active tab */
+    color: white;
+    border-color: #4CAF50;
+  }  
+  
+  .data-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Assets List Section */
+  .assets-list-section {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .data-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    max-width: 100%;
+  }
+  
