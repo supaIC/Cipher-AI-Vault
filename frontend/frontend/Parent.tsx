@@ -5,16 +5,16 @@ import {
   ErrorNotification,
   DeleteConfirmation,
 } from "./components/OverlayComponents";
-import DataStore from "./components/DataStore";
-import ImageStore from "./components/ImageStore";
-import DocumentStore from "./components/DocumentStore";
-import DatabaseAdmin from "./components/DatabaseAdmin";
+import DataStore from "./screens/DataStore";
+import ImageStore from "./screens/ImageStore";
+import DocumentStore from "./screens/DocumentStore";
+import DatabaseAdmin from "./screens/DatabaseAdmin";
 import { ICWalletList } from "./components/ICWalletList";
 import { useAssetManager, Asset, UserObject } from "./hooks/assetManager/assetManager";
 import { cyclesTopUp } from "./hooks/useCyclesTopup/useCyclesTopup";
 import DragAndDropContainer from "./components/DragAndDropContainer";
 import { HttpAgent } from "@dfinity/agent";
-import { whitelist } from "./config";
+import { whitelist } from "./configs/config";
 import * as auth from "./hooks/authFunctions/authFunctions";
 import * as data from "./hooks/dataManager/dataManager"; // Add DataManager import
 import * as distro from "./interfaces/distro";
