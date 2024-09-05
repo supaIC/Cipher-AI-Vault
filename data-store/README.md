@@ -1,7 +1,4 @@
-## Azle Playground
-### Basic Template - Version 0.17.1
-
-This is a basic template for writing Internet Computer smart contracts with TypeScipt using the Azle framework. You can utilize this by cloning the repository and referencing the Azle book for instructions on creating your smart contracts, then use the commands in this document for instructions on compilation, testing, and deployment.
+## Cipher AI Vault Data Store Canister
 
 ### Getting Started:
 
@@ -36,19 +33,9 @@ dfx canister install backend --wasm target/wasm32-unknown-unknown/release/backen
 
 If you have already created a mainnet canister and wish to deploy to the network just add `--network ic` after `canister` in the command.
 
-#### To Use:
-
-If you have deployed the canister locally you can use this command to test it. If you are trying to test it on the mainnet add `--network ic` after `canister` in the command and replace `backend` with your mainnet canister ID.
-
-```
-dfx canister call backend hello
-```
-
-Disclaimer: Azle is still in alpha and beta phases, this means it is subject to errors, inconsistent operation, and unexpected behaviors. Use at your own risk.
-
 ## Useful Test Commands:
 
-Here’s the updated list of DFX command-line test commands using your principal (`zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe`):
+Here’s the updated list of DFX command-line test commands using your principal (`principal`):
 
 ### Authorization and Management
 
@@ -64,7 +51,7 @@ Here’s the updated list of DFX command-line test commands using your principal
 
 3. **Delete User Data (for authorized users only):**
    ```bash
-   dfx canister --network ic call backend deleteUserData '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe" )'
+   dfx canister --network ic call backend deleteUserData '( "principal" )'
    ```
 
 ### Queries
@@ -81,17 +68,17 @@ Here’s the updated list of DFX command-line test commands using your principal
 
 6. **Fetch Data for a Single User:**
    ```bash
-   dfx canister --network ic call backend getSingleUser '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe" )'
+   dfx canister --network ic call backend getSingleUser '( "principal" )'
    ```
 
 7. **Fetch File Data for a User's File:**
    ```bash
-   dfx canister --network ic call backend getFileData '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe", "file-12345" )'
+   dfx canister --network ic call backend getFileData '( "principal", "file-12345" )'
    ```
 
 8. **Check if a User Exists:**
    ```bash
-   dfx canister --network ic call backend doesUserExist '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe" )'
+   dfx canister --network ic call backend doesUserExist '( "principal" )'
    ```
 
 ### Updates
@@ -103,31 +90,31 @@ Here’s the updated list of DFX command-line test commands using your principal
 
 10. **Add a File to User:**
     ```bash
-    dfx canister --network ic call backend addFileToUser '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe", record { fileID = "file-12345"; fileName = "Project Plan"; fileData = vec { record { id = "1"; name = "First Entry"; description = "Details of first entry" } } } )'
+    dfx canister --network ic call backend addFileToUser '( "principal", record { fileID = "file-12345"; fileName = "Project Plan"; fileData = vec { record { id = "1"; name = "First Entry"; description = "Details of first entry" } } } )'
     ```
 
 11. **Update File for User:**
     ```bash
-    dfx canister --network ic call backend updateFileForUser '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe", record { fileID = "file-12345"; fileName = "Updated Project Plan"; fileData = vec { record { id = "1"; name = "Updated Entry"; description = "Updated details" } } } )'
+    dfx canister --network ic call backend updateFileForUser '( "principal", record { fileID = "file-12345"; fileName = "Updated Project Plan"; fileData = vec { record { id = "1"; name = "Updated Entry"; description = "Updated details" } } } )'
     ```
 
 12. **Remove a File from User:**
     ```bash
-    dfx canister --network ic call backend removeFileFromUser '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe", "file-12345" )'
+    dfx canister --network ic call backend removeFileFromUser '( "principal", "file-12345" )'
     ```
 
 13. **Add Data to a File for a User:**
     ```bash
-    dfx canister --network ic call backend addDataToFile '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe", "file-12345", record { id = "2"; name = "Second Entry"; description = "Details of second entry" } )'
+    dfx canister --network ic call backend addDataToFile '( "principal", "file-12345", record { id = "2"; name = "Second Entry"; description = "Details of second entry" } )'
     ```
 
 14. **Update Data for a File for a User:**
     ```bash
-    dfx canister --network ic call backend updateDataForFile '( "zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe", "file-12345", record { id = "1"; name = "Updated Entry"; description = "Updated details of first entry" } )'
+    dfx canister --network ic call backend updateDataForFile '( "principal", "file-12345", record { id = "1"; name = "Updated Entry"; description = "Updated details of first entry" } )'
     ```
 
 ### Example Mock Values:
-- **User Principal:** `"zvahu-nf2zh-rqszo-mwqxb-rly67-dsmdf-xau5z-6khv7-5ch5e-a2tlw-nqe"`
+- **User Principal:** `"principal"`
 - **File ID:** `"file-12345"`
 - **File Name:** `"Project Plan"` / `"Updated Project Plan"`
 - **Data Entries:**

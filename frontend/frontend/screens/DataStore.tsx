@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HttpAgent, Agent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
 import * as data from "../hooks/dataManager/dataManager";
-import { Types } from 'ic-auth'
+import { Types } from 'ic-auth';
 
 interface Asset {
   key: string;
@@ -55,28 +55,46 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
 
   const getDataActor = async (): Promise<ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>> => {
     return await data.getDataActor(userObject.agent as any);
-  }
+  };
 
   const loadPrivateData = async () => {
-    if (!dataActor) return;
+    if (!dataActor) {
+      console.log("Data actor not initialized yet.");
+      return;
+    }
+  
     setLoading(true);
     setError(null);
+  
     try {
+      console.log("Fetching all user data...");
       const allUserData = await data.getAllUserData(dataActor);
-      console.log("Fetched all user data:", allUserData);
-      setPrivateData(allUserData);
+  
+      if (!allUserData || allUserData.length === 0) {
+        // If no user data is found, create the user automatically
+        console.log("No user data found. Proceeding to create a new user...");
+        await data.createUser(dataActor);
+        console.log("User created successfully.");
+        
+        console.log("Reloading data after user creation...");
+        await loadPrivateData(); // Load data again after user creation
+      } else {
+        console.log("User exists. Fetched all user data:", allUserData);
+        setPrivateData(allUserData);
+      }
     } catch (error) {
       console.error("Error loading private data:", error);
       setError("Failed to load private data. Please try again.");
     } finally {
+      console.log("Finished loading private data.");
       setLoading(false);
     }
-  };
+  };  
 
   const loadPublicData = async () => {
     const jsonAssets = assets.filter((asset) => asset.key.includes("/data-store/"));
     const snippets: { [key: string]: string } = {};
-  
+
     for (const asset of jsonAssets) {
       if (asset.url.endsWith(".json")) {
         try {
@@ -100,7 +118,7 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
         }
       }
     }
-  
+
     setPublicData(snippets);
   };
 
@@ -172,22 +190,6 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
     );
   };
 
-  const createUser = async () => {
-    if (!dataActor) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await data.createUser(dataActor);
-      console.log("Create user result:", result);
-      await loadPrivateData();
-    } catch (error) {
-      console.error("Error creating user:", error);
-      setError("Failed to create user. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const validateJsonFormat = (jsonData: any): boolean => {
     if (!Array.isArray(jsonData)) {
       return false;
@@ -247,11 +249,11 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
     if (loading) {
       return <p>Loading...</p>;
     }
-  
+
     if (error) {
       return <p>Error: {error}</p>;
     }
-  
+
     if (activeTab === 'private') {
       if (!privateData || privateData.length === 0) {
         return <p>No private data available. Try uploading a file.</p>;
@@ -273,7 +275,7 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
             onClick={() => handleAssetClick(file)}
           >
             <div className="json-preview">
-              <pre 
+              <pre
                 className="json-snippet"
                 dangerouslySetInnerHTML={{
                   __html: file.fileData && file.fileData.length > 0
@@ -304,10 +306,10 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
             onClick={() => handleAssetClick({ key, url: assets.find(a => a.key === key)?.url || '' })}
           >
             <div className="json-preview">
-              <pre 
+              <pre
                 className="json-snippet"
                 dangerouslySetInnerHTML={{
-                  __html: isError 
+                  __html: isError
                     ? `Error: ${parsedValue.error}`
                     : syntaxHighlight(value.substring(0, 100) + "...")
                 }}
@@ -323,42 +325,48 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
   };
 
   return (
-    <>
-      <div className="tab-container">
-        <button
-          className={`tab ${activeTab === 'private' ? 'active' : ''}`}
-          onClick={() => setActiveTab('private')}
-        >
-          Private Data
-        </button>
-        <button
-          className={`tab ${activeTab === 'public' ? 'active' : ''}`}
-          onClick={() => setActiveTab('public')}
-        >
-          Public Data
-        </button>
+    <div className="page-container">
+      {/* Top Section with Tabs and Actions */}
+      <div className="top-section">
+        <div className="tab-container">
+          <button
+            className={`tab ${activeTab === 'private' ? 'active' : ''}`}
+            onClick={() => setActiveTab('private')}
+          >
+            Private Data
+          </button>
+          <button
+            className={`tab ${activeTab === 'public' ? 'active' : ''}`}
+            onClick={() => setActiveTab('public')}
+          >
+            Public Data
+          </button>
+        </div>
+  
+        <div className="data-actions">
+          {activeTab === 'private' && (
+            <>
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleFileUpload}
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+              />
+              <button onClick={() => fileInputRef.current?.click()}>Upload Private File</button>
+            </>
+          )}
+        </div>
       </div>
-
-      <div className="data-actions">
-        {activeTab === 'private' && (
-          <>
-            <button onClick={createUser}>Create User</button>
-            <input
-              type="file"
-              accept=".json"
-              onChange={handleFileUpload}
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-            />
-            <button onClick={() => fileInputRef.current?.click()}>Upload File</button>
-          </>
-        )}
+  
+      {/* Separated Assets Section */}
+      <div className="assets-list-section">
+        <div className="data-list">
+          {renderDataList()}
+        </div>
       </div>
-
-      <div className="data-list">
-        {renderDataList()}
-      </div>
-
+  
+      {/* Asset View Section */}
       {viewingAsset && (
         <div className="asset-view">
           <div className="asset-view-content">
@@ -383,8 +391,8 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
           </div>
         </div>
       )}
-    </>
-  );
+    </div>
+  );   
 };
 
 export default DataStore;
