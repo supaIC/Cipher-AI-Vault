@@ -102,6 +102,16 @@ The [**`useAssetManager.js`**](https://github.com/supaIC/Cipher-AI-Vault/blob/ma
 - Upload new assets and delete existing ones.
 - Dynamically manage loading states and handle error messages.
 
+## Stable Memory Data Storage
+
+The Stable Memory Data Storage feature allows users to store and retrieve data in a persistent and secure manner.
+
+### Codebase
+
+- The Stable Memory Data Storage is implemented in the [**`dataManager.ts`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/dataManager/dataManager.ts) hook.
+- The UI integration is handled in the [**`DataStore.tsx`**](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/DataStore.tsx) component.
+- The canister code is located in the following repository: [**`data-store-canister`**](https://github.com/supaIC/data-store-canister).
+
 ## VectorDB + LLM Integration
 
 ### Codebase

@@ -1,6 +1,6 @@
 # Cipher AI Vault
 
-**Cipher AI Vault** is an Azle-based proof of concept designed with a strong emphasis on abstraction, seamlessly integrating in-memory VectorDB, in-memory LLM, secure asset storage, cycles-distro top-up, and ic-auth for authentication. This adaptability makes it well-suited for a wide range of AI-driven use cases. The project showcases the Internet Computer's potential for secure, sandboxed AI development, offering versatile tools for diverse applications.
+**Cipher AI Vault** is an Azle-based proof of concept designed with a strong emphasis on abstraction, seamlessly integrating in-memory VectorDB, in-memory LLM, secure asset storage, stable memory data storage, cycles-distro top-up, and ic-auth for authentication. This adaptability makes it well-suited for a wide range of AI-driven use cases. The project showcases the Internet Computer's potential for secure, sandboxed AI development, offering versatile tools for diverse applications.
 
 *Please note that this demo is a proof of concept and is not intended for production use. This project was developed as part of a [**Developer Grant from the DFINITY Foundation**](https://dfinity.org/grants).*
 
@@ -14,6 +14,7 @@ The demo canister is live and can be accessed [**here**](https://qehbq-rqaaa-aaa
 ### Grant Deliverables Repositories
 - [**ic-auth**](https://github.com/supaIC/ic-auth)
 - [**Cycles Distro**](https://github.com/supaIC/cycles-distro)
+- [**Data Store Canister**](https://github.com/supaIC/data-store-canister)
 
 ## Core Features
 
@@ -21,6 +22,7 @@ The demo canister is live and can be accessed [**here**](https://qehbq-rqaaa-aaa
 - **In-memory VectorDB**: Stores and manages embeddings for efficient retrieval.
 - **In-memory LLM**: Processes natural language queries and interacts with the VectorDB.
 - **Secure Asset Storage**: A dedicated module that securely stores assets.
+- **Secure Data Store**: A dedicated canister for storing data in stable memory.
 - **Cycles Distro Canister**: Manages cycles and top-ups.
 - **ic-auth**: Handles authentication with various wallets such as Plug, Stoic, NFID, and Internet Identity.
 
