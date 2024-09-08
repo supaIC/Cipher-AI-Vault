@@ -45,7 +45,7 @@ export function Parent() {
     const loadPrivateData = async () => {
       if (dataActor) { // Ensure dataActor is initialized
         try {
-          const userData = await dataActor.getAllUserData();
+          const userData = await dataActor.getAllUserData(); // Adjusted to call the correct method
           setPrivateData(userData);
         } catch (error) {
           console.error("Error loading private data:", error);
@@ -78,7 +78,7 @@ export function Parent() {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file && currentUser) {
-        handleFileUpload(file, currentUser.principal || "");
+        handleFileUpload(file, currentUser.principal || ""); // Ensure currentUser is defined
       }
     },
     [currentUser, handleFileUpload]
@@ -137,10 +137,10 @@ export function Parent() {
               ) : viewMode === 'documents' ? (
                 <Screens.DocumentStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
               ) : viewMode === 'json' ? (
-                <Screens.DataStore
+                <Screens.PrivateDataStore
                   assets={assets}
                   userObject={{ ...currentUser, provider: currentUser?.provider || '' }}  // Ensure provider is string
-                  onDelete={(asset) => setConfirmDelete(asset)}
+                  onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
                 />
               ) : viewMode === 'public' ? (
                 <Screens.PublicDataStore assets={assets} onDelete={async (asset) => setConfirmDelete(asset)} />

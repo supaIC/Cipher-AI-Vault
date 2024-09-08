@@ -3,6 +3,7 @@ import { HttpAgent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
 import * as data from "../../hooks/dataManager/dataManager";
 import { Types } from 'ic-auth';
 import * as Components from "../../components"; // Import all components
+import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight"; // Import the syntaxHighlight utility
 
 interface Asset {
   key: string;
@@ -15,12 +16,11 @@ interface DataStoreProps {
   userObject: Types.UserObject;
 }
 
-const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) => {
+const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) => {
   const [dataActor, setDataActor] = useState<Actor | null>(null);
   const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
   const [fullJsonData, setFullJsonData] = useState<string | null>(null);
-  const [copySuccess, setCopySuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<Asset | null>(null); // State for delete confirmation
@@ -137,53 +137,7 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) =
     setConfirmDeleteAsset(null); // Reset confirmation
   };
 
-  const syntaxHighlight = (json: string) => {
-    if (!json) return "";
-    return json
-      .replace(/(&)/g, '&amp;')
-      .replace(/(>)/g, '&gt;')
-      .replace(/(<)/g, '&lt;')
-      .replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*?"(\s*:)?|\b(true|false|null)\b|\d+)/g, (match) => {
-        let cls = "number";
-        if (/^"/.test(match)) {
-          cls = /:$/.test(match) ? "key" : "string";
-        } else if (/true|false/.test(match)) {
-          cls = "boolean";
-        } else if (/null/.test(match)) {
-          cls = "null";
-        }
-        return `<span class="${cls}">${match}</span>`;
-      });
-  };
-
-  const copyToClipboard = () => {
-    if (!fullJsonData) return;
-    navigator.clipboard.writeText(fullJsonData).then(
-      () => {
-        setCopySuccess("Copied to clipboard!");
-        setTimeout(() => setCopySuccess(null), 2000);
-      },
-      (err) => {
-        setCopySuccess("Failed to copy!");
-        setTimeout(() => setCopySuccess(null), 2000);
-        console.error("Failed to copy JSON to clipboard", err);
-      }
-    );
-  };
-
-  const validateJsonFormat = (jsonData: any): boolean => {
-    if (!Array.isArray(jsonData)) {
-      return false;
-    }
-
-    return jsonData.every((item: any) =>
-      typeof item.id === 'string' &&
-      typeof item.name === 'string' &&
-      typeof item.description === 'string'
-    );
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -191,14 +145,10 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) =
         const content = e.target?.result as string;
         try {
           const jsonData = JSON.parse(content);
-          if (validateJsonFormat(jsonData)) {
-            await addFile(jsonData, file.name);
-          } else {
-            setError("Invalid JSON format. Please upload a file with the correct structure.");
-          }
+          await addFile(jsonData, file.name);
         } catch (error) {
           console.error("Error parsing JSON:", error);
-          setError("Failed to parse JSON. Please make sure the file contains valid JSON.");
+          setError("Failed to parse JSON. Please ensure the file contains valid JSON.");
         }
       };
       reader.readAsText(file);
@@ -212,12 +162,11 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) =
     const newFileData: data.FileData = {
       fileID: "file-" + Date.now(),
       fileName: fileName,
-      fileData: fileData
+      fileData: fileData,
     };
     try {
-      const result = await data.addFileToUser(userObject.principal, newFileData, dataActor);
-      console.log("Add file result:", result);
-      await loadPrivateData();
+      await data.addFileToUser(userObject.principal, newFileData, dataActor);
+      await loadPrivateData(); // Reload data after adding the file
     } catch (error) {
       console.error("Error adding file:", error);
       setError("Failed to add file. Please try again.");
@@ -305,10 +254,7 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) =
                 __html: fullJsonData ? syntaxHighlight(fullJsonData) : "Loading full JSON...",
               }}
             />
-            <button onClick={copyToClipboard} className="copy-json-button">
-              Copy Raw JSON
-            </button>
-            {copySuccess && <div className="copy-feedback">{copySuccess}</div>}
+            <Components.CopyToClipboard text={fullJsonData || ""} /> {/* Use the CopyToClipboard component */}
           </div>
           <div className="asset-view-actions">
             <button onClick={() => setViewingAsset(null)}>Close</button>
@@ -332,4 +278,4 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) =
   );   
 };
 
-export default DataStore;
+export default PrivateDataStore;

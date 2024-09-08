@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as Components from "../../components"; // Import other components
+import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight"; // Import the syntaxHighlight utility
 
 interface Asset {
   key: string;
@@ -83,25 +84,6 @@ const PublicDataStore: React.FC<PublicDataStoreProps> = ({ assets, onDelete }) =
     }
   };
 
-  const syntaxHighlight = (json: string) => {
-    if (!json) return "";
-    return json
-      .replace(/(&)/g, '&amp;')
-      .replace(/(>)/g, '&gt;')
-      .replace(/(<)/g, '&lt;')
-      .replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*?"(\s*:)?|\b(true|false|null)\b|\d+)/g, (match) => {
-        let cls = "number";
-        if (/^"/.test(match)) {
-          cls = /:$/.test(match) ? "key" : "string";
-        } else if (/true|false/.test(match)) {
-          cls = "boolean";
-        } else if (/null/.test(match)) {
-          cls = "null";
-        }
-        return `<span class="${cls}">${match}</span>`;
-      });
-  };
-
   const renderPublicDataList = () => {
     if (loading) {
       return <Components.LoadingOverlay message="Loading data..." />;
@@ -153,6 +135,7 @@ const PublicDataStore: React.FC<PublicDataStoreProps> = ({ assets, onDelete }) =
         <div className="asset-view">
           <div className="asset-view-content">
             <pre dangerouslySetInnerHTML={{ __html: syntaxHighlight(fullJsonData || "") }} />
+            <Components.CopyToClipboard text={fullJsonData || ""} /> {/* Use the CopyToClipboard component */}
           </div>
           <div className="asset-view-actions">
             <button onClick={() => setViewingAsset(null)}>Close</button>
