@@ -1,13 +1,12 @@
 import React from "react";
-import "../styles/index.css";
-import dfinity from "../assets/logos/dfinity.png";
-import plug from "../assets/logos/plug.png";
-import stoic from "../assets/logos/stoic.png";
-import nfid from "../assets/logos/nfid.png";
+import "../../styles/index.css";
+import dfinity from "../../assets/logos/dfinity.png";
+import plug from "../../assets/logos/plug.png";
+import stoic from "../../assets/logos/stoic.png";
+import nfid from "../../assets/logos/nfid.png";
 import { PlugLogin, StoicLogin, NFIDLogin, IdentityLogin, CreateActor, Types } from 'ic-auth';
 
-
-export function ICWalletList({ giveToParent, whitelist }: any) {
+const ICWalletList = ({ giveToParent, whitelist }: any) => {
   const grabUserObject = async (UserObject: Types.UserObject) => {
     giveToParent(UserObject.principal, UserObject.agent, UserObject.provider);
   };
@@ -72,4 +71,6 @@ export function ICWalletList({ giveToParent, whitelist }: any) {
       </div>
     </div>
   );
-}
+};
+
+export default ICWalletList; // Use default export

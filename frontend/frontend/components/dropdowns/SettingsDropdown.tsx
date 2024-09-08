@@ -1,19 +1,19 @@
 import React from 'react';
+import CyclesTopUpComponent from '../cycles/CyclesTopUpButton'; // Import your component
+import GetBalancesComponent from '../cycles/GetBalancesButton'; // Import your component
 
 interface SettingsDropdownProps {
   isVisible: boolean;
-  onCyclesTopUp: () => void;
+  currentUser: any; // Add currentUser prop
   onLogout: () => void;
-  onGetBalances: () => void;
   showUserFiles: boolean;
   onToggleUserFiles: () => void;
 }
 
 const SettingsDropdown: React.FC<SettingsDropdownProps> = ({
   isVisible,
-  onCyclesTopUp,
+  currentUser,
   onLogout,
-  onGetBalances,
   showUserFiles,
   onToggleUserFiles,
 }) => {
@@ -22,8 +22,10 @@ const SettingsDropdown: React.FC<SettingsDropdownProps> = ({
   return (
     <div className={`settings-dropdown ${isVisible ? 'active' : ''}`}>
       <button onClick={onLogout}>Logout</button>
-      <button onClick={onGetBalances}>Get Balances</button>
-      <button onClick={onCyclesTopUp}>Donate Cycles</button>
+
+      <GetBalancesComponent agent={currentUser.agent} />  {/* Use the GetBalancesComponent */}
+      <CyclesTopUpComponent currentUser={currentUser} />   {/* Use the CyclesTopUpComponent */}
+
       <button onClick={onToggleUserFiles}>
         {showUserFiles ? 'Show All Files' : 'Show My Files'}
       </button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { HttpAgent, Agent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
-import * as data from "../hooks/dataManager/dataManager";
+import * as data from "../../hooks/dataManager/dataManager";
 import { Types } from 'ic-auth';
 
 interface Asset {

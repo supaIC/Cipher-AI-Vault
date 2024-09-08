@@ -1,36 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
-import UploadButton from "./components/UploadButton";
-import {
-  LoadingOverlay,
-  ErrorNotification,
-  DeleteConfirmation,
-} from "./components/OverlayComponents";
-import DataStore from "./screens/DataStore";
-import ImageStore from "./screens/ImageStore";
-import DocumentStore from "./screens/DocumentStore";
-import DatabaseAdmin from "./screens/DatabaseAdmin";
-import { ICWalletList } from "./components/ICWalletList";
-import { useAssetManager, Asset, UserObject } from "./hooks/assetManager/assetManager";
-import { cyclesTopUp } from "./hooks/useCyclesTopup/useCyclesTopup";
-import DragAndDropContainer from "./components/DragAndDropContainer";
-import { HttpAgent } from "@dfinity/agent";
-import { whitelist } from "./configs/config";
-import * as auth from "./hooks/authFunctions/authFunctions";
-import * as data from "./hooks/dataManager/dataManager";
-import * as distro from "./interfaces/distro";
+import React, { useCallback, useEffect, useState } from "react";
+import * as Components from "./components"; // Import all components at once
+import * as Screens from "./screens";       // Import all screens at once
+import * as Context from "./context";       // Import all context providers at once
+import { useAssetManager, Asset } from "./hooks/assetManager/assetManager"; // Still using useAssetManager
 import internetComputerLogo from './assets/logos/internet_computer.png';
 import cipherProxyLogo from './assets/logos/cipher_proxy.png';
-import SettingsDropdown from "./components/SettingsDropdown";
-import LoggedInUser from "./components/LoggedInUser";
-import ViewToggle from "./components/ViewToggle";
 
 export function Parent() {
-  const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
+  const { currentUser, setCurrentUser } = Context.useAuthActor();         // Use auth actor for currentUser and setCurrentUser
+  const { dataActor, initializeDataActor } = Context.useDataActor();      // Use data actor for data management
+  const { createBackendActor } = Context.useBackendActor();               // Use backend actor for backend interaction
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
   const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin'>('images');
-  const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
-  const [dataActor, setDataActor] = useState<any | null>(null);
+  const [privateData, setPrivateData] = useState<any | null>(null);
+  const [settingsVisible, setSettingsVisible] = useState(false);
 
   const {
     assets,
@@ -47,35 +31,11 @@ export function Parent() {
     toggleUserFiles,
   } = useAssetManager(currentUser, currentUser?.principal || null);
 
-  const giveToParent = useCallback(
-    (principal: string, agent: HttpAgent, provider: string) => {
-      setCurrentUser({ principal, agent, provider });
-    },
-    []
-  );
-
-  useEffect(() => {
-    const initializeDataActor = async () => {
-      if (currentUser?.agent) {
-        try {
-          const actor = await data.getDataActor(currentUser.agent);
-          setDataActor(actor);
-        } catch (error) {
-          console.error("Error initializing data actor:", error);
-        }
-      }
-    };
-
-    if (currentUser) {
-      initializeDataActor();
-    }
-  }, [currentUser]);
-
   useEffect(() => {
     const loadPrivateData = async () => {
       if (dataActor) {
         try {
-          const userData = await data.getAllUserData(dataActor);
+          const userData = await dataActor.getAllUserData();
           setPrivateData(userData);
         } catch (error) {
           console.error("Error loading private data:", error);
@@ -94,29 +54,16 @@ export function Parent() {
     }
   }, [currentUser, loadAssetList, showUserFiles]);
 
-  const handleCyclesTopUp = async () => {
-    if (currentUser) {
-      await cyclesTopUp(currentUser);
-    }
-  };
-
-  const handleLogout = useCallback(() => {
-    setCurrentUser(null);
-  }, []);
-
-  const [settingsVisible, setSettingsVisible] = useState(false);
+  const giveToParent = useCallback(
+    (principal: string, agent: any, provider: string) => {
+      setCurrentUser({ principal, agent, provider: provider || '' });  // Ensure provider is always a string
+    },
+    [setCurrentUser]
+  );
 
   const toggleSettings = () => {
     setSettingsVisible((prevState) => !prevState);
   };
-
-  const getBalances = async () => {
-    if (currentUser) {
-      const backendActor = await auth.getBackendActor(currentUser.agent, "jeb4e-myaaa-aaaak-aflga-cai", distro.idlFactory);
-      const balances = await backendActor.getBalances();
-      console.log(balances);
-    }
-  }
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -134,99 +81,70 @@ export function Parent() {
       <img src={internetComputerLogo} alt="Internet Computer" className="bottom-left-image" />
       <img src={cipherProxyLogo} alt="Cipher Proxy" className="right-image" />
 
-      {/* Landing Page Section */}
       {!currentUser ? (
         <div className="landing-page">
           <div className="hero-section">
             <h1>Welcome to Cipher AI Vault</h1>
             <p>
-              Secure, sandboxed AI with in-memory VectorDB and LLM,
-              stable-memory data storage, and more—all on the Internet Computer.
+              Secure, sandboxed AI with in-memory VectorDB and LLM, stable-memory data storage, and more—all on the Internet Computer.
             </p>
-            <ICWalletList giveToParent={giveToParent} whitelist={whitelist} />
+            <Components.ICWalletList giveToParent={giveToParent} whitelist={[]} /> {/* Pass the empty whitelist or update if needed */}
           </div>
         </div>
       ) : (
         <>
-          <button className="settings-btn" onClick={toggleSettings}>
-            Settings
-          </button>
+          <button className="settings-btn" onClick={toggleSettings}>Settings</button>
 
-          <SettingsDropdown
+          <Components.SettingsDropdown
             isVisible={settingsVisible}
-            onCyclesTopUp={handleCyclesTopUp}
-            onLogout={handleLogout}
-            onGetBalances={getBalances}
+            currentUser={currentUser} // Pass currentUser
+            onLogout={() => setCurrentUser(null)}
             showUserFiles={showUserFiles}
             onToggleUserFiles={toggleUserFiles}
           />
 
-          <LoggedInUser principal={currentUser.principal} />
+          <Components.LoggedInUser principal={currentUser.principal} />
 
-          {globalLoading && <LoadingOverlay message={loadingMessage} />}
-          {error && <ErrorNotification message={error} onClose={() => setError(null)} />}
+          {globalLoading && <Components.LoadingOverlay message={loadingMessage} />}
+          {error && <Components.ErrorNotification message={error} onClose={() => setError(null)} />}
           {confirmDelete && (
-            <DeleteConfirmation
+            <Components.DeleteConfirmation
               asset={confirmDelete}
               onConfirm={() => handleDeleteAsset(confirmDelete)}
               onCancel={() => setConfirmDelete(null)}
             />
           )}
 
-          <UploadButton
-            onUpload={(file) => handleFileUpload(file, currentUser.principal || "")}
+          <Components.UploadButton
+            onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")}
             disabled={globalLoading}
           />
 
-          <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
+          <Components.ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
-          <DragAndDropContainer onDrop={handleDrop}>
+          <Components.DragAndDropContainer onDrop={handleDrop}>
             <div className="assets-container">
               {viewMode === 'images' ? (
-                <ImageStore
-                  assets={assets}
-                  onAssetHover={setHoveredAsset}
-                  onDelete={(asset) => {
-                    setConfirmDelete(asset);
-                  }}
-                />
+                <Screens.ImageStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
               ) : viewMode === 'documents' ? (
-                <DocumentStore
-                  assets={assets}
-                  onAssetHover={setHoveredAsset}
-                  onDelete={(asset) => {
-                    setConfirmDelete(asset);
-                  }}
-                />
+                <Screens.DocumentStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
               ) : viewMode === 'json' ? (
-                <DataStore
+                <Screens.DataStore
                   assets={assets}
                   onAssetHover={setHoveredAsset}
-                  onDelete={(asset) => {
-                    setConfirmDelete(asset);
-                  }}
-                  userObject={currentUser as any}
+                  onDelete={(asset) => setConfirmDelete(asset)}
+                  userObject={{ ...currentUser, provider: currentUser?.provider || '' }}  // Ensure provider is string
                 />
               ) : (
-                <DatabaseAdmin
-                  assets={assets}
-                  privateData={privateData}
-                />
+                <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
               )}
             </div>
-
             {hoveredAsset && (
-              <div
-                className="tooltip"
-                style={{
-                  left: tooltipPosition.left,
-                  top: tooltipPosition.top,
-                }}
-              >
+              <div className="tooltip" style={{ left: tooltipPosition.left, top: tooltipPosition.top }}>
                 <p>URL: {hoveredAsset.url}</p>
               </div>
             )}
-          </DragAndDropContainer>
+          </Components.DragAndDropContainer>
         </>
       )}
     </div>
