@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { HttpAgent, Agent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
+import { HttpAgent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
 import * as data from "../../hooks/dataManager/dataManager";
 import { Types } from 'ic-auth';
+import * as Components from "../../components"; // Import all components
 
 interface Asset {
   key: string;
@@ -10,21 +11,19 @@ interface Asset {
 
 interface DataStoreProps {
   assets: Array<Asset>;
-  onAssetHover: (asset: Asset | null) => void;
   onDelete: (asset: Asset) => void;
   userObject: Types.UserObject;
 }
 
-const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, userObject }) => {
+const DataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) => {
   const [dataActor, setDataActor] = useState<Actor | null>(null);
   const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
-  const [publicData, setPublicData] = useState<{ [key: string]: string }>({});
-  const [activeTab, setActiveTab] = useState<'private' | 'public'>('private');
-  const [viewingAsset, setViewingAsset] = useState<Asset | data.FileData | null>(null);
+  const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
   const [fullJsonData, setFullJsonData] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<Asset | null>(null); // State for delete confirmation
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -49,10 +48,6 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
     }
   }, [dataActor]);
 
-  useEffect(() => {
-    loadPublicData();
-  }, [assets]);
-
   const getDataActor = async (): Promise<ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>> => {
     return await data.getDataActor(userObject.agent as any);
   };
@@ -62,16 +57,15 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
       console.log("Data actor not initialized yet.");
       return;
     }
-  
+
     setLoading(true);
     setError(null);
-  
+
     try {
       console.log("Fetching all user data...");
       const allUserData = await data.getAllUserData(dataActor);
-  
+
       if (!allUserData || allUserData.length === 0) {
-        // If no user data is found, create the user automatically
         console.log("No user data found. Proceeding to create a new user...");
         await data.createUser(dataActor);
         console.log("User created successfully.");
@@ -89,41 +83,10 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
       console.log("Finished loading private data.");
       setLoading(false);
     }
-  };  
-
-  const loadPublicData = async () => {
-    const jsonAssets = assets.filter((asset) => asset.key.includes("/data-store/"));
-    const snippets: { [key: string]: string } = {};
-
-    for (const asset of jsonAssets) {
-      if (asset.url.endsWith(".json")) {
-        try {
-          const response = await fetch(asset.url);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          let data;
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            data = await response.json();
-          } else {
-            const text = await response.text();
-            console.warn(`Received non-JSON response for ${asset.key}:`, text);
-            data = { error: "Received non-JSON response", content: text };
-          }
-          snippets[asset.key] = JSON.stringify(data, null, 2);
-        } catch (error) {
-          console.error(`Error fetching JSON data for ${asset.key}:`, error);
-          snippets[asset.key] = JSON.stringify({ error: "Failed to load data" }, null, 2);
-        }
-      }
-    }
-
-    setPublicData(snippets);
   };
 
   const handleAssetClick = async (asset: Asset | data.FileData) => {
-    setViewingAsset(asset);
+    setViewingAsset(asset as Asset);
     setFullJsonData(null);
 
     if ('url' in asset) {
@@ -140,20 +103,38 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
     }
   };
 
-  const handleDelete = async (asset: Asset | data.FileData) => {
-    if (activeTab === 'public') {
-      onDelete(asset as Asset);
-    } else {
-      if (!dataActor) return;
-      try {
-        await data.removeFileFromUser(userObject.principal, (asset as data.FileData).fileID, dataActor);
-        await loadPrivateData();
-      } catch (error) {
-        console.error("Error deleting file:", error);
-        setError("Failed to delete file. Please try again.");
-      }
+  const handleDeletePrivateAsset = async (asset: data.FileData) => {
+    if (!dataActor) {
+      console.error("Data actor not initialized");
+      return;
     }
-    setViewingAsset(null);
+
+    setLoading(true);
+    try {
+      await data.removeFileFromUser(userObject.principal, asset.fileID, dataActor);
+      await loadPrivateData(); // Load private data after deletion of private asset
+    } catch (error) {
+      console.error("Error deleting private asset:", error);
+      setError("Failed to delete private asset. Please try again.");
+    } finally {
+      setLoading(false);
+      setViewingAsset(null); // Reset viewing asset after delete
+    }
+  };
+
+  const handleDelete = (asset: Asset | data.FileData) => {
+    setConfirmDeleteAsset(asset as Asset); // Set asset for confirmation
+  };
+
+  const confirmDelete = async () => {
+    if (confirmDeleteAsset) {
+      await handleDeletePrivateAsset(confirmDeleteAsset as unknown as data.FileData);
+      setConfirmDeleteAsset(null); // Reset confirmation after delete
+    }
+  };
+
+  const cancelDelete = () => {
+    setConfirmDeleteAsset(null); // Reset confirmation
   };
 
   const syntaxHighlight = (json: string) => {
@@ -247,115 +228,64 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
 
   const renderDataList = () => {
     if (loading) {
-      return <p>Loading...</p>;
+      return <Components.LoadingOverlay message="Loading data..." />; // Use loading overlay
     }
 
     if (error) {
       return <p>Error: {error}</p>;
     }
 
-    if (activeTab === 'private') {
-      if (!privateData || privateData.length === 0) {
-        return <p>No private data available. Try uploading a file.</p>;
-      }
-      return privateData.flatMap((userDataMap) => {
-        if (!Array.isArray(userDataMap)) {
-          console.error('Unexpected data structure:', userDataMap);
-          return null;
-        }
-        const [_, userData] = userDataMap;
-        if (!userData || !userData.allFiles) {
-          console.error('Invalid user data structure:', userData);
-          return null;
-        }
-        return userData.allFiles.map((file: any) => (
-          <div
-            key={file.fileID}
-            className="asset-item"
-            onClick={() => handleAssetClick(file)}
-          >
-            <div className="json-preview">
-              <pre
-                className="json-snippet"
-                dangerouslySetInnerHTML={{
-                  __html: file.fileData && file.fileData.length > 0
-                    ? syntaxHighlight(JSON.stringify(file.fileData[0], null, 2).substring(0, 100) + "...")
-                    : "No data available"
-                }}
-              />
-            </div>
-            <p className="asset-name" style={{ fontSize: "12px" }}>
-              {file.fileName}
-            </p>
-          </div>
-        ));
-      }).filter(Boolean);
-    } else {
-      if (Object.keys(publicData).length === 0) {
-        return <p>No public data available.</p>;
-      }
-      return Object.entries(publicData).map(([key, value]) => {
-        const parsedValue = JSON.parse(value);
-        const isError = parsedValue.error !== undefined;
-        return (
-          <div
-            key={key}
-            className={`asset-item ${isError ? 'error' : ''}`}
-            onMouseEnter={() => onAssetHover({ key, url: assets.find(a => a.key === key)?.url || '' })}
-            onMouseLeave={() => onAssetHover(null)}
-            onClick={() => handleAssetClick({ key, url: assets.find(a => a.key === key)?.url || '' })}
-          >
-            <div className="json-preview">
-              <pre
-                className="json-snippet"
-                dangerouslySetInnerHTML={{
-                  __html: isError
-                    ? `Error: ${parsedValue.error}`
-                    : syntaxHighlight(value.substring(0, 100) + "...")
-                }}
-              />
-            </div>
-            <p className="asset-name" style={{ fontSize: "12px" }}>
-              {key.split("/").pop()}
-            </p>
-          </div>
-        );
-      });
+    if (!privateData || privateData.length === 0) {
+      return <p>No private data available. Try uploading a file.</p>;
     }
+    
+    return privateData.flatMap((userDataMap) => {
+      if (!Array.isArray(userDataMap)) {
+        console.error('Unexpected data structure:', userDataMap);
+        return null;
+      }
+      const [_, userData] = userDataMap;
+      if (!userData || !userData.allFiles) {
+        console.error('Invalid user data structure:', userData);
+        return null;
+      }
+      return userData.allFiles.map((file: any) => (
+        <div
+          key={file.fileID}
+          className="asset-item"
+          onClick={() => handleAssetClick(file)}
+        >
+          <div className="json-preview">
+            <pre
+              className="json-snippet"
+              dangerouslySetInnerHTML={{
+                __html: file.fileData && file.fileData.length > 0
+                  ? syntaxHighlight(JSON.stringify(file.fileData[0], null, 2).substring(0, 100) + "...")
+                  : "No data available"
+              }}
+            />
+          </div>
+          <p className="asset-name" style={{ fontSize: "12px" }}>
+            {file.fileName}
+          </p>
+        </div>
+      ));
+    }).filter(Boolean);
   };
 
   return (
     <div className="page-container">
-      {/* Top Section with Tabs and Actions */}
+      {/* Top Section with Actions */}
       <div className="top-section">
-        <div className="tab-container">
-          <button
-            className={`tab ${activeTab === 'private' ? 'active' : ''}`}
-            onClick={() => setActiveTab('private')}
-          >
-            Private Data
-          </button>
-          <button
-            className={`tab ${activeTab === 'public' ? 'active' : ''}`}
-            onClick={() => setActiveTab('public')}
-          >
-            Public Data
-          </button>
-        </div>
-  
         <div className="data-actions">
-          {activeTab === 'private' && (
-            <>
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleFileUpload}
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-              />
-              <button onClick={() => fileInputRef.current?.click()}>Upload Private File</button>
-            </>
-          )}
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleFileUpload}
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+          />
+          <button onClick={() => fileInputRef.current?.click()}>Upload Data to Stable Memory</button>
         </div>
       </div>
   
@@ -381,16 +311,23 @@ const DataStore: React.FC<DataStoreProps> = ({ assets, onAssetHover, onDelete, u
             {copySuccess && <div className="copy-feedback">{copySuccess}</div>}
           </div>
           <div className="asset-view-actions">
-            {activeTab === 'public' && 'url' in viewingAsset && (
-              <button onClick={() => window.open(viewingAsset.url, "_blank")}>
-                View Asset on-chain
-              </button>
-            )}
             <button onClick={() => setViewingAsset(null)}>Close</button>
             <button onClick={() => handleDelete(viewingAsset)}>Delete</button>
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation */}
+      {confirmDeleteAsset && (
+        <Components.DeleteConfirmation
+          asset={confirmDeleteAsset}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
+      
+      {/* Loading Overlay */}
+      {loading && <Components.LoadingOverlay message="Loading data..." />}
     </div>
   );   
 };

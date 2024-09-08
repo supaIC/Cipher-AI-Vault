@@ -17,6 +17,6 @@ export { default as CyclesTopUpComponent } from './cycles/CyclesTopUpButton';
 export { default as GetBalancesComponent } from './cycles/GetBalancesButton';
 
 // Overlay Components
-export { default as LoadingOverlay } from './overlays/LoadingOverlay';
+export { default as LoadingOverlay } from './overlays/LoadingOverlay/LoadingOverlay';
 export { default as ErrorNotification } from './overlays/ErrorNotification';
-export { default as DeleteConfirmation } from './overlays/DeleteConfirmation';
+export { default as DeleteConfirmation } from './overlays/DeleteConfirmation/DeleteConfirmation';

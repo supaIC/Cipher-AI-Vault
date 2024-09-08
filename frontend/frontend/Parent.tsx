@@ -12,7 +12,7 @@ export function Parent() {
   const { createBackendActor } = Actor.useBackendActor();               // Use backend actor for backend interaction
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
-  const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin'>('images');
+  const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin' | 'public'>('images');
   const [privateData, setPrivateData] = useState<any | null>(null);
   const [settingsVisible, setSettingsVisible] = useState(false);
 
@@ -139,10 +139,11 @@ export function Parent() {
               ) : viewMode === 'json' ? (
                 <Screens.DataStore
                   assets={assets}
-                  onAssetHover={setHoveredAsset}
-                  onDelete={(asset) => setConfirmDelete(asset)}
                   userObject={{ ...currentUser, provider: currentUser?.provider || '' }}  // Ensure provider is string
+                  onDelete={(asset) => setConfirmDelete(asset)}
                 />
+              ) : viewMode === 'public' ? (
+                <Screens.PublicDataStore assets={assets} onDelete={async (asset) => setConfirmDelete(asset)} />
               ) : (
                 <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
               )}

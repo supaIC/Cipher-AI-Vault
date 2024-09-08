@@ -1,4 +1,5 @@
 import React from "react";
+import './DeleteConfirmation.css';
 
 interface DeleteConfirmationProps {
   asset: { key: string; url: string };
@@ -13,7 +14,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
 }) => (
   <div className="confirm-overlay">
     <div className="confirm-box">
-      <p>Are you sure you want to delete this asset?</p>{" "}
+      <h2>Delete Asset</h2>
+      <p>Are you sure you want to delete this asset?</p>
+      <p><strong>{asset.url}</strong></p>
       <div className="confirm-actions">
         <button onClick={onConfirm} className="confirm-delete">
           Delete

@@ -1,4 +1,5 @@
 import React from "react";
+import './LoadingOverlay.css'; // Import the CSS file for styling
 
 interface LoadingOverlayProps {
   message: string;
@@ -6,7 +7,10 @@ interface LoadingOverlayProps {
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ message }) => (
   <div className="overlay">
-    <div className="loading">{message}</div>
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <div className="loading-message">{message}</div>
+    </div>
   </div>
 );
 

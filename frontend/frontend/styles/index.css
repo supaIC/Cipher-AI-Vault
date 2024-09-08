@@ -77,11 +77,6 @@ button:hover {
   background-color: #45a049;
 }
 
-.loading,
-.error {
-  margin-top: 1.25rem; /* 20px */
-}
-
 .error {
   color: #ff3860;
 }
@@ -208,25 +203,6 @@ button:hover {
   position: relative;
 }
 
-/* Overlay and loading styles */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-
-.loading {
-  color: #fff;
-  font-size: 1.25rem; /* 20px */
-}
-
 /* Error notification styles */
 .error-notification {
   position: fixed;
@@ -297,73 +273,8 @@ button:hover {
   margin: 0;
 }
 
-/* Confirmation dialog styles */
-.confirm-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-}
-
-.confirm-box {
-  background-color: #282c34;
-  color: #fff;
-  padding: 1.25rem; /* 20px */
-  border-radius: 0.5rem; /* 8px */
-  box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.5);
-  text-align: center;
-  width: 18.75rem; /* 300px */
-}
-
-.confirm-actions {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 1.25rem; /* 20px */
-}
-
-.confirm-delete,
-.cancel-delete {
-  padding: 0.625rem 1.25rem; /* 10px 20px */
-  border: none;
-  border-radius: 0.3125rem; /* 5px */
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.confirm-delete {
-  background-color: #ff3860;
-  color: #fff;
-}
-
-.confirm-delete:hover {
-  background-color: #e22e4d;
-}
-
-.cancel-delete {
-  background-color: #6c757d;
-  color: #fff;
-}
-
-.cancel-delete:hover {
-  background-color: #5a6268;
-}
-
-/* Adjusting the overlay and loading for consistency */
-.overlay,
-.loading,
-.error-notification {
-  z-index: 30;
-}
-
 /* Additional UI enhancements */
 .app,
-.loading,
 .error-notification,
 .walletList {
   transition: all 0.3s ease;
@@ -819,18 +730,6 @@ button {
 .model-load-button:hover:not(:disabled) {
   background-color: #4682b4;
   transform: scale(1.05);
-}
-
-.loading-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.loading-text {
-  margin-bottom: 0.5rem;
-  color: #aaa;
 }
 
 .progress-item-wrapper {
