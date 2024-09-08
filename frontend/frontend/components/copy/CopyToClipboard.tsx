@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './CopyToClipboard.css';
 
 interface CopyToClipboardProps {
   text: string;
