@@ -18,6 +18,11 @@ import { whitelist } from "./configs/config";
 import * as auth from "./hooks/authFunctions/authFunctions";
 import * as data from "./hooks/dataManager/dataManager";
 import * as distro from "./interfaces/distro";
+import internetComputerLogo from './assets/logos/internet_computer.png';
+import cipherProxyLogo from './assets/logos/cipher_proxy.png';
+import SettingsDropdown from "./components/SettingsDropdown";
+import LoggedInUser from "./components/LoggedInUser";
+import ViewToggle from "./components/ViewToggle";
 
 export function Parent() {
   const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
@@ -126,8 +131,8 @@ export function Parent() {
 
   return (
     <div className="app">
-      <img src="frontend/assets/logos/internet_computer.png" alt="Bottom Left" className="bottom-left-image" />
-      <img src="frontend/assets/logos/cipher_proxy.png" alt="Right Side" className="right-image" />
+      <img src={internetComputerLogo} alt="Internet Computer" className="bottom-left-image" />
+      <img src={cipherProxyLogo} alt="Cipher Proxy" className="right-image" />
 
       {/* Landing Page Section */}
       {!currentUser ? (
@@ -147,17 +152,16 @@ export function Parent() {
             Settings
           </button>
 
-          {settingsVisible && (
-            <div className={`settings-dropdown ${settingsVisible && "active"}`}>
-              <button onClick={handleCyclesTopUp}>Donate Cycles</button>
-              <button onClick={handleLogout}>Logout</button>
-              <button onClick={getBalances}>Get Balances</button>
-            </div>
-          )}
+          <SettingsDropdown
+            isVisible={settingsVisible}
+            onCyclesTopUp={handleCyclesTopUp}
+            onLogout={handleLogout}
+            onGetBalances={getBalances}
+            showUserFiles={showUserFiles}
+            onToggleUserFiles={toggleUserFiles}
+          />
 
-          <div className="logged-in-info">
-            Logged in as: {currentUser.principal}
-          </div>
+          <LoggedInUser principal={currentUser.principal} />
 
           {globalLoading && <LoadingOverlay message={loadingMessage} />}
           {error && <ErrorNotification message={error} onClose={() => setError(null)} />}
@@ -174,32 +178,7 @@ export function Parent() {
             disabled={globalLoading}
           />
 
-          <div className="view-toggle-container">
-            <button
-              className={`view-toggle-button ${viewMode === 'images' ? 'active' : ''}`}
-              onClick={() => setViewMode('images')}
-            >
-              Image Store
-            </button>
-            <button
-              className={`view-toggle-button ${viewMode === 'documents' ? 'active' : ''}`}
-              onClick={() => setViewMode('documents')}
-            >
-              Document Store
-            </button>
-            <button
-              className={`view-toggle-button ${viewMode === 'json' ? 'active' : ''}`}
-              onClick={() => setViewMode('json')}
-            >
-              Data Store
-            </button>
-            <button
-              className={`view-toggle-button ${viewMode === 'admin' ? 'active' : ''}`}
-              onClick={() => setViewMode('admin')}
-            >
-              Database Admin
-            </button>
-          </div>
+          <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
           <DragAndDropContainer onDrop={handleDrop}>
             <div className="assets-container">
