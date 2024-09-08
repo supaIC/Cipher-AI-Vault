@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/index.css";
 import { Parent } from "./Parent";
-import { AuthActorProvider, DataActorProvider, BackendActorProvider, DistroActorProvider } from "./actors"; // Import all the providers
+import { AuthActorProvider, DataActorProvider, BackendActorProvider, DistroActorProvider } from "./actors";
 
 // Create a root.
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);

@@ -3,6 +3,7 @@ import { AssetManager } from "@dfinity/assets";
 import { canisterId } from "../../configs/config";
 
 function useAssetManager(currentUser, bucketName) {
+  // State variables
   const [assets, setAssets] = useState([]);
   const [showUserFiles, setShowUserFiles] = useState(false);
   const [globalLoading, setGlobalLoading] = useState(false);
@@ -10,6 +11,7 @@ function useAssetManager(currentUser, bucketName) {
   const [error, setError] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
 
+  // Create an AssetManager instance
   const createAssetManager = useCallback(async () => {
     console.log("Creating Asset Manager...");
     if (!currentUser || !bucketName) {
@@ -21,6 +23,7 @@ function useAssetManager(currentUser, bucketName) {
     });
   }, [currentUser, bucketName]);
 
+  // Generic function to handle API requests
   const handleApiRequest = useCallback(
     async (requestFunction, loadingMessage) => {
       console.log("Handling API request...");
@@ -40,6 +43,7 @@ function useAssetManager(currentUser, bucketName) {
     []
   );
 
+  // Load the list of assets
   const loadAssetList = useCallback(async () => {
     console.log("Loading asset list...");
     await handleApiRequest(async () => {
@@ -59,6 +63,7 @@ function useAssetManager(currentUser, bucketName) {
     }, "Loading assets...");
   }, [createAssetManager, currentUser, showUserFiles, handleApiRequest]);
 
+  // Delete an asset
   const handleDeleteAsset = useCallback(
     async (asset) => {
       console.log("Deleting asset...");
@@ -74,6 +79,7 @@ function useAssetManager(currentUser, bucketName) {
     [createAssetManager, loadAssetList, handleApiRequest]
   );
 
+  // Upload a file
   const handleFileUpload = useCallback(
     async (file, principal) => {
       console.log("Uploading file...");
@@ -112,11 +118,13 @@ function useAssetManager(currentUser, bucketName) {
     [createAssetManager, loadAssetList, handleApiRequest]
   );
 
+  // Toggle visibility of user files
   const toggleUserFiles = useCallback(() => {
     console.log("Toggling user files visibility...");
     setShowUserFiles((prevVisibility) => !prevVisibility);
   }, []);
 
+  // Effect to load asset list when the component mounts
   useEffect(() => {
     console.log("Effect: Loading asset list...");
     if (currentUser) {
@@ -124,6 +132,7 @@ function useAssetManager(currentUser, bucketName) {
     }
   }, []); // Empty dependency array to ensure it runs only once
 
+  // Return the hook's API
   return {
     assets,
     globalLoading,

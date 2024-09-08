@@ -4,27 +4,27 @@ import { blob, nat, int, Principal, Vec, Opt, $query, $update, nat8, StableBTree
 // Data structures / Custom types //
 //================================//
 
-// A single entry of an entire user.
+// Represents all data for a single user
 export type UserData = Record<{
     user: string,
-    allFiles: Vec<FileData> // Array of files each with their own data (FileData).
+    allFiles: Vec<FileData> // Array of files each with their own data
 }>;
 
-// A single file data entry that includes an array of data for each file.
+// Represents data for a single file
 export type FileData = Record<{
-    fileID: string, // UUID of each single file.
-    fileName: string, // File name.
+    fileID: string, // UUID of each single file
+    fileName: string, // File name
     fileData: Vec<SingleFileData>
 }>;
 
-// A single data entry as part of an array that makes up the total data of a single file.
+// Represents a single data entry within a file
 export type SingleFileData = Record<{
     id: string,
     name: string,
     description: string,
 }>;
 
-// 
+// Query result types
 export type FileDataQuery = Variant<{
     fileData: FileData,
     error: string
@@ -35,42 +35,51 @@ export type SingleDataQuery = Variant<{
     error: string
 }>;
 
-// Canister authorization.
-
+// Canister authorization
 let owner = "";
 
-// Initializes the data store.
+// Initialize the canister
+// Sets the owner to the principal of the entity deploying the canister
 $init
 export function init(): void {
     owner = ic.caller().toText();
 }
 
-// Checks if the caller is the owner.
+// Check if the caller is authorized
+// Returns true if the caller is the owner, false otherwise
 $query
 export function isAuthorized(): boolean {
     return ic.caller().toText() === owner;
 }
 
-// Key is the user's principal ID.
+// Main data store: a map of user principals to their data
 let dataRecordMap = new StableBTreeMap<string, UserData>(0, 10000, 100000);
 
+// Query functions
+
+// Check if the data map is empty
+// Returns true if there are no entries in the map, false otherwise
 $query
 export function isDataMapEmpty (): boolean {
     return dataRecordMap.isEmpty();
 }
 
+// Get all user data
+// Returns an array of tuples, each containing a user's principal and their data
 $query
 export function getAllUserData(): Vec<Tuple<[string, UserData]>> {
     return dataRecordMap.items();
 }
 
-// Gives you the user's data including an array of all of the file data.
+// Get data for a single user
+// Returns the UserData for the specified user principal, or null if not found
 $query
 export function getSingleUser(key: string): Opt<UserData> {
     return dataRecordMap.get(key);
 }
 
-// Gets all of the data for a single file.
+// Get data for a specific file of a user
+// Returns the FileData for the specified file, or an error message if not found
 $query
 export function getFileData(key: string, fileName: string): FileDataQuery {
     const user = dataRecordMap.get(key);
@@ -81,7 +90,8 @@ export function getFileData(key: string, fileName: string): FileDataQuery {
     return fileData? { fileData: fileData } : { error: "File not found." };
 }
 
-// Checks if a user exists.
+// Check if a user exists
+// Returns true if the user exists in the data map, false otherwise
 $query
 export function doesUserExist(user: string): boolean {
     const allUsers = dataRecordMap.items();
@@ -89,7 +99,10 @@ export function doesUserExist(user: string): boolean {
     return userExists;
 }
 
-// Creates a user entry.
+// Update functions
+
+// Create a new user entry
+// Returns 'Success' if the user is created, 'User already exists' if the user already exists, or 'Failed' on error
 $update
 export async function createUserEntry(): Promise<string> {
     const key = ic.caller().toText();
@@ -109,7 +122,8 @@ export async function createUserEntry(): Promise<string> {
     }
 }
 
-// > Todo: Test this thing.
+// Add a new file to a user's data
+// Returns 'Success' if the file is added, 'User not found' if the user doesn't exist, or 'Failed' on error
 $update
 export async function addFileToUser(key: string, data: FileData): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -125,7 +139,9 @@ export async function addFileToUser(key: string, data: FileData): Promise<string
     }
 }
 
-// Updates a file for a user.
+// Update an existing file for a user
+// Returns 'Success' if the file is updated, 'User not found' if the user doesn't exist, 
+// 'File not found' if the file doesn't exist, or 'Failed' on error
 $update
 export async function updateFileForUser(key: string, fileData: FileData): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -145,7 +161,9 @@ export async function updateFileForUser(key: string, fileData: FileData): Promis
     }
 }
 
-// Removes a file for a user.
+// Remove a file from a user's data
+// Returns 'Success' if the file is removed, 'User not found' if the user doesn't exist, 
+// 'File not found' if the file doesn't exist, or 'Failed' on error
 $update
 export async function removeFileFromUser(key: string, fileName: string): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -169,6 +187,9 @@ export async function removeFileFromUser(key: string, fileName: string): Promise
 // Functions for the data inside each FileData object //
 //====================================================//
 
+// Add new data to a specific file
+// Returns 'Success' if the data is added, 'User not found' if the user doesn't exist, 
+// 'File not found' if the file doesn't exist, or 'Failed' on error
 $update
 export async function addDataToFile(key: string, fileID: string, data: SingleFileData): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -188,6 +209,10 @@ export async function addDataToFile(key: string, fileID: string, data: SingleFil
     }
 }
 
+// Update existing data in a specific file
+// Returns 'Success' if the data is updated, 'User not found' if the user doesn't exist, 
+// 'File not found' if the file doesn't exist, 'Data not found' if the specific data entry doesn't exist, 
+// or 'Failed' on error
 $update
 export async function updateDataForFile(key: string, fileID: string, data: SingleFileData): Promise<string> {
     const user = dataRecordMap.get(key);
@@ -210,10 +235,14 @@ export async function updateDataForFile(key: string, fileID: string, data: Singl
         return 'Failed';
     }
 }
-//============================//
-// Canister management stuffs //
-//============================//
 
+//===========================//
+// Canister management stuff //
+//===========================//
+
+// Delete all data for a specific user
+// Returns 'Success' if the user data is deleted, 'Unauthorized' if the caller is not the owner, 
+// or 'Failed' on error
 $update
 export async function deleteUserData(key: string): Promise<string> {
     const auth = isAuthorized();
@@ -229,6 +258,9 @@ export async function deleteUserData(key: string): Promise<string> {
     }
 }
 
+// Reset the entire canister by removing all user data
+// Returns 'Success' if all data is cleared, 'Unauthorized' if the caller is not the owner, 
+// or 'Failed' on error
 $update
 export async function resetCanister(): Promise<string> {
     const auth = isAuthorized();
