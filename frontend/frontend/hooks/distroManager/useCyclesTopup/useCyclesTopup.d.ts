@@ -1,10 +1,7 @@
-
-// agent.d.ts
-
 import { HttpAgent } from "@dfinity/agent";
-import { Cycles } from "../../interfaces/cmc/cmc";
+import { Cycles } from "../../../interfaces/cmc/cmc";
 import { Ledger } from "./interfaces/ledger/index";
-import { Distro } from "../../interfaces/distro/index";
+import { Distro } from "../../../interfaces/distro/index";
 
 declare const walletAddress: string;
 
@@ -31,4 +28,4 @@ export declare function verifyTransaction(
   actor: Ledger
 ): Promise<boolean>;
 
-export declare function cyclesTopUp(currentUser: { agent: HttpAgent }): Promise<void>;
+export declare function useCyclesTopUp(): (currentUser: { agent: HttpAgent }) => Promise<void>;

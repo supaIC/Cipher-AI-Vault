@@ -1,15 +1,16 @@
-// components/CyclesTopUpComponent.tsx
 import React from 'react';
-import { cyclesTopUp } from '../../hooks/useCyclesTopup/useCyclesTopup';
+import { useCyclesTopUp } from '../../hooks/distroManager/useCyclesTopup/useCyclesTopup';
 
 interface CyclesTopUpProps {
   currentUser: any;
 }
 
 const CyclesTopUpComponent: React.FC<CyclesTopUpProps> = ({ currentUser }) => {
+  const cycleTopUp = useCyclesTopUp(); // Get the cycleTopUp function
+
   const handleCyclesTopUp = async () => {
     if (currentUser) {
-      await cyclesTopUp(currentUser);
+      await cycleTopUp(currentUser); // Call the cycleTopUp function
     }
   };
 

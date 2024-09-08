@@ -1,24 +1,15 @@
-// components/GetBalancesComponent.tsx
 import React from 'react';
-import { useDistroActor } from '../../actors';  // Assuming context is now centralized
+import { useGetBalances } from '../../hooks/distroManager/useGetBalances/useGetBalances'; // Import the new hook
 
 interface GetBalancesProps {
   agent: any;
 }
 
 const GetBalancesComponent: React.FC<GetBalancesProps> = ({ agent }) => {
-  const { createDistroActor } = useDistroActor();
-
-  const getBalances = async () => {
-    if (agent) {
-      const distroActor = await createDistroActor(agent);
-      const balances = await distroActor.getBalances();
-      console.log(balances);
-    }
-  };
+  const { getBalances } = useGetBalances(agent); // Use the hook for getting balances and destructure getBalances
 
   return (
-    <button onClick={getBalances}>Get Balances</button>
+    <button onClick={() => getBalances()}>Get Balances</button>
   );
 };
 

@@ -6,6 +6,7 @@ import * as dataIDL from '../../interfaces/backend';
 const IDL = dataIDL.idlFactory;
 const canisterID = "olf36-uaaaa-aaaan-qmu5q-cai";
 
+// Move to Actor Context
 // Create a data actor for interacting with the canister
 export const getDataActor = async(agent: HttpAgent | Agent) => {
     const dataActor = Actor.createActor(dataIDL.idlFactory, { agent, canisterId: canisterID });
