@@ -1,6 +1,6 @@
 // components/GetBalancesComponent.tsx
 import React from 'react';
-import { useDistroActor } from '../../context';  // Assuming context is now centralized
+import { useDistroActor } from '../../actors';  // Assuming context is now centralized
 
 interface GetBalancesProps {
   agent: any;

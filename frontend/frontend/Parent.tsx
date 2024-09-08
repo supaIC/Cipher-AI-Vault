@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import * as Components from "./components"; // Import all components at once
 import * as Screens from "./screens";       // Import all screens at once
-import * as Context from "./context";       // Import all context providers at once
+import * as Context from "./actors";       // Import all context providers at once
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager"; // Still using useAssetManager
 import internetComputerLogo from './assets/logos/internet_computer.png';
 import cipherProxyLogo from './assets/logos/cipher_proxy.png';
