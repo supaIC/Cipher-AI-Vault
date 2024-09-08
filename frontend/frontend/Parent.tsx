@@ -16,7 +16,7 @@ import DragAndDropContainer from "./components/DragAndDropContainer";
 import { HttpAgent } from "@dfinity/agent";
 import { whitelist } from "./configs/config";
 import * as auth from "./hooks/authFunctions/authFunctions";
-import * as data from "./hooks/dataManager/dataManager"; // Add DataManager import
+import * as data from "./hooks/dataManager/dataManager";
 import * as distro from "./interfaces/distro";
 
 export function Parent() {
@@ -24,7 +24,7 @@ export function Parent() {
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
   const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin'>('images');
-  const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null); // Add state for private data
+  const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
   const [dataActor, setDataActor] = useState<any | null>(null);
 
   const {
@@ -49,7 +49,6 @@ export function Parent() {
     []
   );
 
-  // Initialize the DataActor for private data
   useEffect(() => {
     const initializeDataActor = async () => {
       if (currentUser?.agent) {
@@ -67,7 +66,6 @@ export function Parent() {
     }
   }, [currentUser]);
 
-  // Load private data when the data actor is ready
   useEffect(() => {
     const loadPrivateData = async () => {
       if (dataActor) {
@@ -128,7 +126,22 @@ export function Parent() {
 
   return (
     <div className="app">
-      {currentUser && (
+      <img src="frontend/assets/logos/internet_computer.png" alt="Bottom Left" className="bottom-left-image" />
+      <img src="frontend/assets/logos/cipher_proxy.png" alt="Right Side" className="right-image" />
+
+      {/* Landing Page Section */}
+      {!currentUser ? (
+        <div className="landing-page">
+          <div className="hero-section">
+            <h1>Welcome to Cipher AI Vault</h1>
+            <p>
+              Secure, sandboxed AI with in-memory VectorDB and LLM,
+              stable-memory data storage, and more—all on the Internet Computer.
+            </p>
+            <ICWalletList giveToParent={giveToParent} whitelist={whitelist} />
+          </div>
+        </div>
+      ) : (
         <>
           <button className="settings-btn" onClick={toggleSettings}>
             Settings
@@ -145,23 +158,17 @@ export function Parent() {
           <div className="logged-in-info">
             Logged in as: {currentUser.principal}
           </div>
-        </>
-      )}
 
-      {globalLoading && <LoadingOverlay message={loadingMessage} />}
-      {error && <ErrorNotification message={error} onClose={() => setError(null)} />}
-      {confirmDelete && (
-        <DeleteConfirmation
-          asset={confirmDelete}
-          onConfirm={() => handleDeleteAsset(confirmDelete)}
-          onCancel={() => setConfirmDelete(null)}
-        />
-      )}
+          {globalLoading && <LoadingOverlay message={loadingMessage} />}
+          {error && <ErrorNotification message={error} onClose={() => setError(null)} />}
+          {confirmDelete && (
+            <DeleteConfirmation
+              asset={confirmDelete}
+              onConfirm={() => handleDeleteAsset(confirmDelete)}
+              onCancel={() => setConfirmDelete(null)}
+            />
+          )}
 
-      {!currentUser ? (
-        <ICWalletList giveToParent={giveToParent} whitelist={whitelist} />
-      ) : (
-        <>
           <UploadButton
             onUpload={(file) => handleFileUpload(file, currentUser.principal || "")}
             disabled={globalLoading}
@@ -222,9 +229,9 @@ export function Parent() {
                   userObject={currentUser as any}
                 />
               ) : (
-                <DatabaseAdmin 
-                  assets={assets} 
-                  privateData={privateData} 
+                <DatabaseAdmin
+                  assets={assets}
+                  privateData={privateData}
                 />
               )}
             </div>
