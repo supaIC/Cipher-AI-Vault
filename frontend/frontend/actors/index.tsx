@@ -1,4 +1,4 @@
-export { AuthActorProvider, useAuthActor } from './Auth/AuthActorContext';
-export { DataActorProvider, useDataActor } from './Data/DataActorContext';
-export { BackendActorProvider, useBackendActor } from './Backend/BackendActorContext';
-export { DistroActorProvider, useDistroActor } from './Distro/DistroActorContext';
+export { AuthActorProvider, useAuthActor } from './Auth/AuthActor';
+export { DataActorProvider, useDataActor } from './Data/DataActor';
+export { BackendActorProvider, useBackendActor } from './Backend/BackendActor';
+export { DistroActorProvider, useDistroActor } from './Distro/DistroActor';
