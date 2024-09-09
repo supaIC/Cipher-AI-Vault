@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import * as Components from "./components";
 import * as Screens from "./screens";
 import * as Actor from "./actors";
-import DeleteButton from "./components/buttons/delete/DeleteAssetButton"; // Import DeleteButton
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
 import { useDataManager } from "./hooks/dataManager/dataManager";
 import internetComputerLogo from './assets/logos/internet_computer.png';
@@ -111,14 +110,13 @@ export function Parent() {
           {confirmDelete && (
             <Components.DeleteConfirmation
               asset={confirmDelete}
-              onConfirm={() => handleDeleteAsset(confirmDelete)}
+              onConfirm={async () => handleDeleteAsset(confirmDelete)}
               onCancel={() => setConfirmDelete(null)}
             />
           )}
 
           <Components.ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
-          {/* Conditionally render UploadButton based on the view mode below ViewToggle */}
           {(viewMode === 'images' || viewMode === 'documents' || viewMode === 'public') && (
             <Components.UploadButton
               onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")}
@@ -126,17 +124,30 @@ export function Parent() {
             />
           )}
 
-          {/* Conditionally render DragAndDropContainer based on the view mode */}
           {viewMode === 'images' || viewMode === 'documents' || viewMode === 'public' ? (
             <Components.DragAndDropContainer onDrop={handleDrop}>
               <div className="assets-container">
-                {viewMode === 'images' ? (
-                  <Screens.ImageStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
-                ) : viewMode === 'documents' ? (
-                  <Screens.DocumentStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
-                ) : viewMode === 'public' ? (
-                  <Screens.PublicDataStore assets={assets} onDelete={async (asset) => setConfirmDelete(asset)} />
-                ) : null}
+                {viewMode === 'images' && (
+                  <Screens.ImageStore 
+                    assets={assets} 
+                    onAssetHover={setHoveredAsset} 
+                    onDelete={(asset) => setConfirmDelete(asset)} 
+                  />
+                )}
+                {viewMode === 'documents' && (
+                  <Screens.DocumentStore 
+                    assets={assets} 
+                    onAssetHover={setHoveredAsset} 
+                    onDelete={(asset) => setConfirmDelete(asset)} 
+                  />
+                )}
+                {viewMode === 'public' && (
+                  <Screens.PublicDataStore 
+                    assets={assets} 
+                    onAssetHover={setHoveredAsset} 
+                    onDelete={async (asset) => setConfirmDelete(asset)} 
+                  />
+                )}
               </div>
               {hoveredAsset && (
                 <div className="tooltip" style={{ left: tooltipPosition.left, top: tooltipPosition.top }}>
@@ -150,17 +161,12 @@ export function Parent() {
                 assets={assets}
                 userObject={currentUser as Types.UserObject}
                 onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
+                onAssetHover={setHoveredAsset}
               />
             ) : (
               <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
             )
           )}
-
-          {/* Integrate DeleteButton component */}
-          <DeleteButton
-            asset={confirmDelete}
-            onDelete={(asset) => asset && handleDeleteAsset(asset)}
-          />
         </>
       )}
     </div>

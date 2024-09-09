@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import * as Components from "../../components"; // Import other components
-import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight"; // Import the syntaxHighlight utility
+import * as Components from "../../components";
+import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight";
 
 interface Asset {
   key: string;
@@ -9,16 +9,16 @@ interface Asset {
 
 interface PublicDataStoreProps {
   assets: Array<Asset>;
-  onDelete: (asset: Asset) => Promise<void>; // Ensure this returns a promise for proper async handling
+  onDelete: (asset: Asset) => Promise<void>;
+  onAssetHover: (asset: Asset | null) => void;
 }
 
-const PublicDataStore: React.FC<PublicDataStoreProps> = ({ assets, onDelete }) => {
+const PublicDataStore: React.FC<PublicDataStoreProps> = ({ assets, onDelete, onAssetHover }) => {
   const [publicData, setPublicData] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
   const [fullJsonData, setFullJsonData] = useState<string | null>(null);
-  const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<Asset | null>(null); // State for delete confirmation
 
   useEffect(() => {
     loadPublicData();
@@ -73,88 +73,84 @@ const PublicDataStore: React.FC<PublicDataStoreProps> = ({ assets, onDelete }) =
 
   const handleDelete = async (asset: Asset) => {
     setLoading(true);
+    setError(null);
     try {
       await onDelete(asset);
+      // After successful deletion, remove the asset from publicData
+      setPublicData(prevData => {
+        const newData = { ...prevData };
+        delete newData[asset.key];
+        return newData;
+      });
     } catch (error) {
       console.error("Error deleting public asset:", error);
       setError("Failed to delete public asset. Please try again.");
     } finally {
       setLoading(false);
-      setViewingAsset(null); // Reset viewing asset after delete
+      setViewingAsset(null);
     }
   };
 
-  const renderPublicDataList = () => {
-    if (loading) {
-      return <Components.LoadingOverlay message="Loading data..." />;
-    }
+  if (loading) {
+    return <Components.LoadingOverlay message="Loading data..." />;
+  }
 
-    if (error) {
-      return <p>Error: {error}</p>;
-    }
-
-    if (Object.keys(publicData).length === 0) {
-      return <p>No public data available.</p>;
-    }
-
-    return Object.entries(publicData).map(([key, value]) => {
-      const parsedValue = JSON.parse(value);
-      const isError = parsedValue.error !== undefined;
-
-      return (
-        <div
-          key={key}
-          className={`asset-item ${isError ? 'error' : ''}`}
-          onClick={() => handleAssetClick({ key, url: assets.find(a => a.key === key)?.url || '' })}
-        >
-          <div className="json-preview">
-            <pre
-              className="json-snippet"
-              dangerouslySetInnerHTML={{
-                __html: isError
-                  ? `Error: ${parsedValue.error}`
-                  : syntaxHighlight(value.substring(0, 100) + "...")
-              }}
-            />
-          </div>
-          <p className="asset-name" style={{ fontSize: "12px" }}>
-            {key.split("/").pop()}
-          </p>
-        </div>
-      );
-    });
-  };
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
-    <div className="public-data-store">
-      <h2>Public Data</h2>
-      <div className="public-data-list">
-        {renderPublicDataList()}
-      </div>
+    <>
+      {Object.keys(publicData).length > 0 ? (
+        Object.entries(publicData).map(([key, value]) => {
+          const parsedValue = JSON.parse(value);
+          const isError = parsedValue.error !== undefined;
+          const asset = assets.find(a => a.key === key);
+
+          return (
+            <div
+              key={key}
+              className={`asset-item ${isError ? 'error' : ''}`}
+              onMouseEnter={() => onAssetHover(asset || null)}
+              onMouseLeave={() => onAssetHover(null)}
+              onClick={() => asset && handleAssetClick(asset)}
+            >
+              <div className="json-preview">
+                <pre
+                  className="json-snippet"
+                  dangerouslySetInnerHTML={{
+                    __html: isError
+                      ? `Error: ${parsedValue.error}`
+                      : syntaxHighlight(value.substring(0, 100) + "...")
+                  }}
+                />
+              </div>
+              <p className="asset-name" style={{ fontSize: "12px" }}>
+                {key.split("/").pop()}
+              </p>
+            </div>
+          );
+        })
+      ) : (
+        <p>No public data available.</p>
+      )}
+
       {viewingAsset && (
         <div className="asset-view">
           <div className="asset-view-content">
             <pre dangerouslySetInnerHTML={{ __html: syntaxHighlight(fullJsonData || "") }} />
-            <Components.CopyToClipboard text={fullJsonData || ""} /> {/* Use the CopyToClipboard component */}
+            <Components.CopyToClipboard text={fullJsonData || ""} />
           </div>
           <div className="asset-view-actions">
-            <button onClick={() => setViewingAsset(null)}>Close</button>
             <button onClick={() => window.open(viewingAsset.url, "_blank")}>
               View Asset on-chain
             </button>
+            <button onClick={() => setViewingAsset(null)}>Close</button>
             <button onClick={() => handleDelete(viewingAsset)}>Delete</button>
           </div>
         </div>
       )}
-      {/* Delete Confirmation */}
-      {confirmDeleteAsset && (
-        <Components.DeleteConfirmation
-          asset={confirmDeleteAsset}
-          onConfirm={async () => await handleDelete(confirmDeleteAsset)}
-          onCancel={() => setConfirmDeleteAsset(null)}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

@@ -13,9 +13,10 @@ interface DataStoreProps {
   assets: Array<Asset>;
   onDelete: (asset: Asset) => void;
   userObject: Types.UserObject;
+  onAssetHover: (asset: Asset | null) => void;
 }
 
-const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) => {
+const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject, onAssetHover }) => {
   const dataManager = useDataManager();
   const [privateData, setPrivateData] = useState<any | null>(null);
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
@@ -34,25 +35,18 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
     setError(null);
 
     try {
-      console.log("Fetching all user data...");
       const allUserData = await dataManager.getAllUserData(userObject);
 
       if (!allUserData || allUserData.length === 0) {
-        console.log("No user data found. Proceeding to create a new user...");
         await dataManager.createUser(userObject);
-        console.log("User created successfully.");
-        
-        console.log("Reloading data after user creation...");
         await loadPrivateData();
       } else {
-        console.log("User exists. Fetched all user data:", allUserData);
         setPrivateData(allUserData);
       }
     } catch (error) {
       console.error("Error loading private data:", error);
       setError("Failed to load private data. Please try again.");
     } finally {
-      console.log("Finished loading private data.");
       setLoading(false);
     }
   };
@@ -76,7 +70,6 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
   };
 
   const handleDeletePrivateAsset = async (asset: any) => {
-    setLoading(true);
     try {
       await dataManager.removeFileFromUser(userObject, userObject.principal, asset.fileID);
       await loadPrivateData();
@@ -84,24 +77,12 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
       console.error("Error deleting private asset:", error);
       setError("Failed to delete private asset. Please try again.");
     } finally {
-      setLoading(false);
       setViewingAsset(null);
     }
   };
 
   const handleDelete = (asset: Asset | any) => {
     setConfirmDeleteAsset(asset as Asset);
-  };
-
-  const confirmDelete = async () => {
-    if (confirmDeleteAsset) {
-      await handleDeletePrivateAsset(confirmDeleteAsset);
-      setConfirmDeleteAsset(null);
-    }
-  };
-
-  const cancelDelete = () => {
-    setConfirmDeleteAsset(null);
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,52 +122,13 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
     }
   };
 
-  const renderDataList = () => {
-    if (loading) {
-      return <Components.LoadingOverlay message="Loading data..." />;
-    }
+  if (loading) {
+    return <Components.LoadingOverlay message="Loading data..." />;
+  }
 
-    if (error) {
-      return <p>Error: {error}</p>;
-    }
-
-    if (!privateData || privateData.length === 0) {
-      return <p>No private data available. Try uploading a file.</p>;
-    }
-    
-    return privateData.flatMap((userDataMap: any) => {
-      if (!Array.isArray(userDataMap)) {
-        console.error('Unexpected data structure:', userDataMap);
-        return null;
-      }
-      const [_, userData] = userDataMap;
-      if (!userData || !userData.allFiles) {
-        console.error('Invalid user data structure:', userData);
-        return null;
-      }
-      return userData.allFiles.map((file: any) => (
-        <div
-          key={file.fileID}
-          className="asset-item"
-          onClick={() => handleAssetClick(file)}
-        >
-          <div className="json-preview">
-            <pre
-              className="json-snippet"
-              dangerouslySetInnerHTML={{
-                __html: file.fileData && file.fileData.length > 0
-                  ? syntaxHighlight(JSON.stringify(file.fileData[0], null, 2).substring(0, 100) + "...")
-                  : "No data available"
-              }}
-            />
-          </div>
-          <p className="asset-name" style={{ fontSize: "12px" }}>
-            {file.fileName}
-          </p>
-        </div>
-      ));
-    }).filter(Boolean);
-  };
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="page-container">
@@ -205,7 +147,44 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
   
       <div className="assets-list-section">
         <div className="data-list">
-          {renderDataList()}
+          {privateData && privateData.length > 0 ? (
+            privateData.flatMap((userDataMap: any) => {
+              if (!Array.isArray(userDataMap)) {
+                console.error('Unexpected data structure:', userDataMap);
+                return null;
+              }
+              const [_, userData] = userDataMap;
+              if (!userData || !userData.allFiles) {
+                console.error('Invalid user data structure:', userData);
+                return null;
+              }
+              return userData.allFiles.map((file: any) => (
+                <div
+                  key={file.fileID}
+                  className="asset-item"
+                  onClick={() => handleAssetClick(file)}
+                  onMouseEnter={() => onAssetHover({ key: file.fileID, url: '' })}
+                  onMouseLeave={() => onAssetHover(null)}
+                >
+                  <div className="json-preview">
+                    <pre
+                      className="json-snippet"
+                      dangerouslySetInnerHTML={{
+                        __html: file.fileData && file.fileData.length > 0
+                          ? syntaxHighlight(JSON.stringify(file.fileData[0], null, 2).substring(0, 100) + "...")
+                          : "No data available"
+                      }}
+                    />
+                  </div>
+                  <p className="asset-name" style={{ fontSize: "12px" }}>
+                    {file.fileName}
+                  </p>
+                </div>
+              ));
+            }).filter(Boolean)
+          ) : (
+            <p>No private data available. Try uploading a file.</p>
+          )}
         </div>
       </div>
   
@@ -229,12 +208,13 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
       {confirmDeleteAsset && (
         <Components.DeleteConfirmation
           asset={confirmDeleteAsset}
-          onConfirm={confirmDelete}
-          onCancel={cancelDelete}
+          onConfirm={async () => {
+            await handleDeletePrivateAsset(confirmDeleteAsset);
+            setConfirmDeleteAsset(null);
+          }}
+          onCancel={() => setConfirmDeleteAsset(null)}
         />
       )}
-      
-      {loading && <Components.LoadingOverlay message="Loading data..." />}
     </div>
   );   
 };
