@@ -1,0 +1,44 @@
+/* Wallet list styles */
+.walletList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5625rem; /* 25px */
+    border: 1px solid silver;
+    border-radius: 0.75rem; /* 12px */
+  }
+  
+  .walletList button {
+    margin-top: 0.625rem; /* 10px */
+    display: flex;
+    height: 2.5rem; /* 40px */
+    width: 8.4375rem; /* 135px */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #1e1e1e;
+  }
+  
+  .walletList img {
+    height: 1.25rem; /* 20px */
+    width: 1.25rem; /* 20px */
+    margin: 0.625rem; /* 10px */
+  }
+  
+  .walletList h2 {
+    margin: 0;
+    margin-bottom: 0.625rem; /* 10px */
+  }
+  
+  .walletList p {
+    font-size: 0.875rem; /* 14px */
+    margin: 0;
+  }
+  
+  /* Additional UI enhancements */
+  .app,
+  .error-notification,
+  .walletList {
+    transition: all 0.3s ease;
+  }

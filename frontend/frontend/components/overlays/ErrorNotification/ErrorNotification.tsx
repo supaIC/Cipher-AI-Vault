@@ -1,4 +1,5 @@
 import React from "react";
+import "./ErrorNotification.css";
 
 interface ErrorNotificationProps {
   message: string;

@@ -1,4 +1,5 @@
 import React from 'react';
+import './LoggedInUser.css';
 
 interface LoggedInUserProps {
   principal: string;

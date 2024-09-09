@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetBalances } from '../../hooks/distroManager/useGetBalances/useGetBalances'; // Import the new hook
+import { useGetBalances } from '../../../hooks/distroManager/useGetBalances/useGetBalances'; // Import the new hook
 
 interface GetBalancesProps {
   agent: any;

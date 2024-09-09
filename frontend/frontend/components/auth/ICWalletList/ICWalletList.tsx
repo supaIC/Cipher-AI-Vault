@@ -1,12 +1,12 @@
 import React from "react";
-import "../../styles/index.css";
 // Import logo assets for different wallets
-import dfinity from "../../assets/logos/dfinity.png";
-import plug from "../../assets/logos/plug.png";
-import stoic from "../../assets/logos/stoic.png";
-import nfid from "../../assets/logos/nfid.png";
+import dfinity from "../../../assets/logos/dfinity.png";
+import plug from "../../../assets/logos/plug.png";
+import stoic from "../../../assets/logos/stoic.png";
+import nfid from "../../../assets/logos/nfid.png";
 // Import authentication functions and types from ic-auth library
 import { PlugLogin, StoicLogin, NFIDLogin, IdentityLogin, CreateActor, Types } from 'ic-auth';
+import "./ICWalletList.css"
 
 // ICWalletList component for displaying wallet login options
 const ICWalletList = ({ giveToParent, whitelist }: any) => {

@@ -203,83 +203,6 @@ button:hover {
   position: relative;
 }
 
-/* Error notification styles */
-.error-notification {
-  position: fixed;
-  bottom: 1.25rem; /* 20px */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ff3860;
-  color: white;
-  padding: 0.625rem 1.25rem; /* 10px 20px */
-  border-radius: 0.5rem; /* 8px */
-  display: flex;
-  align-items: center;
-  gap: 0.9375rem; /* 15px */
-}
-
-.error-notification button {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 50%;
-  width: 1.5625rem; /* 25px */
-  height: 1.5625rem; /* 25px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.error-notification button:hover {
-  background-color: #e22e4d;
-}
-
-/* Wallet list styles */
-.walletList {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5625rem; /* 25px */
-  border: 1px solid silver;
-  border-radius: 0.75rem; /* 12px */
-}
-
-.walletList button {
-  margin-top: 0.625rem; /* 10px */
-  display: flex;
-  height: 2.5rem; /* 40px */
-  width: 8.4375rem; /* 135px */
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: #1e1e1e;
-}
-
-.walletList img {
-  height: 1.25rem; /* 20px */
-  width: 1.25rem; /* 20px */
-  margin: 0.625rem; /* 10px */
-}
-
-.walletList h2 {
-  margin: 0;
-  margin-bottom: 0.625rem; /* 10px */
-}
-
-.walletList p {
-  font-size: 0.875rem; /* 14px */
-  margin: 0;
-}
-
-/* Additional UI enhancements */
-.app,
-.error-notification,
-.walletList {
-  transition: all 0.3s ease;
-}
-
 /* Improving visibility and interaction */
 .error-notification button {
   margin-left: 0.9375rem; /* 15px */
@@ -407,17 +330,6 @@ button {
 
 .asset-view-actions button:hover {
   background-color: #3367d6;
-}
-
-.logged-in-info {
-  position: fixed;
-  top: 0.625rem; /* 10px */
-  right: 0.625rem; /* 10px */
-  background-color: rgba(33, 33, 33, 0.8);
-  padding: 0.3125rem 0.625rem; /* 5px 10px */
-  border-radius: 0.3125rem; /* 5px */
-  z-index: 9999;
-  font-size: 0.75rem; /* 12px */
 }
 
 .assets-container {

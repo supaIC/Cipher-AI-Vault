@@ -1,6 +1,6 @@
 import React from 'react';
-import CyclesTopUpComponent from '../cycles/CyclesTopUpButton'; // Import your component
-import GetBalancesComponent from '../cycles/GetBalancesButton'; // Import your component
+import CyclesTopUpComponent from '../buttons/cycles/CyclesTopUpButton'; // Import your component
+import GetBalancesComponent from '../buttons/cycles/GetBalancesButton'; // Import your component
 import './SettingsDropdown.css';
 
 interface SettingsDropdownProps {

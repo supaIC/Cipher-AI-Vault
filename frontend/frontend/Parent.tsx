@@ -2,15 +2,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import * as Components from "./components";
 import * as Screens from "./screens";
 import * as Actor from "./actors";
+import DeleteButton from "./components/buttons/delete/DeleteAssetButton"; // Import DeleteButton
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
-import { useDataManager } from "./hooks/dataManager/dataManager"; // Import useDataManager
+import { useDataManager } from "./hooks/dataManager/dataManager";
 import internetComputerLogo from './assets/logos/internet_computer.png';
 import cipherProxyLogo from './assets/logos/cipher_proxy.png';
+import { Types } from "ic-auth";
 
 export function Parent() {
   const { currentUser, setCurrentUser } = Actor.useAuthActor();
   const { createBackendActor } = Actor.useBackendActor();
-  const dataManager = useDataManager(); // Use dataManager hook
+  const dataManager = useDataManager();
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
   const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin' | 'public'>('images');
@@ -146,13 +148,19 @@ export function Parent() {
             viewMode === 'json' ? (
               <Screens.PrivateDataStore
                 assets={assets}
-                userObject={currentUser as import("/ic-projects/ic-storage-module/frontend/node_modules/ic-auth/dist/frontend/types").UserObject}
+                userObject={currentUser as Types.UserObject}
                 onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
               />
             ) : (
               <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
             )
           )}
+
+          {/* Integrate DeleteButton component */}
+          <DeleteButton
+            asset={confirmDelete}
+            onDelete={(asset) => asset && handleDeleteAsset(asset)}
+          />
         </>
       )}
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCyclesTopUp } from '../../hooks/distroManager/useCyclesTopup/useCyclesTopup';
+import { useCyclesTopUp } from '../../../hooks/distroManager/useCyclesTopup/useCyclesTopup';
 
 interface CyclesTopUpProps {
   currentUser: any;

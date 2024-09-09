@@ -1,0 +1,31 @@
+/* Error notification styles */
+.error-notification {
+    position: fixed;
+    bottom: 1.25rem; /* 20px */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff3860;
+    color: white;
+    padding: 0.625rem 1.25rem; /* 10px 20px */
+    border-radius: 0.5rem; /* 8px */
+    display: flex;
+    align-items: center;
+    gap: 0.9375rem; /* 15px */
+  }
+  
+  .error-notification button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 1.5625rem; /* 25px */
+    height: 1.5625rem; /* 25px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .error-notification button:hover {
+    background-color: #e22e4d;
+  }
