@@ -1,4 +1,5 @@
 import React from 'react';
+import './ViewToggle.css';
 
 type ViewMode = 'images' | 'json' | 'documents' | 'admin' | 'public';
 

@@ -114,37 +114,45 @@ export function Parent() {
             />
           )}
 
-          <Components.UploadButton
-            onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")}
-            disabled={globalLoading}
-          />
-
           <Components.ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
 
-          <Components.DragAndDropContainer onDrop={handleDrop}>
-            <div className="assets-container">
-              {viewMode === 'images' ? (
-                <Screens.ImageStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
-              ) : viewMode === 'documents' ? (
-                <Screens.DocumentStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
-              ) : viewMode === 'json' ? (
-                <Screens.PrivateDataStore
-                  assets={assets}
-                  userObject={currentUser as import("/ic-projects/ic-storage-module/frontend/node_modules/ic-auth/dist/frontend/types").UserObject}
-                  onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
-                />
-              ) : viewMode === 'public' ? (
-                <Screens.PublicDataStore assets={assets} onDelete={async (asset) => setConfirmDelete(asset)} />
-              ) : (
-                <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
-              )}
-            </div>
-            {hoveredAsset && (
-              <div className="tooltip" style={{ left: tooltipPosition.left, top: tooltipPosition.top }}>
-                <p>URL: {hoveredAsset.url}</p>
+          {/* Conditionally render UploadButton based on the view mode below ViewToggle */}
+          {(viewMode === 'images' || viewMode === 'documents' || viewMode === 'public') && (
+            <Components.UploadButton
+              onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")}
+              disabled={globalLoading}
+            />
+          )}
+
+          {/* Conditionally render DragAndDropContainer based on the view mode */}
+          {viewMode === 'images' || viewMode === 'documents' || viewMode === 'public' ? (
+            <Components.DragAndDropContainer onDrop={handleDrop}>
+              <div className="assets-container">
+                {viewMode === 'images' ? (
+                  <Screens.ImageStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
+                ) : viewMode === 'documents' ? (
+                  <Screens.DocumentStore assets={assets} onAssetHover={setHoveredAsset} onDelete={(asset) => setConfirmDelete(asset)} />
+                ) : viewMode === 'public' ? (
+                  <Screens.PublicDataStore assets={assets} onDelete={async (asset) => setConfirmDelete(asset)} />
+                ) : null}
               </div>
-            )}
-          </Components.DragAndDropContainer>
+              {hoveredAsset && (
+                <div className="tooltip" style={{ left: tooltipPosition.left, top: tooltipPosition.top }}>
+                  <p>URL: {hoveredAsset.url}</p>
+                </div>
+              )}
+            </Components.DragAndDropContainer>
+          ) : (
+            viewMode === 'json' ? (
+              <Screens.PrivateDataStore
+                assets={assets}
+                userObject={currentUser as import("/ic-projects/ic-storage-module/frontend/node_modules/ic-auth/dist/frontend/types").UserObject}
+                onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
+              />
+            ) : (
+              <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
+            )
+          )}
         </>
       )}
     </div>
