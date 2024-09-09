@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { HttpAgent, Actor, ActorSubclass, ActorMethod } from "@dfinity/agent";
-import * as data from "../../hooks/dataManager/dataManager";
 import { Types } from 'ic-auth';
-import * as Components from "../../components"; // Import all components
-import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight"; // Import the syntaxHighlight utility
+import * as Components from "../../components";
+import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight";
+import { useDataManager } from "../../hooks/dataManager/dataManager";
 
 interface Asset {
   key: string;
@@ -17,61 +16,34 @@ interface DataStoreProps {
 }
 
 const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObject }) => {
-  const [dataActor, setDataActor] = useState<Actor | null>(null);
-  const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
+  const dataManager = useDataManager();
+  const [privateData, setPrivateData] = useState<any | null>(null);
   const [viewingAsset, setViewingAsset] = useState<Asset | null>(null);
   const [fullJsonData, setFullJsonData] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<Asset | null>(null); // State for delete confirmation
+  const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<Asset | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const initializeDataActor = async () => {
-      if (userObject.agent) {
-        try {
-          const actor = await getDataActor();
-          setDataActor(actor as any);
-        } catch (error) {
-          console.error("Error initializing data actor:", error);
-          setError("Failed to initialize data actor. Please try again.");
-        }
-      }
-    };
-
-    initializeDataActor();
-  }, [userObject]);
-
-  useEffect(() => {
-    if (dataActor) {
-      loadPrivateData();
-    }
-  }, [dataActor]);
-
-  const getDataActor = async (): Promise<ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>> => {
-    return await data.getDataActor(userObject.agent as any);
-  };
+    loadPrivateData();
+  }, []);
 
   const loadPrivateData = async () => {
-    if (!dataActor) {
-      console.log("Data actor not initialized yet.");
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
     try {
       console.log("Fetching all user data...");
-      const allUserData = await data.getAllUserData(dataActor);
+      const allUserData = await dataManager.getAllUserData(userObject);
 
       if (!allUserData || allUserData.length === 0) {
         console.log("No user data found. Proceeding to create a new user...");
-        await data.createUser(dataActor);
+        await dataManager.createUser(userObject);
         console.log("User created successfully.");
         
         console.log("Reloading data after user creation...");
-        await loadPrivateData(); // Load data again after user creation
+        await loadPrivateData();
       } else {
         console.log("User exists. Fetched all user data:", allUserData);
         setPrivateData(allUserData);
@@ -85,7 +57,7 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
     }
   };
 
-  const handleAssetClick = async (asset: Asset | data.FileData) => {
+  const handleAssetClick = async (asset: Asset | any) => {
     setViewingAsset(asset as Asset);
     setFullJsonData(null);
 
@@ -103,38 +75,33 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
     }
   };
 
-  const handleDeletePrivateAsset = async (asset: data.FileData) => {
-    if (!dataActor) {
-      console.error("Data actor not initialized");
-      return;
-    }
-
+  const handleDeletePrivateAsset = async (asset: any) => {
     setLoading(true);
     try {
-      await data.removeFileFromUser(userObject.principal, asset.fileID, dataActor);
-      await loadPrivateData(); // Load private data after deletion of private asset
+      await dataManager.removeFileFromUser(userObject, userObject.principal, asset.fileID);
+      await loadPrivateData();
     } catch (error) {
       console.error("Error deleting private asset:", error);
       setError("Failed to delete private asset. Please try again.");
     } finally {
       setLoading(false);
-      setViewingAsset(null); // Reset viewing asset after delete
+      setViewingAsset(null);
     }
   };
 
-  const handleDelete = (asset: Asset | data.FileData) => {
-    setConfirmDeleteAsset(asset as Asset); // Set asset for confirmation
+  const handleDelete = (asset: Asset | any) => {
+    setConfirmDeleteAsset(asset as Asset);
   };
 
   const confirmDelete = async () => {
     if (confirmDeleteAsset) {
-      await handleDeletePrivateAsset(confirmDeleteAsset as unknown as data.FileData);
-      setConfirmDeleteAsset(null); // Reset confirmation after delete
+      await handleDeletePrivateAsset(confirmDeleteAsset);
+      setConfirmDeleteAsset(null);
     }
   };
 
   const cancelDelete = () => {
-    setConfirmDeleteAsset(null); // Reset confirmation
+    setConfirmDeleteAsset(null);
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,17 +123,16 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
   };
 
   const addFile = async (fileData: any[], fileName: string) => {
-    if (!dataActor) return;
     setLoading(true);
     setError(null);
-    const newFileData: data.FileData = {
+    const newFileData = {
       fileID: "file-" + Date.now(),
       fileName: fileName,
       fileData: fileData,
     };
     try {
-      await data.addFileToUser(userObject.principal, newFileData, dataActor);
-      await loadPrivateData(); // Reload data after adding the file
+      await dataManager.addFileToUser(userObject, userObject.principal, newFileData);
+      await loadPrivateData();
     } catch (error) {
       console.error("Error adding file:", error);
       setError("Failed to add file. Please try again.");
@@ -177,7 +143,7 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
 
   const renderDataList = () => {
     if (loading) {
-      return <Components.LoadingOverlay message="Loading data..." />; // Use loading overlay
+      return <Components.LoadingOverlay message="Loading data..." />;
     }
 
     if (error) {
@@ -188,7 +154,7 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
       return <p>No private data available. Try uploading a file.</p>;
     }
     
-    return privateData.flatMap((userDataMap) => {
+    return privateData.flatMap((userDataMap: any) => {
       if (!Array.isArray(userDataMap)) {
         console.error('Unexpected data structure:', userDataMap);
         return null;
@@ -224,7 +190,6 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
 
   return (
     <div className="page-container">
-      {/* Top Section with Actions */}
       <div className="top-section">
         <div className="data-actions">
           <input
@@ -238,14 +203,12 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
         </div>
       </div>
   
-      {/* Separated Assets Section */}
       <div className="assets-list-section">
         <div className="data-list">
           {renderDataList()}
         </div>
       </div>
   
-      {/* Asset View Section */}
       {viewingAsset && (
         <div className="asset-view">
           <div className="asset-view-content">
@@ -254,7 +217,7 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
                 __html: fullJsonData ? syntaxHighlight(fullJsonData) : "Loading full JSON...",
               }}
             />
-            <Components.CopyToClipboard text={fullJsonData || ""} /> {/* Use the CopyToClipboard component */}
+            <Components.CopyToClipboard text={fullJsonData || ""} />
           </div>
           <div className="asset-view-actions">
             <button onClick={() => setViewingAsset(null)}>Close</button>
@@ -263,7 +226,6 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
         </div>
       )}
 
-      {/* Delete Confirmation */}
       {confirmDeleteAsset && (
         <Components.DeleteConfirmation
           asset={confirmDeleteAsset}
@@ -272,7 +234,6 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
         />
       )}
       
-      {/* Loading Overlay */}
       {loading && <Components.LoadingOverlay message="Loading data..." />}
     </div>
   );   

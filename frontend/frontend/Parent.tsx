@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import * as Components from "./components"; // Import all components at once
-import * as Screens from "./screens";       // Import all screens at once
-import * as Actor from "./actors";        // Import all context providers at once
-import { useAssetManager, Asset } from "./hooks/assetManager/assetManager"; // Still using useAssetManager
+import * as Components from "./components";
+import * as Screens from "./screens";
+import * as Actor from "./actors";
+import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
+import { useDataManager } from "./hooks/dataManager/dataManager"; // Import useDataManager
 import internetComputerLogo from './assets/logos/internet_computer.png';
 import cipherProxyLogo from './assets/logos/cipher_proxy.png';
 
 export function Parent() {
-  const { currentUser, setCurrentUser } = Actor.useAuthActor();         // Use auth actor for currentUser and setCurrentUser
-  const { dataActor, initializeDataActor } = Actor.useDataActor();      // Use data actor for data management
-  const { createBackendActor } = Actor.useBackendActor();               // Use backend actor for backend interaction
+  const { currentUser, setCurrentUser } = Actor.useAuthActor();
+  const { createBackendActor } = Actor.useBackendActor();
+  const dataManager = useDataManager(); // Use dataManager hook
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
   const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin' | 'public'>('images');
@@ -32,20 +33,10 @@ export function Parent() {
   } = useAssetManager(currentUser, currentUser?.principal || null);
 
   useEffect(() => {
-    // Initialize the data actor when currentUser is available
-    const initialize = async () => {
-      if (currentUser && currentUser.agent) {
-        await initializeDataActor(currentUser.agent);
-      }
-    };
-    initialize();
-  }, [currentUser, initializeDataActor]); // Run effect when currentUser changes
-
-  useEffect(() => {
     const loadPrivateData = async () => {
-      if (dataActor) { // Ensure dataActor is initialized
+      if (currentUser) {
         try {
-          const userData = await dataActor.getAllUserData(); // Adjusted to call the correct method
+          const userData = await dataManager.getAllUserData(currentUser);
           setPrivateData(userData);
         } catch (error) {
           console.error("Error loading private data:", error);
@@ -53,8 +44,8 @@ export function Parent() {
       }
     };
 
-    loadPrivateData(); // Call loadPrivateData whenever dataActor changes
-  }, [dataActor]);
+    loadPrivateData();
+  }, [currentUser, dataManager]);
 
   useEffect(() => {
     if (currentUser) {
@@ -64,7 +55,7 @@ export function Parent() {
 
   const giveToParent = useCallback(
     (principal: string, agent: any, provider: string) => {
-      setCurrentUser({ principal, agent, provider: provider || '' });  // Ensure provider is always a string
+      setCurrentUser({ principal, agent, provider });
     },
     [setCurrentUser]
   );
@@ -78,7 +69,7 @@ export function Parent() {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file && currentUser) {
-        handleFileUpload(file, currentUser.principal || ""); // Ensure currentUser is defined
+        handleFileUpload(file, currentUser.principal || "");
       }
     },
     [currentUser, handleFileUpload]
@@ -96,7 +87,7 @@ export function Parent() {
             <p>
               Secure, sandboxed AI with in-memory VectorDB and LLM, stable-memory data storage, and more—all on the Internet Computer.
             </p>
-            <Components.ICWalletList giveToParent={giveToParent} whitelist={[]} /> {/* Pass the empty whitelist or update if needed */}
+            <Components.ICWalletList giveToParent={giveToParent} whitelist={[]} />
           </div>
         </div>
       ) : (
@@ -105,7 +96,7 @@ export function Parent() {
 
           <Components.SettingsDropdown
             isVisible={settingsVisible}
-            currentUser={currentUser} // Pass currentUser
+            currentUser={currentUser}
             onLogout={() => setCurrentUser(null)}
             showUserFiles={showUserFiles}
             onToggleUserFiles={toggleUserFiles}
@@ -139,7 +130,7 @@ export function Parent() {
               ) : viewMode === 'json' ? (
                 <Screens.PrivateDataStore
                   assets={assets}
-                  userObject={{ ...currentUser, provider: currentUser?.provider || '' }}  // Ensure provider is string
+                  userObject={currentUser as import("/ic-projects/ic-storage-module/frontend/node_modules/ic-auth/dist/frontend/types").UserObject}
                   onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
                 />
               ) : viewMode === 'public' ? (
