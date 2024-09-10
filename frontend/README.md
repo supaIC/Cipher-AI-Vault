@@ -126,7 +126,7 @@ The Stable Memory Data Storage feature allows users to store and retrieve data i
 
 Implemented in:
 - [`dataManager.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/dataManager/dataManager.ts) hook
-- [`DataStore.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DataStore/PrivateDataStore.tsx) screen
+- [`PrivateDataStore.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DataStore/PrivateDataStore.tsx) screen
 - [data-store-canister](https://github.com/supaIC/data-store-canister) repository
 
 ### VectorDB + LLM Integration
