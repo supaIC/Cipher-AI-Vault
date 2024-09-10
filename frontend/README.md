@@ -102,7 +102,7 @@ We use the `ic-auth` package for user authentication, supporting Plug, Stoic, NF
 
 Key files:
 - [`ICWalletList.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/auth/ICWalletList/ICWalletList.tsx): Implements wallet selection and login.
-- [`authFunctions.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/actors/AuthActor/AuthActor.tsx): Manages backend actor creation.
+- [`AuthActor.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/actors/Auth/AuthActor.tsx): Manages backend actor creation.
 
 #### Integration
 
