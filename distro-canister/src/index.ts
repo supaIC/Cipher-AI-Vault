@@ -1,11 +1,6 @@
 import { ok } from 'assert';
 import { blob, nat, int, Principal, $query, $update, $init, ic, Variant, Record, Result, match } from 'azle';
 import { CanisterStatus, managementCanister } from 'azle/canisters/management';
-import {
-    CanisterStatusArgs,
-    CanisterStatusResult,
-    CreateCanisterResult
-} from 'azle/canisters/management';
 
 const canisterList: Array<string> = ["zks6t-giaaa-aaaap-qb7fa-cai", "qehbq-rqaaa-aaaan-ql2iq-cai"];
 

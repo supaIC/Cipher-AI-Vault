@@ -1,4 +1,4 @@
-import * as Actor from '../../../actors';
+import * as Actors from '../../../actors';
 import { walletAddress } from "../../../configs/config";
 
 const CONVERSION_DETAILS = {
@@ -23,7 +23,7 @@ const verifyTransaction = async (block_height, amount_sent, actor) => {
 };
 
 export const useCyclesTopUp = () => {
-  const { createActors } = Actor.useDistroActor();
+  const { createActors } = Actors.useDistroActor();
 
   const cycleTopUp = async (currentUser) => {
     try {

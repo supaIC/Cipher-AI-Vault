@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import * as Components from "./components";
 import * as Screens from "./screens";
-import * as Actor from "./actors";
+import * as Actors from "./actors";
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
 import { useDataManager } from "./hooks/dataManager/dataManager";
 import internetComputerLogo from './assets/logos/internet_computer.png';
@@ -9,8 +9,8 @@ import cipherProxyLogo from './assets/logos/cipher_proxy.png';
 import { Types } from "ic-auth";
 
 export function Parent() {
-  const { currentUser, setCurrentUser } = Actor.useAuthActor();
-  const { createBackendActor } = Actor.useBackendActor();
+  const { currentUser, setCurrentUser } = Actors.useAuthActor();
+  const { createBackendActor } = Actors.useBackendActor();
   const dataManager = useDataManager();
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
   const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
