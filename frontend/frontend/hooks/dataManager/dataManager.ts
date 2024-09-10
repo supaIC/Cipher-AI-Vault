@@ -1,82 +1,76 @@
-import { HttpAgent, Agent, Actor } from '@dfinity/agent';
-import { Principal } from '@dfinity/principal';
-import * as dataIDL from '../../interfaces/backend';
+import { useDataActor } from '../../actors';
 
-// IDL and canister ID.
-const IDL = dataIDL.idlFactory;
-const canisterID = "olf36-uaaaa-aaaan-qmu5q-cai";
-
-// Create a data actor.
-export const getDataActor = async(agent: HttpAgent | Agent) => {
-    const dataActor = Actor.createActor(dataIDL.idlFactory, { agent, canisterId: canisterID });
-    return dataActor;
-}
-
-//=================================//
-// Data structures / Custom types. //
-//=================================//
-
-// A single entry of an entire user.
+// Data structures / Custom types
 export type UserData = {
     user: string,
-    allFiles: Array<FileData> // Array of files each with their own data (FileData).
+    allFiles: Array<FileData>
 };
 
-// A single file data entry that includes an array of data for each file.
 export type FileData = {
-    fileID: string, // UUID of each single file.
-    fileName: string, // File name.
+    fileID: string,
+    fileName: string,
     fileData: Array<SingleFileData>
 };
 
-// A single data entry as part of an array that makes up the total data of a single file.
 export type SingleFileData = {
     id: string,
     name: string,
     description: string,
 };
 
-// Query types.
+// Query result types
 export type FileDataQuery = FileData | string;
 export type SingleDataQuery = SingleFileData | string;
 export type FullDataQuery = Array<Map<string, UserData>>;
 
-// Gets all files for all users.
-export const getAllUserData = async(dataActor: any): Promise<FullDataQuery> => {
-    return await dataActor.getAllUserData() as FullDataQuery;
-}
+export const useDataManager = () => {
+  const { createDataActor } = useDataActor();
 
-// Creates a new user.
-export const createUser = async(dataActor: any): Promise<string> => {
+  const getAllUserData = async (currentUser: any): Promise<FullDataQuery> => {
+    const dataActor = await createDataActor(currentUser.agent);
+    return await dataActor.getAllUserData() as FullDataQuery;
+  };
+
+  const createUser = async (currentUser: any): Promise<string> => {
+    const dataActor = await createDataActor(currentUser.agent);
     const result = await dataActor.createUserEntry() as string;
     console.log(result);
     return result;
-}
+  };
 
-// Gets all files for a single user.
-export const getSingleUser = async(user: string, dataActor: any): Promise<any> => {
+  const getSingleUser = async (currentUser: any, user: string): Promise<any> => {
+    const dataActor = await createDataActor(currentUser.agent);
     const userData = await dataActor.getSingleUser(user);
     return userData;
-}
+  };
 
-// Adds a file to a user.
-export const addFileToUser = async (user: string, fileData: FileData, dataActor: any): Promise<string> => {
+  const addFileToUser = async (currentUser: any, user: string, fileData: FileData): Promise<string> => {
+    const dataActor = await createDataActor(currentUser.agent);
     const result = await dataActor.addFileToUser(user, fileData) as string;
     console.log("Add file result: ", result);
     return result;
-};
+  };
 
-// Removes a file for a user.
-export const removeFileFromUser = async (user: string, fileName: string, dataActor: any): Promise<string> => {
+  const removeFileFromUser = async (currentUser: any, user: string, fileName: string): Promise<string> => {
+    const dataActor = await createDataActor(currentUser.agent);
     const result = await dataActor.removeFileFromUser(user, fileName) as string;
     console.log("Remove file result: ", result);
     return result;
-};
+  };
 
-// Fetches data for a specific file of a user.
-export const getFileData = async (user: string, fileName: string, dataActor: any): Promise<FileData> => {
+  const getFileData = async (currentUser: any, user: string, fileName: string): Promise<FileData> => {
+    const dataActor = await createDataActor(currentUser.agent);
     const result = await dataActor.getFileData(user, fileName) as FileData;
     console.log("Get file data result: ", result);
     return result;
-};
+  };
 
+  return {
+    getAllUserData,
+    createUser,
+    getSingleUser,
+    addFileToUser,
+    removeFileFromUser,
+    getFileData
+  };
+};

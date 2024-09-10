@@ -1,0 +1,35 @@
+.copy-json-button {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;              /* Text color */
+    border: none;              /* Remove default border */
+    border-radius: 4px;       /* Rounded corners */
+    padding: 8px 16px;        /* Padding for the button */
+    font-size: 16px;          /* Font size */
+    cursor: pointer;           /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Transition for hover effect */
+  }
+  
+  .copy-json-button:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+  }
+  
+  .copy-feedback {
+    margin-top: 8px;          /* Space above feedback */
+    font-size: 14px;          /* Font size for feedback */
+    color: #28a745;           /* Success message color */
+    animation: fadeIn 0.5s;   /* Fade-in animation for feedback */
+  }
+  
+  .copy-feedback.error {
+    color: #dc3545;           /* Error message color */
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;             /* Start fully transparent */
+    }
+    to {
+      opacity: 1;             /* End fully opaque */
+    }
+  }
+  

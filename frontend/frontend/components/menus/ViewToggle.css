@@ -1,0 +1,29 @@
+.view-toggle-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem; /* Adjust to position below the toggle button */
+  }
+  
+  .view-toggle-button {
+    background-color: #343434;
+    color: #fff;
+    padding: 0.75rem 1.5rem; /* Padding to create a rectangular button */
+    border-radius: 0.3125rem; /* Slightly rounded corners */
+    border: none;
+    cursor: pointer;
+    font-size: 1rem; /* 16px */
+    transition:
+      background-color 0.3s ease,
+      transform 0.3s ease;
+  }
+  
+  .view-toggle-button.active {
+    background-color: #3367d6;
+  }
+  
+  .view-toggle-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-0.125rem); /* -2px */
+  }

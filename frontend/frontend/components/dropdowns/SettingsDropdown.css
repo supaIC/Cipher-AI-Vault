@@ -1,0 +1,55 @@
+.settings-btn {
+    position: absolute;
+    top: 2.5rem;
+    left: 1.25rem;
+    z-index: 9;
+    color: #fff;
+    background-color: #343434;
+    border: none;
+    border-radius: 0.3125rem;
+    padding: 0.625rem 1.25rem; /* Adjust button padding */
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      transform 0.2s;
+  }
+  
+  .settings-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-0.125rem); /* Adjust button hover effect */
+  }
+  
+  .settings-dropdown {
+    display: none;
+    position: absolute;
+    top: 4rem;
+    left: 1.25rem;
+    background-color: #34343451;
+    border-radius: 0.3125rem;
+    padding: 0.625rem; /* Adjust dropdown padding */
+    z-index: 10;
+    margin-top: 0.6%;
+  }
+  
+  .settings-dropdown.active {
+    display: block;
+  }
+  
+  .settings-dropdown button {
+    display: block;
+    margin-bottom: 0.625rem; /* Adjust button margin */
+    color: #fff;
+    background-color: #343434;
+    border: none;
+    border-radius: 0.3125rem;
+    padding: 0.625rem 1.25rem; /* Adjust button padding */
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      transform 0.2s;
+  }
+  
+  .settings-dropdown button:hover {
+    background-color: #0056b3;
+    transform: translateY(-0.125rem); /* Adjust button hover effect */
+  }

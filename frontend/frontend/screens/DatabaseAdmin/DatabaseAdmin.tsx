@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { getEmbedding, EmbeddingIndex, initializeModel } from "../hooks/client-vector-search/src/index";
-import * as data from "../hooks/dataManager/dataManager";
+import { getEmbedding, EmbeddingIndex, initializeModel } from "../../hooks/client-vector-search/src/index";
+import * as data from "../../hooks/dataManager/dataManager";
 
 interface SearchResult {
   input: string;
@@ -198,7 +198,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
 
   useEffect(() => {
     if (!worker.current) {
-      worker.current = new Worker(new URL('../hooks/modelManager/llm.js', import.meta.url), { type: 'module' });
+      worker.current = new Worker(new URL('../../hooks/modelManager/llm.js', import.meta.url), { type: 'module' });
     }
 
     const onMessageReceived = (e: MessageEvent) => {
