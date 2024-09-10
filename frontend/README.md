@@ -79,7 +79,7 @@ dfx deploy --network ic
 
 ## Configuration
 
-Edit the [`config.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/config.ts) file to configure canister and user whitelists:
+Edit the [`config.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/configs/config.ts) file to configure canister and user whitelists:
 
 ```typescript
 // Existing canister ID
@@ -101,13 +101,13 @@ export const whitelist: string[] = [
 We use the `ic-auth` package for user authentication, supporting Plug, Stoic, NFID, and Internet Identity wallets.
 
 Key files:
-- [`ICWalletList.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/ICWalletList.tsx): Implements wallet selection and login.
-- [`authFunctions.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/authFunctions/authFunctions.ts): Manages backend actor creation.
+- [`ICWalletList.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/auth/ICWalletList.tsx): Implements wallet selection and login.
+- [`authFunctions.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/actors/AuthActor/AuthActor.tsx): Manages backend actor creation.
 
 #### Integration
 
 - **Authentication Functions:** The `ic-auth` package facilitates the login process for various wallet providers. The integration is implemented in the `ICWalletList.tsx` component.
-- **Backend Actor Creation:** Actor creation for interacting with backend canisters is managed through the `authFunctions.ts` file. This provides a general abstraction for creating backend actors using `HttpAgent` and `Actor` from `@dfinity/agent`.
+- **Backend Actor Creation:** Actor creation for interacting with backend canisters is managed through the `AuthActor.tsx` file. This provides a general abstraction for creating backend actors using `HttpAgent` and `Actor` from `@dfinity/agent`.
 
 For detailed usage, see the [ic-auth README](https://github.com/supaIC/ic-auth).
 
@@ -126,14 +126,14 @@ The Stable Memory Data Storage feature allows users to store and retrieve data i
 
 Implemented in:
 - [`dataManager.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/dataManager/dataManager.ts) hook
-- [`DataStore.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DataStore.tsx) screen
+- [`DataStore.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DataStore/PrivateDataStore.tsx) screen
 - [data-store-canister](https://github.com/supaIC/data-store-canister) repository
 
 ### VectorDB + LLM Integration
 
 #### Key Files
 - LLM Integration: [`llm.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/modelManager/llm.js)
-- VectorDB Integration: [`DatabaseAdmin.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DatabaseAdmin.tsx)
+- VectorDB Integration: [`DatabaseAdmin.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DatabaseAdmin/DatabaseAdmin.tsx)
 
 #### Standalone Demos
 - [WebGPU LLM demo](https://f45ub-wiaaa-aaaap-ahskq-cai.icp0.io/)
@@ -173,7 +173,7 @@ To initialize custom data into the VectorDB, upload a JSON file to the Data Stor
 
 The Cycles Top-Up feature streamlines the conversion of ICP into cycles, enabling effortless top-ups for canisters used within the demo.
 
-Implemented in [`useCyclesTopup.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/useCyclesTopup/useCyclesTopup.js) hook.
+Implemented in [`useCyclesTopup.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/distroManager/useCyclesTopup/useCyclesTopup.js) hook.
 
 Related projects:
 - [Demo's Cycles Distro canister](https://github.com/supaIC/Cipher-AI-Vault/tree/main/distro-canister)
