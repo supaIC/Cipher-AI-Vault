@@ -1,108 +1,196 @@
-# Cipher AI Vault
+# Cipher AI Vault Frontend Canister
 
 [![Developer Grant](https://img.shields.io/badge/DFINITY-Developer%20Grant-blue)](https://dfinity.org/grants)
 
-**Cipher AI Vault** is an Azle-based proof of concept that seamlessly integrates:
-
-- In-memory VectorDB
-- In-memory LLM
-- Secure asset storage
-- Stable memory data storage
-- Cycles-distro top-up
-- ic-auth for authentication
-
-This versatile platform showcases the Internet Computer's potential for secure, sandboxed AI development, offering adaptable tools for a wide range of AI-driven applications.
+This canister is the frontend for the Cipher AI Vault demo.
 
 > **Note:** This demo is a proof of concept and not intended for production use. It was developed as part of a Developer Grant from the DFINITY Foundation.
 
 ## Table of Contents
 
-- [Demo Canisters and Repositories](#demo-canisters-and-repositories)
-- [Core Features](#core-features)
 - [Prerequisites](#prerequisites)
-- [Quick Setup Instructions](#quick-setup-instructions)
-- [Detailed Setup and Deployment](#detailed-setup-and-deployment)
-- [Roadmap](#cipher-ai-vault-roadmap)
-- [License](#license)
-
-## Demo Canisters and Repositories
-
-### Main Demo
-- [Cipher AI Vault Demo](https://qehbq-rqaaa-aaaan-ql2iq-cai.icp0.io/)
-
-### Standalone Demo Canisters
-- [WebGPU LLM Demo](https://f45ub-wiaaa-aaaap-ahskq-cai.icp0.io/)
-
-### Grant Deliverables Repositories
-- [ic-auth](https://github.com/supaIC/ic-auth)
-- [Cycles Distro](https://github.com/supaIC/cycles-distro)
-- [Data Store Canister](https://github.com/supaIC/data-store-canister)
-
-## Core Features
-
-1. **Frontend Canister**: Main entry point for user interactions
-2. **In-memory VectorDB**: Stores and manages embeddings for efficient retrieval
-3. **In-memory LLM**: Processes natural language queries and interacts with the VectorDB
-4. **Secure Asset Storage**: Dedicated module for secure asset storage
-5. **Secure Data Store**: Dedicated canister for storing data in stable memory
-6. **Cycles Distro Canister**: Manages cycles and top-ups
-7. **ic-auth**: Handles authentication with various wallets (Plug, Stoic, NFID, and Internet Identity)
+- [Local Deployment](#local-deployment)
+- [Mainnet Deployment](#mainnet-deployment)
+- [Configuration](#configuration)
+- [Features](#features)
+  - [Authentication](#authentication)
+  - [Asset Management](#asset-management)
+  - [Stable Memory Data Storage](#stable-memory-data-storage)
+  - [VectorDB + LLM Integration](#vectordb--llm-integration)
+  - [Cycles Top-Up](#cycles-top-up)
+- [Creating Actors for Backend Interactions](#creating-actors-for-backend-interactions)
+- [Roadmap](#roadmap)
 
 ## Prerequisites
 
 ### WebGPU Support
+
 For the best experience, use a [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) enabled browser. We recommend [Chrome Canary](https://www.google.com/chrome/canary/).
 
 ### Required Software
-- DFX
-- Node.js
-- Azle development kit
 
-For setup assistance, refer to:
+- **Node.js:** v20.11.1
+- **DFX:** v0.21.0
+
+This project leverages the Azle development kit from Demergent Labs. For setup assistance, refer to:
 - [DFX Setup](https://internetcomputer.org/docs/current/developer-docs/getting-started/install)
 - [Node.js Setup](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Azle Documentation](https://github.com/demergent-labs/azle)
 
 ### Required Wallets
+
 You will need one of the following wallets:
+
 - [Plug Wallet](https://plugwallet.ooo/)
 - [Stoic Wallet](https://www.stoicwallet.com/)
 - [NFID Wallet](https://nfid.one/)
 - [Internet Identity](https://identity.raw.ic0.app/)
 
-## Quick Setup Instructions
+## Local Deployment
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/supaIC/Cipher-AI-Vault.git
-   cd Cipher-AI-Vault
-   ```
+### Using `dfx`
 
-2. Run the setup script:
-   ```bash
-   npm run setup
-   ```
-   
-   **Note:** You may be prompted to enter your DFX identity password during setup.
+```bash
+# Ensure you are in the frontend directory
+npm install
+dfx start --background --clean
+dfx deploy
+dfx stop
+```
 
-## Detailed Setup and Deployment
+### Using `npm`
 
-For detailed instructions, refer to the following README files within this repository:
+```bash
+# Ensure you are in the frontend directory
+npm install
+npm run dev
+```
 
-- [Frontend Canister Setup and Deployment](frontend/README.md)
-- [Cycles Distro Canister Setup and Deployment](distro-canister/README.md)
-- [Data Store Canister Setup and Deployment](data-store/README.md)
+## Mainnet Deployment
 
-## Cipher AI Vault Roadmap
+> ⚠️ **WARNING: THIS PROJECT IS NOT BUILT FOR PRODUCTION USE**
 
-- [ ] Data Store backup canister
-- [ ] Edit Data Store file entries
-- [ ] Multiple in-memory LLM support
-- [ ] Models stored in asset canisters
-- [ ] Embeddings backed up in Stable Memory
-- [ ] Generate a Data File from a document using in-memory LLM
-- [ ] Generate images to be stored in the Image Store using in-memory Stable Diffusion
+1. Update the `canister_ids.json` file with your target canister ID.
+2. Run the following command:
 
-## License
+```bash
+dfx deploy --network ic
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Configuration
+
+Edit the [`config.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/config.ts) file to configure canister and user whitelists:
+
+```typescript
+// Existing canister ID
+export const canisterId: string = "canister-id";
+
+// Add the wallet address for cycles top-up payments
+export const walletAddress: string = "principal";
+
+export const whitelist: string[] = [
+    "canister-id",
+    "canister-id",
+];
+```
+
+## Features
+
+### Authentication
+
+We use the `ic-auth` package for user authentication, supporting Plug, Stoic, NFID, and Internet Identity wallets.
+
+Key files:
+- [`ICWalletList.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/ICWalletList.tsx): Implements wallet selection and login.
+- [`authFunctions.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/authFunctions/authFunctions.ts): Manages backend actor creation.
+
+#### Integration
+
+- **Authentication Functions:** The `ic-auth` package facilitates the login process for various wallet providers. The integration is implemented in the `ICWalletList.tsx` component.
+- **Backend Actor Creation:** Actor creation for interacting with backend canisters is managed through the `authFunctions.ts` file. This provides a general abstraction for creating backend actors using `HttpAgent` and `Actor` from `@dfinity/agent`.
+
+For detailed usage, see the [ic-auth README](https://github.com/supaIC/ic-auth).
+
+### Asset Management
+
+The [`useAssetManager.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/assetManager/assetManager.js) hook is the core utility for managing assets on the Internet Computer.
+
+Features:
+- Load and display assets with support for various file types and use cases.
+- Upload new assets and delete existing ones.
+- Dynamically manage loading states and handle error messages.
+
+### Stable Memory Data Storage
+
+The Stable Memory Data Storage feature allows users to store and retrieve data in a persistent and secure manner.
+
+Implemented in:
+- [`dataManager.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/dataManager/dataManager.ts) hook
+- [`DataStore.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DataStore.tsx) screen
+- [data-store-canister](https://github.com/supaIC/data-store-canister) repository
+
+### VectorDB + LLM Integration
+
+#### Key Files
+- LLM Integration: [`llm.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/modelManager/llm.js)
+- VectorDB Integration: [`DatabaseAdmin.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/screens/DatabaseAdmin.tsx)
+
+#### Standalone Demos
+- [WebGPU LLM demo](https://f45ub-wiaaa-aaaap-ahskq-cai.icp0.io/)
+
+#### Related Repositories
+- [WebGPU LLM](https://github.com/supaIC/ic-webgpu-ai-template)
+- [VectorDB](https://github.com/supaIC/ic-vectordb-graph-template)
+- [LLM with VectorDB](https://github.com/supaIC/ic-webgpu-ai-graph-demo)
+
+#### Packages Used
+- [@huggingface/transformers](https://www.npmjs.com/package/@huggingface/transformers)
+- Custom fork of [client-vector-search](https://github.com/supaIC/Cipher-AI-Vault/tree/main/frontend/frontend/hooks/client-vector-search)
+
+#### Models Used
+- Embeddings: [all-MiniLM-L6-v2](https://huggingface.co/Xenova/all-MiniLM-L6-v2)
+- LLM: [Phi-3-mini-4k-instruct-fp16](https://huggingface.co/Xenova/Phi-3-mini-4k-instruct_fp16)
+
+#### Custom Data Integration
+To initialize custom data into the VectorDB, upload a JSON file to the Data Store and select it in the Database Admin Panel. The JSON structure should be:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "name here",
+    "description": "description here"
+  },
+  {
+    "id": 2,
+    "name": "name here",
+    "description": "description here"
+  }
+]
+```
+
+### Cycles Top-Up
+
+The Cycles Top-Up feature streamlines the conversion of ICP into cycles, enabling effortless top-ups for canisters used within the demo.
+
+Implemented in [`useCyclesTopup.js`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/hooks/useCyclesTopup/useCyclesTopup.js) hook.
+
+Related projects:
+- [Demo's Cycles Distro canister](https://github.com/supaIC/Cipher-AI-Vault/tree/main/distro-canister)
+- [Stand-alone Cycles Distro module](https://github.com/supaIC/cycles-distro)
+
+## Creating Actors for Backend Interactions
+
+To interact with canisters on the Internet Computer, actors need to be created with specific roles:
+
+- **Cycles Actor:** Manages cycle-related operations, ensuring efficient resource management.
+- **Ledger Actor:** Handles ledger transactions and queries, facilitating secure and transparent financial operations.
+- **Distribution Actor:** Distributes cycles across canisters, supporting balanced and scalable resource allocation.
+- **Data Actor:** Manages data storage and retrieval, ensuring data integrity and accessibility.
+
+## Roadmap
+
+- [ ] Upload .txt and .pdf files and use LLM to generate data for VectorDB
+- [ ] Clean up unused or duplicate style entries in index.css
+- [ ] Create CSS files for different components
+- [ ] Implement choice of various LLMs for the chatbot
