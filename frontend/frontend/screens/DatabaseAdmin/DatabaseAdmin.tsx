@@ -198,7 +198,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
 
   useEffect(() => {
     if (!worker.current) {
-      worker.current = new Worker(new URL('../hooks/modelManager/llm.js', import.meta.url), { type: 'module' });
+      worker.current = new Worker(new URL('../../hooks/modelManager/llm.js', import.meta.url), { type: 'module' });
     }
 
     const onMessageReceived = (e: MessageEvent) => {
