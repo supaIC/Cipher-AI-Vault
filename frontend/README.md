@@ -101,7 +101,7 @@ export const whitelist: string[] = [
 We use the `ic-auth` package for user authentication, supporting Plug, Stoic, NFID, and Internet Identity wallets.
 
 Key files:
-- [`ICWalletList.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/auth/ICWalletList.tsx): Implements wallet selection and login.
+- [`ICWalletList.tsx`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/components/auth/ICWalletList/ICWalletList.tsx): Implements wallet selection and login.
 - [`authFunctions.ts`](https://github.com/supaIC/Cipher-AI-Vault/blob/main/frontend/frontend/actors/AuthActor/AuthActor.tsx): Manages backend actor creation.
 
 #### Integration
