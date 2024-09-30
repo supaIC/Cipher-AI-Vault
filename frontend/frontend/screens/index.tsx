@@ -8,3 +8,4 @@ export { default as ModelManagement } from './ModelManagement/ModelManagement';
 export { default as DataManagement } from './DataManagement/DataManagement';
 export { default as ChatInterface } from './ChatInterface/ChatInterface';
 export { default as Settings } from './Settings/Settings';
+export { default as CycleManagement } from './CyclesManagement/CyclesManagement';

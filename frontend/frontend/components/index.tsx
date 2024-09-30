@@ -6,9 +6,6 @@ export { default as LoggedInUser } from './auth/LoggedInUser/LoggedInUser';
 export { default as UploadButton } from './buttons/upload/UploadAssetButton';
 export { default as DragAndDropContainer } from './overlays/DragAndDropOverlay/DragAndDropOverlay';
 
-// Dropdown Components
-export { default as SettingsDropdown } from './dropdowns/SettingsDropdown';
-
 // Cycles Components
 export { default as CyclesTopUpComponent } from './buttons/cycles/CyclesTopUpButton';
 export { default as GetBalancesComponent } from './buttons/cycles/GetBalancesButton';

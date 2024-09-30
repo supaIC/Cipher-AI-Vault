@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   FiHome, FiBox, FiDatabase, FiMessageSquare, FiSettings, FiChevronLeft,
-  FiChevronRight, FiImage, FiFileText, FiGlobe, FiHardDrive
+  FiChevronRight, FiImage, FiFileText, FiGlobe, FiHardDrive,
+  FiCoffee
 } from 'react-icons/fi';
 import './Sidebar.css';
 
@@ -29,8 +30,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isMe
     { label: "Stable Memory", Icon: FiHardDrive },
     { label: "Data Management", Icon: FiDatabase },
     null,
+    { label: "Cycle Management", Icon: FiCoffee },
+    null,
     { label: "Settings", Icon: FiSettings },
-  ];
+  ];  
 
   useEffect(() => {
     const handleResize = () => {

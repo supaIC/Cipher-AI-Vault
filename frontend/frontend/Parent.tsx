@@ -303,13 +303,17 @@ export function Parent() {
             setMessages={setMessages}
           />
         );
+      case 'Cycle Management':  // New Case for Cycle Management
+        return (
+          <Screens.CycleManagement
+            currentUser={currentUser}
+          />
+        );
       case 'Settings':
         return (
           <Screens.Settings
             currentUser={currentUser}
             onLogout={() => setCurrentUser(null)}
-            showUserFiles={showUserFiles}
-            onToggleUserFiles={toggleUserFiles}
           />
         );
       case 'Image Store':
