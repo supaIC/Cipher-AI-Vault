@@ -19,8 +19,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isMe
   const sidebarItems = [
     { label: "Dashboard", Icon: FiHome },
     null,
-    { label: "Chat", Icon: FiMessageSquare },
-    { label: "Models", Icon: FiBox },
+    { label: "Playground", Icon: FiMessageSquare },
+    { label: "Model Manager", Icon: FiBox },
     null,
     { label: "Image Store", Icon: FiImage },
     { label: "Document Store", Icon: FiFileText },

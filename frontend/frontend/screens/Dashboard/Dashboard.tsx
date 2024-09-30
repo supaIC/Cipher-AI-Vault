@@ -82,7 +82,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           <div className="action-button-wrapper">
             {renderActionButton(
               'Load Model',
-              () => setActiveSection('Models'),
+              () => setActiveSection('Model Manager'),
               false,
               true
             )}
@@ -100,7 +100,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           <div className="action-button-wrapper">
             {renderActionButton(
               'Start Chat',
-              () => setActiveSection('Chat'),
+              () => setActiveSection('Playground'),
               false,
               true
             )}

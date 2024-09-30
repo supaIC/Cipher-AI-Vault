@@ -255,7 +255,7 @@ export function Parent() {
             setSearchQuery={setSearchQuery}
           />
         );
-      case 'Models':
+      case 'Model Manager':
         return (
           <ModelManagement
             selectedModel={selectedModel}
@@ -293,7 +293,7 @@ export function Parent() {
             statusMessage={statusMessage}
           />
         );
-      case 'Chat':
+      case 'Playground':
         return (
           <ChatInterface
             messages={messages}
