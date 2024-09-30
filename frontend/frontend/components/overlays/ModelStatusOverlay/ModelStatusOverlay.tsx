@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface StatusOverlayProps {
+interface ModelStatusOverlayProps {
   status: string | null;
   loadingMessage: string;
 }
 
-const StatusOverlay: React.FC<StatusOverlayProps> = ({ status, loadingMessage }) => {
+const ModelStatusOverlay: React.FC<ModelStatusOverlayProps> = ({ status, loadingMessage }) => {
   return (
     <>
       {status === 'loading' && (
@@ -18,4 +18,4 @@ const StatusOverlay: React.FC<StatusOverlayProps> = ({ status, loadingMessage })
   );
 };
 
-export default StatusOverlay;
+export default ModelStatusOverlay;

@@ -418,7 +418,7 @@ export function Parent() {
               onCancel={() => setConfirmDelete(null)} // Clear confirmDelete on cancel
             />
           )}
-          <Components.StatusOverlay status={status} loadingMessage={loadingMessage} />
+          <Components.ModelStatusOverlay status={status} loadingMessage={loadingMessage} />
         </>
       )}
     </div>

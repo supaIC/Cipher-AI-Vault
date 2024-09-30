@@ -17,7 +17,7 @@ export { default as GetBalancesComponent } from './buttons/cycles/GetBalancesBut
 export { default as LoadingOverlay } from './overlays/LoadingOverlay/LoadingOverlay';
 export { default as ErrorNotification } from './overlays/ErrorNotification/ErrorNotification';
 export { default as DeleteConfirmation } from './overlays/DeleteConfirmation/DeleteConfirmation';
-export { default as StatusOverlay } from './overlays/StatusOverlay/StatusOverlay';
+export { default as ModelStatusOverlay } from './overlays/ModelStatusOverlay/ModelStatusOverlay';
 
 // Copy Components
 export { default as CopyToClipboard } from './buttons/copy/CopyToClipboardButton';
