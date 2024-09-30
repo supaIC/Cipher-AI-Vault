@@ -1,4 +1,14 @@
+// React
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+
+// Screens
+import * as Screens from "./screens";
+
+// Components
+import * as Components from "./components";
+
+// Actors
+import * as Actors from "./actors";
 
 // Hooks
 import * as data from './hooks/dataManager/dataManager';
@@ -10,29 +20,13 @@ import useModelLoader from './hooks/modelManager/useModelLoader';
 import useDatabase from './hooks/dataManager/useDatabase';
 import useDarkMode from './hooks/useDarkMode/useDarkMode';
 
-// Screens
-import * as Screens from "./screens";
-import ChatInterface from './screens/ChatInterface/ChatInterface';
-import ModelManagement from './screens/ModelManagement/ModelManagement';
-import DataManagement from './screens/DataManagement/DataManagement';
-import Dashboard from './screens/Dashboard/Dashboard';
-import Settings from './screens/Settings/Settings';
-
-// Components
-import * as Components from "./components";
-import Sidebar from './components/sidebar/Sidebar';
-import StatusOverlay from './components/overlays/StatusOverlay/StatusOverlay';
-import Header from './components/header/Header';
-
 // Assets and Types
 import internetComputerLogo from './assets/images/internet_computer.png';
 import cipherProxyLogo from './assets/images/cipher_proxy.png';
 import { Types } from "ic-auth";
 
 // Styles
-import './styles/DatabaseAdmin.css';
-
-import * as Actors from "./actors";
+import './styles/Parent.css';
 
 interface SearchResult {
   input: string;
@@ -244,7 +238,7 @@ export function Parent() {
     switch (activeSection) {
       case 'Dashboard':
         return (
-          <Dashboard
+          <Screens.Dashboard
             loadedModels={loadedModels}
             index={index}
             renderCard={renderCard}
@@ -257,7 +251,7 @@ export function Parent() {
         );
       case 'Model Manager':
         return (
-          <ModelManagement
+          <Screens.ModelManagement
             selectedModel={selectedModel}
             setSelectedModel={setSelectedModel}
             loadedModels={loadedModels}
@@ -271,7 +265,7 @@ export function Parent() {
         );
       case 'Data Management':
         return (
-          <DataManagement
+          <Screens.DataManagement
             isRunning={isRunning}
             selectedFileType={selectedFileType}
             setSelectedFileType={setSelectedFileType}
@@ -295,7 +289,7 @@ export function Parent() {
         );
       case 'Playground':
         return (
-          <ChatInterface
+          <Screens.ChatInterface
             messages={messages}
             isRunning={isRunning}
             status={status}
@@ -311,7 +305,7 @@ export function Parent() {
         );
       case 'Settings':
         return (
-          <Settings
+          <Screens.Settings
             currentUser={currentUser}
             onLogout={() => setCurrentUser(null)}
             showUserFiles={showUserFiles}
@@ -385,7 +379,7 @@ export function Parent() {
         </div>
       ) : (
         <>
-          <Header
+          <Components.Header
             isMenuOpen={isMenuOpen}
             toggleMenu={toggleMenu}
             isDarkMode={isDarkMode}
@@ -394,7 +388,7 @@ export function Parent() {
           />
 
           <main className="main-content">
-            <Sidebar
+            <Components.Sidebar
               activeSection={activeSection}
               setActiveSection={setActiveSection}
               isMenuOpen={isMenuOpen}
@@ -424,7 +418,7 @@ export function Parent() {
               onCancel={() => setConfirmDelete(null)} // Clear confirmDelete on cancel
             />
           )}
-          <StatusOverlay status={status} loadingMessage={loadingMessage} />
+          <Components.StatusOverlay status={status} loadingMessage={loadingMessage} />
         </>
       )}
     </div>

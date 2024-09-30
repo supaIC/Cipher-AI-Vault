@@ -37,4 +37,3 @@ export function useAuthActor(): { currentUser: any; setCurrentUser: any; } {
 export function useBackendActor(): { createBackendActor: any; } {
   throw new Error('Function not implemented.');
 }
-
