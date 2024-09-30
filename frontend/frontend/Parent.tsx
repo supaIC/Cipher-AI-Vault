@@ -1,27 +1,82 @@
-import React, { useCallback, useEffect, useState } from "react";
-import * as Components from "./components";
-import * as Screens from "./screens";
-import * as Actors from "./actors";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+
+// Hooks
+import * as data from './hooks/dataManager/dataManager';
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
 import { useDataManager } from "./hooks/dataManager/dataManager";
+import useWorker from './hooks/modelManager/useWorker';
+import useChat from './hooks/modelManager/useChat';
+import useModelLoader from './hooks/modelManager/useModelLoader';
+import useDatabase from './hooks/dataManager/useDatabase';
+import useDarkMode from './hooks/useDarkMode/useDarkMode';
+
+// Screens
+import * as Screens from "./screens";
+import ChatInterface from './screens/ChatInterface/ChatInterface';
+import ModelManagement from './screens/ModelManagement/ModelManagement';
+import DataManagement from './screens/DataManagement/DataManagement';
+import Dashboard from './screens/Dashboard/Dashboard';
+import Settings from './screens/Settings/Settings';
+
+// Components
+import * as Components from "./components";
+import Sidebar from './components/sidebar/Sidebar';
+import StatusOverlay from './components/overlays/StatusOverlay/StatusOverlay';
+import Header from './components/header/Header';
+
+// Assets and Types
 import internetComputerLogo from './assets/images/internet_computer.png';
 import cipherProxyLogo from './assets/images/cipher_proxy.png';
 import { Types } from "ic-auth";
+
+// Styles
+import './styles/DatabaseAdmin.css';
+
+import * as Actors from "./actors";
+
+interface SearchResult {
+  input: string;
+  similarity: number;
+  object: {
+    name: string;
+    description: string;
+  };
+}
 
 export function Parent() {
   const { currentUser, setCurrentUser } = Actors.useAuthActor();
   const { createBackendActor } = Actors.useBackendActor();
   const dataManager = useDataManager();
+
+  // State variables
   const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
-  const [tooltipPosition] = useState<{ left: number; top: number }>({ left: 0, top: 0 });
-  const [viewMode, setViewMode] = useState<'images' | 'json' | 'documents' | 'admin' | 'public'>('images');
-  const [privateData, setPrivateData] = useState<any | null>(null);
-  const [settingsVisible, setSettingsVisible] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [activeSection, setActiveSection] = useState<string>('Dashboard');
+  const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [status, setStatus] = useState<string | null>(null);
+  const [loadingMessage, setLoadingMessage] = useState<string>('');
+  const [progressItems, setProgressItems] = useState<any[]>([]);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [loadedModels, setLoadedModels] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [tooltipContent, setTooltipContent] = useState<string | null>(null);
+  const [showUserFiles, setShowUserFiles] = useState<boolean>(false);
+
+  const isMounted = useRef<boolean>(true);
+
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+  const addRecentSearch = useCallback((query: string) => {
+    setRecentSearches((prev) => [query, ...prev.filter((item) => item !== query)].slice(0, 5));
+  }, []);
 
   const {
     assets,
     globalLoading,
-    loadingMessage,
     error,
     setError,
     confirmDelete,
@@ -29,9 +84,72 @@ export function Parent() {
     loadAssetList,
     handleDeleteAsset,
     handleFileUpload,
-    showUserFiles,
     toggleUserFiles,
   } = useAssetManager(currentUser, currentUser?.principal || null);
+
+  const publicJsonAssets = assets.filter((asset) => asset.key.includes('/data-store/'));
+  const privateJsonAssets = privateData
+    ? privateData.flatMap((userDataMap) => (Array.isArray(userDataMap) ? userDataMap[1].allFiles : []))
+    : [];
+
+  const {
+    index,
+    searchResult,
+    selectedFile,
+    setSelectedFile,
+    selectedFileType,
+    setSelectedFileType,
+    initializeDB,
+    handleSearch,
+    clearDatabase,
+  } = useDatabase({
+    isRunning,
+    setIsRunning,
+    log: console.log,
+    addRecentSearch,
+    setStatusMessage,
+    publicJsonAssets,
+    privateJsonAssets,
+    isMounted,
+  });
+
+  const worker = useWorker({
+    selectedModel,
+    log: console.log,
+  });
+
+  useModelLoader({
+    worker,
+    selectedModel,
+    setStatus,
+    setStatusMessage,
+    setLoadedModels,
+    setProgressItems,
+    setLoadingMessage,
+    isMounted,
+    log: console.log,
+  });
+
+  const {
+    messages,
+    setMessages,
+    input,
+    setInput,
+    tps,
+    numTokens,
+    onEnter,
+    onInterrupt,
+  } = useChat({
+    isRunning,
+    setIsRunning,
+    selectedModel,
+    worker,
+    log: console.log,
+    handleSearch,
+    isMounted,
+    setStatus,
+    setStatusMessage,
+  });
 
   useEffect(() => {
     const loadPrivateData = async () => {
@@ -54,6 +172,21 @@ export function Parent() {
     }
   }, [currentUser, loadAssetList, showUserFiles]);
 
+  useEffect(() => {
+    isMounted.current = true;
+    const savedSearches = localStorage.getItem('recentSearches');
+    if (savedSearches) {
+      setRecentSearches(JSON.parse(savedSearches));
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+  }, [recentSearches]);
+
   const giveToParent = useCallback(
     (principal: string, agent: any, provider: string) => {
       setCurrentUser({ principal, agent, provider });
@@ -61,9 +194,16 @@ export function Parent() {
     [setCurrentUser]
   );
 
-  const toggleSettings = () => {
-    setSettingsVisible((prevState) => !prevState);
-  };
+  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
+
+  const handleTooltip = useCallback((content: string | null, event?: React.MouseEvent) => {
+    if (content) {
+      setTooltipContent(content);
+      setTooltipPosition({ x: event?.clientX || 0, y: event?.clientY || 0 });
+    } else {
+      setTooltipContent(null);
+    }
+  }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -76,8 +216,152 @@ export function Parent() {
     [currentUser, handleFileUpload]
   );
 
+  const renderActionButton = useCallback(
+    (label: string, onClick: () => void, disabled: boolean, primary: boolean = false): JSX.Element => (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`button ${primary ? 'button-primary' : 'button-secondary'} ${disabled ? 'button-disabled' : ''}`}
+        aria-label={label}
+      >
+        {label}
+      </button>
+    ),
+    []
+  );
+
+  const renderCard = useCallback(
+    (title: string, content: React.ReactNode): JSX.Element => (
+      <div className="card" key={title}>
+        <h3 className="card-title">{title}</h3>
+        <div className="card-content">{content}</div>
+      </div>
+    ),
+    []
+  );
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'Dashboard':
+        return (
+          <Dashboard
+            loadedModels={loadedModels}
+            index={index}
+            renderCard={renderCard}
+            renderActionButton={renderActionButton}
+            setActiveSection={setActiveSection}
+            recentSearches={recentSearches}
+            handleSearch={handleSearch}
+            setSearchQuery={setSearchQuery}
+          />
+        );
+      case 'Models':
+        return (
+          <ModelManagement
+            selectedModel={selectedModel}
+            setSelectedModel={setSelectedModel}
+            loadedModels={loadedModels}
+            isRunning={isRunning}
+            renderActionButton={renderActionButton}
+            worker={worker}
+            setStatus={setStatus}
+            setStatusMessage={setStatusMessage}
+            log={console.log}
+          />
+        );
+      case 'Data Management':
+        return (
+          <DataManagement
+            isRunning={isRunning}
+            selectedFileType={selectedFileType}
+            setSelectedFileType={setSelectedFileType}
+            selectedFile={selectedFile}
+            setSelectedFile={setSelectedFile}
+            publicJsonAssets={publicJsonAssets}
+            privateJsonAssets={privateJsonAssets}
+            renderActionButton={renderActionButton}
+            initializeDB={initializeDB}
+            status={status}
+            clearDatabase={clearDatabase}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            performSearch={() => handleSearch(searchQuery)}
+            index={index}
+            recentSearches={recentSearches}
+            handleSearch={handleSearch}
+            searchResult={searchResult}
+            statusMessage={statusMessage}
+          />
+        );
+      case 'Chat':
+        return (
+          <ChatInterface
+            messages={messages}
+            isRunning={isRunning}
+            status={status}
+            tps={tps}
+            numTokens={numTokens}
+            input={input}
+            setInput={setInput}
+            onEnter={onEnter}
+            onInterrupt={onInterrupt}
+            worker={worker}
+            setMessages={setMessages}
+          />
+        );
+      case 'Settings':
+        return (
+          <Settings
+            currentUser={currentUser}
+            onLogout={() => setCurrentUser(null)}
+            showUserFiles={showUserFiles}
+            onToggleUserFiles={toggleUserFiles}
+          />
+        );
+      case 'Image Store':
+      case 'Document Store':
+      case 'Public Data':
+        return (
+          <Components.DragAndDropContainer onDrop={handleDrop}>
+            {activeSection === 'Image Store' && (
+              <Screens.ImageStore
+                assets={assets}
+                onAssetHover={setHoveredAsset}
+                onDelete={(asset) => setConfirmDelete(asset)}
+              />
+            )}
+            {activeSection === 'Document Store' && (
+              <Screens.DocumentStore
+                assets={assets}
+                onAssetHover={setHoveredAsset}
+                onDelete={(asset) => setConfirmDelete(asset)}
+              />
+            )}
+            {activeSection === 'Public Data' && (
+              <Screens.PublicDataStore
+                assets={assets}
+                onAssetHover={setHoveredAsset}
+                onDelete={async (asset) => setConfirmDelete(asset)}
+              />
+            )}
+          </Components.DragAndDropContainer>
+        );
+      case 'Stable Memory':
+        return (
+          <Screens.PrivateDataStore
+            assets={assets}
+            userObject={currentUser as Types.UserObject}
+            onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
+            onAssetHover={setHoveredAsset}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="app">
+    <div className={`app admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {!currentUser ? (
         <div className="landing-page">
           <img src={internetComputerLogo} alt="Internet Computer" className="bottom-left-image" />
@@ -92,73 +376,46 @@ export function Parent() {
         </div>
       ) : (
         <>
+          <Header
+            isMenuOpen={isMenuOpen}
+            toggleMenu={toggleMenu}
+            isDarkMode={isDarkMode}
+            toggleDarkMode={toggleDarkMode}
+            currentUser={currentUser.principal}
+          />
+
+          <main className="main-content">
+            <Sidebar
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+              isMenuOpen={isMenuOpen}
+              toggleMenu={toggleMenu}
+            />
+
+            <section className="content-area">
+              {renderContent()}
+
+              {tooltipContent && (
+                <div className="tooltip" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>
+                  <p>{tooltipContent}</p>
+                </div>
+              )}
+            </section>
+          </main>
+
           {globalLoading && <Components.LoadingOverlay message={loadingMessage} />}
           {error && <Components.ErrorNotification message={error} onClose={() => setError(null)} />}
           {confirmDelete && (
             <Components.DeleteConfirmation
               asset={confirmDelete}
-              onConfirm={async () => handleDeleteAsset(confirmDelete)}
-              onCancel={() => setConfirmDelete(null)}
+              onConfirm={async () => {
+                await handleDeleteAsset(confirmDelete);
+                setConfirmDelete(null); // Clear confirmDelete after action
+              }}
+              onCancel={() => setConfirmDelete(null)} // Clear confirmDelete on cancel
             />
           )}
-
-          <Components.ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-
-          {(viewMode === 'images' || viewMode === 'documents' || viewMode === 'public') && (
-            <Components.UploadButton
-              onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")}
-              disabled={globalLoading}
-            />
-          )}
-
-          {viewMode === 'images' || viewMode === 'documents' || viewMode === 'public' ? (
-            <Components.DragAndDropContainer onDrop={handleDrop}>
-              <div className="assets-container">
-                {viewMode === 'images' && (
-                  <Screens.ImageStore
-                    assets={assets}
-                    onAssetHover={setHoveredAsset}
-                    onDelete={(asset) => setConfirmDelete(asset)}
-                  />
-                )}
-                {viewMode === 'documents' && (
-                  <Screens.DocumentStore
-                    assets={assets}
-                    onAssetHover={setHoveredAsset}
-                    onDelete={(asset) => setConfirmDelete(asset)}
-                  />
-                )}
-                {viewMode === 'public' && (
-                  <Screens.PublicDataStore
-                    assets={assets}
-                    onAssetHover={setHoveredAsset}
-                    onDelete={async (asset) => setConfirmDelete(asset)}
-                  />
-                )}
-              </div>
-              {hoveredAsset && (
-                <div className="tooltip" style={{ left: tooltipPosition.left, top: tooltipPosition.top }}>
-                  <p>URL: {hoveredAsset.url}</p>
-                </div>
-              )}
-            </Components.DragAndDropContainer>
-          ) : (
-            viewMode === 'json' ? (
-              <Screens.PrivateDataStore
-                assets={assets}
-                userObject={currentUser as Types.UserObject}
-                onDelete={(asset: Asset | null) => setConfirmDelete(asset)}
-                onAssetHover={setHoveredAsset}
-              />
-            ) : (
-              <Screens.DatabaseAdmin
-                assets={assets}
-                privateData={privateData}
-                currentUser={currentUser}
-                onLogout={() => setCurrentUser(null)}
-              />
-            )
-          )}
+          <StatusOverlay status={status} loadingMessage={loadingMessage} />
         </>
       )}
     </div>

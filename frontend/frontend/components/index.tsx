@@ -9,9 +9,6 @@ export { default as DragAndDropContainer } from './overlays/DragAndDropOverlay/D
 // Dropdown Components
 export { default as SettingsDropdown } from './dropdowns/SettingsDropdown';
 
-// Toggle Components
-export { default as ViewToggle } from './menus/ViewToggle';
-
 // Cycles Components
 export { default as CyclesTopUpComponent } from './buttons/cycles/CyclesTopUpButton';
 export { default as GetBalancesComponent } from './buttons/cycles/GetBalancesButton';
@@ -20,6 +17,7 @@ export { default as GetBalancesComponent } from './buttons/cycles/GetBalancesBut
 export { default as LoadingOverlay } from './overlays/LoadingOverlay/LoadingOverlay';
 export { default as ErrorNotification } from './overlays/ErrorNotification/ErrorNotification';
 export { default as DeleteConfirmation } from './overlays/DeleteConfirmation/DeleteConfirmation';
+export { default as StatusOverlay } from './overlays/StatusOverlay/StatusOverlay';
 
 // Copy Components
 export { default as CopyToClipboard } from './buttons/copy/CopyToClipboardButton';
@@ -29,3 +27,14 @@ export { default as Sidebar } from './sidebar/Sidebar';
 
 // Header Components
 export { default as Header } from './header/Header';
+
+// Tooltip Components
+export { default as Tooltip } from './tooltip/Tooltip';
+
+export function useAuthActor(): { currentUser: any; setCurrentUser: any; } {
+  throw new Error('Function not implemented.');
+}
+export function useBackendActor(): { createBackendActor: any; } {
+  throw new Error('Function not implemented.');
+}
+

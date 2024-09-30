@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './DeleteConfirmation.css';
 import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
 
@@ -14,13 +14,24 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
   onCancel,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useRef(true); // To track if component is mounted
+
+  // Clean up and prevent state updates when component is unmounted
+  useEffect(() => {
+    isMounted.current = true; // Set to true when mounted
+    return () => {
+      isMounted.current = false; // Set to false when unmounted
+    };
+  }, []);
 
   const handleConfirm = async () => {
     setIsLoading(true);
     try {
       await onConfirm();
     } finally {
-      setIsLoading(false);
+      if (isMounted.current) {
+        setIsLoading(false); // Only update state if component is still mounted
+      }
     }
   };
 

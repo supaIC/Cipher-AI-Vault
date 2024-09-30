@@ -51,6 +51,22 @@
     --border-radius-lg: 0.5rem;
 }
 
+/* Light mode override */
+.light-mode {
+    --text-color: #1a1a1a;
+    --bg-color: #e8e8e8;
+    --bg-color-light: #e9ecef;
+    --bg-color-lighter: #dfe3e6;
+    --accent-color: #2979ff;
+    --accent-color-hover: #1565c0;
+    --error-color: #d32f2f;
+    --success-color: #388e3c;
+    --border-color: #bdbdbd;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --hover-bg-color: #e0e0e0;
+    --focus-outline-color: #2979ff;
+  }  
+
 /* Global Styles */
 body,
 html,
@@ -65,11 +81,6 @@ html,
     color: var(--text-color);
     background-color: var(--bg-color);
     line-height: 1.6;
-}
-
-.admin-container {
-    display: flex;
-    flex-direction: column;
 }
 
 /* Header */
@@ -118,6 +129,7 @@ html,
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    background-color: var(--bg-color);
 }
 
 .section-title {
@@ -795,3 +807,4 @@ color: var(--accent-color);
 display: inline-flex !important;
 visibility: visible !important;
 }
+

@@ -44,7 +44,8 @@ body {
 
 .sidebar {
     width: var(--sidebar-width);
-    height: 100vh;
+    height: auto; /* Full viewport height */
+    min-height: 100vh;
     background-color: var(--bg-color-light);
     color: var(--text-color);
     display: flex;
@@ -283,6 +284,13 @@ body {
 
 .sidebar.collapsed .sidebar-label {
     transition-delay: 150ms;
+}
+
+.sidebar-separator {
+    height: 1px;
+    margin: 12px 0;
+    background-color: rgba(0, 0, 0, 0.222);
+    border: none;
 }
 
 @media (max-width: 768px) {

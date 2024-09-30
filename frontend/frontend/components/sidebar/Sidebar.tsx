@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FiHome, FiBox, FiDatabase, FiMessageSquare, FiSettings, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import {
+  FiHome, FiBox, FiDatabase, FiMessageSquare, FiSettings, FiChevronLeft,
+  FiChevronRight, FiImage, FiFileText, FiGlobe, FiHardDrive
+} from 'react-icons/fi';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -12,11 +15,20 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isMenuOpen, toggleMenu }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  // Sidebar items with groups separated by `null`
   const sidebarItems = [
     { label: "Dashboard", Icon: FiHome },
-    { label: "Models", Icon: FiBox },
-    { label: "Data Management", Icon: FiDatabase },
+    null,
     { label: "Chat", Icon: FiMessageSquare },
+    { label: "Models", Icon: FiBox },
+    null,
+    { label: "Data Management", Icon: FiDatabase },
+    { label: "Public Data", Icon: FiGlobe },
+    { label: "Stable Memory", Icon: FiHardDrive },
+    null,
+    { label: "Image Store", Icon: FiImage },
+    { label: "Document Store", Icon: FiFileText },
+    null,
     { label: "Settings", Icon: FiSettings },
   ];
 
@@ -33,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isMe
 
   return (
     <>
-      <div 
+      <div
         className={`sidebar ${isMenuOpen ? 'expanded' : 'collapsed'} ${isHovered ? 'hovered' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -47,26 +59,31 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isMe
         >
           {isMenuOpen ? <FiChevronLeft className="sidebar-icon" /> : <FiChevronRight className="sidebar-icon" />}
         </button>
+
         <nav className="sidebar-nav">
           <ul className="sidebar-menu">
-            {sidebarItems.map(({ label, Icon }) => (
-              <li key={label}>
-                <button
-                  onClick={() => setActiveSection(label)}
-                  className={`sidebar-item ${activeSection === label ? 'active' : ''}`}
-                  aria-label={`Go to ${label}`}
-                  aria-current={activeSection === label ? 'page' : undefined}
-                  data-tooltip={label}
-                >
-                  <Icon className="sidebar-icon" />
-                  <span className="sidebar-label">{label}</span>
-                </button>
-              </li>
+            {sidebarItems.map((item, index) => (
+              item ? (
+                <li key={index}>
+                  <button
+                    onClick={() => setActiveSection(item.label)}
+                    className={`sidebar-item ${activeSection === item.label ? 'active' : ''}`}
+                    aria-label={`Go to ${item.label}`}
+                    aria-current={activeSection === item.label ? 'page' : undefined}
+                    data-tooltip={item.label}
+                  >
+                    <item.Icon className="sidebar-icon" />
+                    <span className="sidebar-label">{item.label}</span>
+                  </button>
+                </li>
+              ) : (
+                <li key={index} className="sidebar-separator" />
+              )
             ))}
           </ul>
         </nav>
       </div>
-      
+
       {isMenuOpen && <div className="sidebar-overlay" onClick={toggleMenu}></div>}
     </>
   );
