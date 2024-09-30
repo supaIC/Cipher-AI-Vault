@@ -17,7 +17,7 @@ import Settings from '../Settings/Settings';
 
 // Components
 import Sidebar from '../../components/sidebar/Sidebar';
-import StatusOverlay from '../../components/StatusOverlay/StatusOverlay';
+import StatusOverlay from '../../components/overlays/StatusOverlay/StatusOverlay';
 import Header from '../../components/header/Header';
 
 // Styles
