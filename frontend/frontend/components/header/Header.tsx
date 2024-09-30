@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import logo from '../../assets/images/logo.png';
+import logo from '../../assets/images/cipher_proxy_logo.png';
 import { FiMenu, FiX, FiSun, FiMoon, FiUser } from 'react-icons/fi';
 import './Header.css';
 
@@ -36,7 +36,6 @@ const Header: React.FC<HeaderProps> = ({
         </button>
         <div className="logo">
           <img src={logo} alt="App Logo" />
-          <h1>Cipher AI Vault</h1>
         </div>
       </div>
       <div className="header-right">
