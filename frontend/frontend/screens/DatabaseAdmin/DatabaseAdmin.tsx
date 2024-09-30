@@ -8,21 +8,21 @@ import useChat from '../../hooks/modelManager/useChat';
 import useModelLoader from '../../hooks/modelManager/useModelLoader';
 import useDatabase from '../../hooks/dataManager/useDatabase';
 
-// Tabs
-import ChatInterface from './tabs/ChatInterface/ChatInterface';
-import ModelManagement from './tabs/ModelManagement/ModelManagement';
-import DataManagement from './tabs/DataManagement/DataManagement';
-import Dashboard from './tabs/Dashboard/Dashboard';
+// Screens
+import ChatInterface from '../ChatInterface/ChatInterface';
+import ModelManagement from '../ModelManagement/ModelManagement';
+import DataManagement from '../DataManagement/DataManagement';
+import Dashboard from '../Dashboard/Dashboard';
 import Settings from '../Settings/Settings';
 
 // Components
 import Sidebar from '../../components/sidebar/Sidebar';
-import StatusOverlay from './components/StatusOverlay/StatusOverlay';
+import StatusOverlay from '../../components/StatusOverlay/StatusOverlay';
 import Header from '../../components/header/Header';
 
 // Styles
-import useDarkMode from './styles/useDarkMode';
-import './styles/DatabaseAdmin.css';
+import useDarkMode from '../../hooks/useDarkMode/useDarkMode';
+import './DatabaseAdmin.css';
 
 interface SearchResult {
   input: string;

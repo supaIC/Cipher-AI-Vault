@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { modelsConfig } from '../../../../hooks/modelManager/modelsConfig'; // Import modelsConfig here
+import { modelsConfig } from '../../hooks/modelManager/modelsConfig'; // Import modelsConfig here
 
 interface ModelManagementProps {
   selectedModel: string;
