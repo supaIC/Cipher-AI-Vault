@@ -324,25 +324,34 @@ export function Parent() {
         return (
           <Components.DragAndDropContainer onDrop={handleDrop}>
             {activeSection === 'Image Store' && (
-              <Screens.ImageStore
-                assets={assets}
-                onAssetHover={setHoveredAsset}
-                onDelete={(asset) => setConfirmDelete(asset)}
-              />
+              <>
+                <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
+                <Screens.ImageStore
+                  assets={assets}
+                  onAssetHover={setHoveredAsset}
+                  onDelete={(asset) => setConfirmDelete(asset)}
+                />
+              </>
             )}
             {activeSection === 'Document Store' && (
-              <Screens.DocumentStore
-                assets={assets}
-                onAssetHover={setHoveredAsset}
-                onDelete={(asset) => setConfirmDelete(asset)}
-              />
+              <>
+                <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
+                <Screens.DocumentStore
+                  assets={assets}
+                  onAssetHover={setHoveredAsset}
+                  onDelete={(asset) => setConfirmDelete(asset)}
+                />
+              </>
             )}
             {activeSection === 'Public Data' && (
-              <Screens.PublicDataStore
-                assets={assets}
-                onAssetHover={setHoveredAsset}
-                onDelete={async (asset) => setConfirmDelete(asset)}
-              />
+              <>
+                <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
+                <Screens.PublicDataStore
+                  assets={assets}
+                  onAssetHover={setHoveredAsset}
+                  onDelete={async (asset) => setConfirmDelete(asset)}
+                />
+              </>
             )}
           </Components.DragAndDropContainer>
         );
@@ -358,7 +367,7 @@ export function Parent() {
       default:
         return null;
     }
-  };
+  };  
 
   return (
     <div className={`app admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
