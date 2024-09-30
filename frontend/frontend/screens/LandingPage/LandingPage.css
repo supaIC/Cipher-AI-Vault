@@ -1,0 +1,804 @@
+/* LandingPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #F9D342;
+    --secondary-color: #42DBF9;
+    --accent-color: #F9428E;
+    --bg-color: #131314;
+    --text-color: #FFFFFF;
+    --text-color-light: rgba(255, 255, 255, 0.8);
+    --card-bg-color: rgba(255, 255, 255, 0.05);
+    --card-border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.lp-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.lp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background-color: rgba(19, 19, 20, 0.8);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.lp-header.lp-scrolled {
+    padding: 0.5rem 5%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.lp-logo {
+    display: flex;
+    align-items: center;
+}
+
+.lp-logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.lp-logo span {
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.lp-nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.lp-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 600; /* Increase font weight for a bolder look */
+    font-size: 1rem; /* Slightly larger font for better readability */
+    letter-spacing: 0.05em; /* Add subtle letter spacing for refinement */
+    position: relative;
+    padding: 0.5rem 0; /* Add padding for better touch targets */
+    text-transform: uppercase; /* Make the text all uppercase for a modern feel */
+}
+
+/* Improved hover effect with a smooth underline transition */
+.lp-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px; /* Move the underline closer to the text */
+    left: 50%; /* Start the underline from the center */
+    background-color: var(--secondary-color);
+    transition: width 0.4s ease, left 0.4s ease; /* Smooth transition for width and position */
+}
+
+/* On hover, the underline expands from the center */
+.lp-nav a:hover::after {
+    width: 100%; /* Full underline width */
+    left: 0; /* Move the underline to cover the full width */
+}
+
+.lp-nav a:hover {
+    color: var(--secondary-color); /* Change text color on hover for better interactivity */
+}
+
+.lp-main-content {
+    flex: 1;
+    padding: 6rem 5% 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.lp-hero-section {
+    text-align: center;
+    margin-bottom: 6rem;
+    position: relative;
+}
+
+.lp-hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    /* background: radial-gradient(circle at top right, var(--accent-color), transparent 70%),
+        radial-gradient(circle at bottom left, var(--secondary-color), transparent 70%); */
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.lp-hero-section h1 {
+    font-weight: 800;
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    /* background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.lp-hero-section h2 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.lp-hero-section p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: var(--text-color-light);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lp-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.lp-button {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.lp-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    transition: all 0.5s;
+}
+
+.lp-button:hover::before {
+    left: 100%;
+}
+
+.lp-button-primary {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+}
+
+.lp-button-primary:hover {
+    background-color: #fae27b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(249, 211, 66, 0.4);
+}
+
+.lp-button-outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.lp-button-outline:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(249, 211, 66, 0.4);
+}
+
+.lp-features-section,
+.lp-about-section,
+.lp-contact-section {
+    margin-bottom: 6rem;
+}
+
+.lp-features-section h3,
+.lp-about-section h3,
+.lp-contact-section h3 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--secondary-color);
+    text-align: center;
+    position: relative;
+}
+
+.lp-features-section h3::after,
+.lp-about-section h3::after,
+.lp-contact-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 4px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
+.lp-feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.lp-card {
+    background-color: var(--card-bg-color);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--card-border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.lp-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--secondary-color), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lp-card:hover::before {
+    opacity: 0.1;
+}
+
+.lp-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+}
+
+.lp-card-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.lp-card:hover .lp-card-icon {
+    transform: scale(1.1);
+}
+
+.lp-card h4 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.lp-card p {
+    color: var(--text-color-light);
+}
+
+.lp-about-section p {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-color-light);
+}
+
+.lp-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  
+  .lp-social-links a {
+    display: flex;
+    align-items: center;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  
+  .lp-social-links a:hover {
+    color: var(--primary-color);
+  }
+  
+  .lp-social-icon {
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+  }  
+
+.lp-footer {
+    background-color: var(--card-bg-color);
+    padding: 3rem 5%;
+    margin-top: auto;
+}
+
+.lp-footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.lp-footer-logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.lp-footer-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.lp-footer-links a {
+    color: var(--text-color-light);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.lp-footer-links a:hover {
+    color: var(--secondary-color);
+}
+
+.lp-footer-bottom {
+    text-align: center;
+    color: var(--text-color-light);
+    font-size: 0.875rem;
+}
+
+.lp-login-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(19, 19, 20, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lp-login-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lp-login-modal-content {
+    background-color: var(--bg-color);
+    padding: 2rem;
+    border-radius: 12px;
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.lp-login-modal.active .lp-login-modal-content {
+    transform: scale(1);
+}
+
+.lp-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.lp-close-button:hover {
+    color: var(--accent-color);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lp-hero-section,
+.lp-features-section,
+.lp-about-section,
+.lp-contact-section {
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.lp-card {
+    animation: fadeInUp 0.5s ease-out forwards;
+    animation-delay: calc(var(--animation-order) * 0.1s);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .lp-hero-section h1 {
+        font-size: 3rem;
+    }
+
+    .lp-hero-section h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .lp-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lp-nav {
+        margin-top: 1rem;
+    }
+
+    .lp-hero-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .lp-hero-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .lp-cta-buttons {
+        flex-direction: column;
+    }
+
+    .lp-feature-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-footer-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .lp-footer-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .lp-footer-links {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .lp-hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .lp-hero-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .lp-hero-section p {
+        font-size: 1rem;
+    }
+
+    .lp-features-section h3,
+    .lp-about-section h3,
+    .lp-contact-section h3 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Accessibility Enhancements */
+.lp-button:focus,
+.lp-nav a:focus,
+.lp-contact-form input:focus,
+.lp-contact-form textarea:focus,
+.lp-close-button:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Dark mode considerations */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Colors already set for dark mode */
+    }
+}
+
+/* Print styles */
+@media print {
+
+    .lp-header,
+    .lp-footer,
+    .lp-cta-buttons,
+    .lp-contact-form {
+        display: none;
+    }
+
+    body {
+        background-color: white;
+        color: black;
+    }
+
+    .lp-hero-section,
+    .lp-features-section,
+    .lp-about-section {
+        page-break-inside: avoid;
+    }
+}
+
+/* Additional polish */
+::selection {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+}
+
+.lp-button,
+.lp-card {
+    will-change: transform;
+}
+
+.lp-card:focus-within {
+    outline: 2px solid var(--secondary-color);
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Ensure consistency across browsers */
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
+/* Enhanced animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.lp-hero-section img {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Gradient text effect */
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Improved card hover effect */
+.lp-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    border-radius: 12px;
+}
+
+.lp-card:hover::after {
+    opacity: 0.1;
+}
+
+/* Animated underline effect for links */
+.animated-underline {
+    position: relative;
+    text-decoration: none;
+}
+
+.animated-underline::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent-color);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+}
+
+.animated-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Customized scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Improved form styling */
+.lp-contact-form input,
+.lp-contact-form textarea {
+    transition: all 0.3s ease;
+}
+
+.lp-contact-form input:hover,
+.lp-contact-form textarea:hover {
+    border-color: var(--accent-color);
+}
+
+.lp-contact-form input:focus,
+.lp-contact-form textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(66, 219, 249, 0.1);
+}
+
+/* Loading spinner */
+.loading-spinner {
+    border: 4px solid var(--card-bg-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Improved button styles */
+.lp-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.lp-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.lp-button:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Improved modal styles */
+.lp-login-modal-content {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.lp-login-modal.active .lp-login-modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Add more polished styles as needed */

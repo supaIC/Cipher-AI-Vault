@@ -20,9 +20,7 @@ import useModelLoader from './hooks/modelManager/useModelLoader';
 import useDatabase from './hooks/dataManager/useDatabase';
 import useDarkMode from './hooks/useDarkMode/useDarkMode';
 
-// Assets and Types
-import internetComputerLogo from './assets/images/internet_computer.png';
-import cipherProxyLogo from './assets/images/cipher_proxy.png';
+// Types
 import { Types } from "ic-auth";
 
 // Styles
@@ -303,7 +301,7 @@ export function Parent() {
             setMessages={setMessages}
           />
         );
-      case 'Cycle Management':  // New Case for Cycle Management
+      case 'Cycle Management':
         return (
           <Screens.CycleManagement
             currentUser={currentUser}
@@ -370,17 +368,7 @@ export function Parent() {
   return (
     <div className={`app admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {!currentUser ? (
-        <div className="landing-page">
-          <img src={internetComputerLogo} alt="Internet Computer" className="bottom-left-image" />
-          <img src={cipherProxyLogo} alt="Cipher Proxy" className="right-image" />
-          <div className="hero-section">
-            <h1>Welcome to Cipher AI Vault</h1>
-            <p>
-              Secure, sandboxed AI with in-memory VectorDB and LLM, stable-memory data storage, and more—all on the Internet Computer.
-            </p>
-            <Components.ICWalletList giveToParent={giveToParent} whitelist={[]} />
-          </div>
-        </div>
+        <Screens.LandingPage giveToParent={giveToParent} />
       ) : (
         <>
           <Components.Header
@@ -417,9 +405,9 @@ export function Parent() {
               asset={confirmDelete}
               onConfirm={async () => {
                 await handleDeleteAsset(confirmDelete);
-                setConfirmDelete(null); // Clear confirmDelete after action
+                setConfirmDelete(null);
               }}
-              onCancel={() => setConfirmDelete(null)} // Clear confirmDelete on cancel
+              onCancel={() => setConfirmDelete(null)}
             />
           )}
           <Components.ModelStatusOverlay status={status} loadingMessage={loadingMessage} />

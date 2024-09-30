@@ -1,3 +1,4 @@
+export { default as LandingPage } from './LandingPage/LandingPage';
 export { default as Dashboard } from './Dashboard/Dashboard';
 export { default as ChatInterface } from './ChatInterface/ChatInterface';
 export { default as ModelManagement } from './ModelManagement/ModelManagement';
