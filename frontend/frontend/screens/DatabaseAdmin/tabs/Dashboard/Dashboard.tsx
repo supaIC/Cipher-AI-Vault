@@ -1,8 +1,6 @@
-// src/screens/DatabaseAdmin/tabs/Dashboard/Dashboard.tsx
-
 import React, { useCallback } from 'react';
-import { FiBox, FiDatabase, FiSettings, FiMessageCircle, FiSearch } from 'react-icons/fi'; // Importing relevant icons
-import './Dashboard.css'; // Optional: If you have component-specific styles
+import { FiBox, FiDatabase, FiSettings, FiMessageCircle, FiSearch } from 'react-icons/fi';
+import './Dashboard.css';
 
 interface DashboardProps {
   loadedModels: Set<string>;
@@ -99,7 +97,15 @@ const Dashboard: React.FC<DashboardProps> = ({
             )}
             <span className="action-tooltip">Add, update, or remove data</span>
           </div>
-          {renderActionButton('Start Chat', () => setActiveSection('Chat'), false, true)}
+          <div className="action-button-wrapper">
+            {renderActionButton(
+              'Start Chat',
+              () => setActiveSection('Chat'),
+              false,
+              true
+            )}
+            <span className="action-tooltip">Begin a new chat session</span>
+          </div>
         </div>
       )}
 
@@ -110,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           {recentSearches.length > 0 ? (
             recentSearches.map((search) => (
               <button
-                key={search} // Ensuring unique and stable keys
+                key={search}
                 onClick={() => handleRecentSearchClick(search)}
                 className="search-chip"
                 aria-label={`Search: ${search}`}

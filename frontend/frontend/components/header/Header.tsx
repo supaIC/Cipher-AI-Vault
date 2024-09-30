@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({
         </button>
         <div className="logo">
           <img src={logo} alt="App Logo" />
-          <h1>AI Vault Admin</h1>
+          <h1>Cipher AI Vault</h1>
         </div>
       </div>
       <div className="header-right">
