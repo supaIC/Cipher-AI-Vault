@@ -1,18 +1,14 @@
-// main.tsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./styles/index.css";
-import { Parent } from "./Parent";
-import { ActorProvider } from "./actors"; // Import the unified ActorProvider
+import React from "react"
+import ReactDOM from "react-dom"
+import "./styles/index.css"
+import { Parent } from "./Parent"
+import { ActorProvider } from "./actors"
 
-// Create a root.
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
-
-// Initial render
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <ActorProvider>
-      <Parent />
+    <Parent />
     </ActorProvider>
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+  document.getElementById("root"),
+)

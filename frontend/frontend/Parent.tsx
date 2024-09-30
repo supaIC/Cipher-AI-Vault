@@ -4,8 +4,8 @@ import * as Screens from "./screens";
 import * as Actors from "./actors";
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
 import { useDataManager } from "./hooks/dataManager/dataManager";
-import internetComputerLogo from './assets/logos/internet_computer.png';
-import cipherProxyLogo from './assets/logos/cipher_proxy.png';
+import internetComputerLogo from './assets/images/internet_computer.png';
+import cipherProxyLogo from './assets/images/cipher_proxy.png';
 import { Types } from "ic-auth";
 
 export function Parent() {
@@ -78,11 +78,10 @@ export function Parent() {
 
   return (
     <div className="app">
-      <img src={internetComputerLogo} alt="Internet Computer" className="bottom-left-image" />
-      <img src={cipherProxyLogo} alt="Cipher Proxy" className="right-image" />
-
       {!currentUser ? (
         <div className="landing-page">
+          <img src={internetComputerLogo} alt="Internet Computer" className="bottom-left-image" />
+          <img src={cipherProxyLogo} alt="Cipher Proxy" className="right-image" />
           <div className="hero-section">
             <h1>Welcome to Cipher AI Vault</h1>
             <p>

@@ -1,9 +1,9 @@
 import React from "react";
 // Import logo assets for different wallets
-import dfinity from "../../../assets/logos/dfinity.png";
-import plug from "../../../assets/logos/plug.png";
-import stoic from "../../../assets/logos/stoic.png";
-import nfid from "../../../assets/logos/nfid.png";
+import dfinity from "../../../assets/images/dfinity.png";
+import plug from "../../../assets/images/plug.png";
+import stoic from "../../../assets/images/stoic.png";
+import nfid from "../../../assets/images/nfid.png";
 // Import authentication functions and types from ic-auth library
 import { PlugLogin, StoicLogin, NFIDLogin, IdentityLogin, CreateActor, Types } from 'ic-auth';
 import "./ICWalletList.css"

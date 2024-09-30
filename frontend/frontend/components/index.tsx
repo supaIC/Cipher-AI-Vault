@@ -23,3 +23,9 @@ export { default as DeleteConfirmation } from './overlays/DeleteConfirmation/Del
 
 // Copy Components
 export { default as CopyToClipboard } from './buttons/copy/CopyToClipboardButton';
+
+// Sidebar Components
+export { default as Sidebar } from './sidebar/Sidebar';
+
+// Header Components
+export { default as Header } from './header/Header';

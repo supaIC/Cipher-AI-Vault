@@ -12,6 +12,22 @@
   --transition: 0.3s ease;
 }
 
+/* Light mode override */
+.light-mode {
+  --text-color: #1a1a1a;
+  --bg-color: #f4f4f4;
+  --bg-color-light: #e9ecef;
+  --bg-color-lighter: #dfe3e6;
+  --accent-color: #2979ff;
+  --accent-color-hover: #1565c0;
+  --error-color: #d32f2f;
+  --success-color: #388e3c;
+  --border-color: #bdbdbd;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --hover-bg-color: #e0e0e0;
+  --focus-outline-color: #2979ff;
+}
+
 /* Global styles */
 html,
 body,
@@ -94,16 +110,23 @@ button:hover {
 }
 
 .asset-item {
-  background-color: #202020;
+  background-color: var(--bg-color-light); /* Use light mode background */
   border-radius: 0.5rem; /* 8px */
   padding: 0.625rem; /* 10px */
   position: relative;
   width: 200px;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+  box-shadow: var(--box-shadow); /* Adjust shadow for light mode */
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: var(--text-color); /* Use dynamic text color */
+}
+
+.asset-item:hover {
+  transform: scale(1.03);
+  z-index: 1;
+  background-color: var(--hover-bg-color); /* Light mode hover background */
 }
 
 .asset-name {
@@ -111,11 +134,7 @@ button:hover {
   padding-bottom: 0.3125rem; /* 5px */
   margin: 0;
   text-align: center;
-}
-
-.asset-item:hover {
-  transform: scale(1.03);
-  z-index: 1;
+  color: var(--text-color); /* Dynamic text color */
 }
 
 .asset-image {
@@ -320,6 +339,11 @@ button {
 
 .asset-view-actions button:hover {
   background-color: #3367d6;
+}
+
+/* Additional styles for light mode */
+.light-mode .asset-view-content {
+  background-color: rgba(255, 255, 255, 0.9); /* Light mode asset view */
 }
 
 .assets-container {
