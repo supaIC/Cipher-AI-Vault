@@ -92,18 +92,6 @@ export function Parent() {
         </div>
       ) : (
         <>
-          <button className="settings-btn" onClick={toggleSettings}>Settings</button>
-
-          <Components.SettingsDropdown
-            isVisible={settingsVisible}
-            currentUser={currentUser}
-            onLogout={() => setCurrentUser(null)}
-            showUserFiles={showUserFiles}
-            onToggleUserFiles={toggleUserFiles}
-          />
-
-          <Components.LoggedInUser principal={currentUser.principal} />
-
           {globalLoading && <Components.LoadingOverlay message={loadingMessage} />}
           {error && <Components.ErrorNotification message={error} onClose={() => setError(null)} />}
           {confirmDelete && (
@@ -127,24 +115,24 @@ export function Parent() {
             <Components.DragAndDropContainer onDrop={handleDrop}>
               <div className="assets-container">
                 {viewMode === 'images' && (
-                  <Screens.ImageStore 
-                    assets={assets} 
-                    onAssetHover={setHoveredAsset} 
-                    onDelete={(asset) => setConfirmDelete(asset)} 
+                  <Screens.ImageStore
+                    assets={assets}
+                    onAssetHover={setHoveredAsset}
+                    onDelete={(asset) => setConfirmDelete(asset)}
                   />
                 )}
                 {viewMode === 'documents' && (
-                  <Screens.DocumentStore 
-                    assets={assets} 
-                    onAssetHover={setHoveredAsset} 
-                    onDelete={(asset) => setConfirmDelete(asset)} 
+                  <Screens.DocumentStore
+                    assets={assets}
+                    onAssetHover={setHoveredAsset}
+                    onDelete={(asset) => setConfirmDelete(asset)}
                   />
                 )}
                 {viewMode === 'public' && (
-                  <Screens.PublicDataStore 
-                    assets={assets} 
-                    onAssetHover={setHoveredAsset} 
-                    onDelete={async (asset) => setConfirmDelete(asset)} 
+                  <Screens.PublicDataStore
+                    assets={assets}
+                    onAssetHover={setHoveredAsset}
+                    onDelete={async (asset) => setConfirmDelete(asset)}
                   />
                 )}
               </div>
@@ -163,7 +151,12 @@ export function Parent() {
                 onAssetHover={setHoveredAsset}
               />
             ) : (
-              <Screens.DatabaseAdmin assets={assets} privateData={privateData} />
+              <Screens.DatabaseAdmin
+                assets={assets}
+                privateData={privateData}
+                currentUser={currentUser}
+                onLogout={() => setCurrentUser(null)}
+              />
             )
           )}
         </>

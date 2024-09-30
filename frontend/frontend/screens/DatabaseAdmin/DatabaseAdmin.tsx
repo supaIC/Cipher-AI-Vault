@@ -1,5 +1,3 @@
-// src/screens/DatabaseAdmin/DatabaseAdmin.tsx
-
 // React
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -15,7 +13,7 @@ import ChatInterface from './tabs/ChatInterface/ChatInterface';
 import ModelManagement from './tabs/ModelManagement/ModelManagement';
 import DataManagement from './tabs/DataManagement/DataManagement';
 import Dashboard from './tabs/Dashboard/Dashboard';
-import Settings from './tabs/Settings/Settings';
+import Settings from '../Settings/Settings';
 
 // Components
 import Sidebar from '../../components/sidebar/Sidebar';
@@ -43,9 +41,11 @@ interface Asset {
 interface DatabaseAdminProps {
   assets: Array<Asset>;
   privateData: data.FullDataQuery | null;
+  currentUser: any;
+  onLogout: () => void;
 }
 
-const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) => {
+const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData, currentUser, onLogout }) => {
   // State variables
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [status, setStatus] = useState<string | null>(null);
@@ -60,6 +60,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [tooltipContent, setTooltipContent] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [showUserFiles, setShowUserFiles] = useState<boolean>(false);
 
   const isMounted = useRef<boolean>(true);
 
@@ -88,6 +89,9 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
   const addRecentSearch = useCallback((query: string) => {
     setRecentSearches((prev) => [query, ...prev.filter((item) => item !== query)].slice(0, 5));
   }, []);
+
+  // Toggle showUserFiles state
+  const onToggleUserFiles = () => setShowUserFiles((prev) => !prev);
 
   // Use the useDarkMode hook
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -184,9 +188,8 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`button ${primary ? 'button-primary' : 'button-secondary'} ${
-          disabled ? 'button-disabled' : ''
-        }`}
+        className={`button ${primary ? 'button-primary' : 'button-secondary'} ${disabled ? 'button-disabled' : ''
+          }`}
         aria-label={label}
       >
         {label}
@@ -296,10 +299,15 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
     />
   ), [messages, isRunning, status, tps, numTokens, input, setInput, onEnter, onInterrupt, worker, setMessages]);
 
-  // Memoize renderSettings
+  // Memoize renderSettings with the newly added props
   const renderSettings = useCallback(() => (
-    <Settings isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-  ), [isDarkMode, toggleDarkMode]);
+    <Settings
+      currentUser={currentUser}
+      onLogout={onLogout}
+      showUserFiles={showUserFiles}
+      onToggleUserFiles={onToggleUserFiles}
+    />
+  ), [isDarkMode, toggleDarkMode, currentUser, onLogout, showUserFiles, onToggleUserFiles]);
 
   return (
     <div className={`admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -308,6 +316,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData }) =>
         toggleMenu={toggleMenu}
         isDarkMode={isDarkMode}
         toggleDarkMode={toggleDarkMode}
+        currentUser={currentUser.principal} // Assuming currentUser object has a principal property
       />
 
       <main className="main-content">
