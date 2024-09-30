@@ -316,12 +316,12 @@ export function Parent() {
             onLogout={() => setCurrentUser(null)}
           />
         );
-      case 'Image Store':
-      case 'Document Store':
+      case 'Image Storage':
+      case 'Document Storage':
       case 'Public Data':
         return (
           <Components.DragAndDropContainer onDrop={handleDrop}>
-            {activeSection === 'Image Store' && (
+            {activeSection === 'Image Storage' && (
               <>
                 <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
                 <Screens.ImageStore
@@ -331,7 +331,7 @@ export function Parent() {
                 />
               </>
             )}
-            {activeSection === 'Document Store' && (
+            {activeSection === 'Document Storage' && (
               <>
                 <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
                 <Screens.DocumentStore
