@@ -65,8 +65,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection, isMe
             ))}
           </ul>
         </nav>
-        <div className="sidebar-brand">Brand</div>
-        <div className="sidebar-footer">© 2024 Your Company</div>
       </div>
       
       {isMenuOpen && <div className="sidebar-overlay" onClick={toggleMenu}></div>}

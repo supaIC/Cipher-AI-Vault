@@ -119,9 +119,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           )}
         </div>
       )}
+      {/* Add the disclaimer here */}
+      <p className="disclaimer-text">Disclaimer: Generated content may be inaccurate or false.</p>
     </div>
   );
 };
 
 export default ChatInterface;
-2

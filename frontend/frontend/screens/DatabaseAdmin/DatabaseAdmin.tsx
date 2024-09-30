@@ -318,7 +318,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData, curr
         toggleDarkMode={toggleDarkMode}
         currentUser={currentUser.principal} // Assuming currentUser object has a principal property
       />
-
+  
       <main className="main-content">
         <Sidebar
           activeSection={activeSection}
@@ -326,7 +326,7 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData, curr
           isMenuOpen={isMenuOpen}
           toggleMenu={toggleMenu}
         />
-
+  
         <section className="content-area">
           <h2 className="section-title">{activeSection}</h2>
           {activeSection === 'Dashboard' && renderDashboard()}
@@ -336,12 +336,10 @@ const DatabaseAdmin: React.FC<DatabaseAdminProps> = ({ assets, privateData, curr
           {activeSection === 'Settings' && renderSettings()}
         </section>
       </main>
-
+  
       <StatusOverlay status={status} loadingMessage={loadingMessage} />
-
-      <p className="disclaimer-text">Disclaimer: Generated content may be inaccurate or false.</p>
     </div>
-  );
+  );  
 };
 
 export default DatabaseAdmin;
