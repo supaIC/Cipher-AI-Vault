@@ -22,7 +22,7 @@
   
   .spinner {
     border: 8px solid rgba(255, 255, 255, 0.4);
-    border-top: 8px solid #00bcd4;
+    border-top: 8px solid var(--accent-color);
     border-radius: 50%;
     width: 80px;
     height: 80px;
