@@ -428,14 +428,15 @@
     right: 1rem;
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: var(--text-color);
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
 .lp-close-button:hover {
-    color: var(--accent-color);
+    color: var(--error-color);
+    background-color: transparent;
 }
 
 /* Animations */

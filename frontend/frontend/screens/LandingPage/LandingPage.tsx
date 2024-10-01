@@ -4,7 +4,7 @@ import ICWalletList from "../../components/auth/ICWalletList/ICWalletList";
 import internetComputerLogo from '../../assets/images/internet_computer.png';
 import cipherProxyLogo from '../../assets/images/cipher_proxy_logo.png';
 import cipherProxyTag from '../../assets/images/cipher_proxy.png';
-import { FiTwitter, FiGithub, FiGlobe, FiLogIn, FiArrowRight, FiShield, FiZap, FiHardDrive } from 'react-icons/fi';
+import { FiTwitter, FiGithub, FiGlobe, FiLogIn, FiArrowRight, FiShield, FiZap, FiHardDrive, FiX } from 'react-icons/fi';
 import './LandingPage.css';
 
 interface LandingPageProps {
@@ -103,8 +103,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ giveToParent }) => {
 
             {showLogin && (
                 <div className={`lp-login-modal ${showLogin ? 'active' : ''}`}>
-                    <button className="lp-close-button" onClick={() => setShowLogin(false)}>×</button>
-                    <ICWalletList giveToParent={giveToParent} whitelist={[]} />
+                    <div className="lp-login-container">
+                        <button className="lp-close-button" onClick={() => setShowLogin(false)}>
+                            <FiX />
+                        </button>
+                        <ICWalletList giveToParent={giveToParent} whitelist={[]} />
+                    </div>
                 </div>
             )}
         </div>
