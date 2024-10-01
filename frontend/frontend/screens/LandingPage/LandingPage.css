@@ -11,6 +11,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: var(--bg-color);
 }
 
 .lp-header {
@@ -18,7 +19,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 5%;
-    background-color: rgba(19, 19, 20, 0.545);
     backdrop-filter: blur(10px);
     position: fixed;
     top: 0;
@@ -356,6 +356,7 @@
     background-color: var(--footer-bg-color);
     padding: 3rem 5%;
     margin-top: auto;
+    border-top: 2px solid var(--card-border-color);
 }
 
 .lp-footer-content {
