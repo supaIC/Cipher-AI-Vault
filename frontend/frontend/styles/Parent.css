@@ -2,9 +2,9 @@
 
 :root {
     /* Color palette */
-    --bg-color: #1a1a1a;
-    --bg-color-light: #2a2a2a;
-    --bg-color-lighter: #3a3a3a;
+    --bg-color: #131314;
+    --bg-color-light: #181818;
+    --bg-color-lighter: #343434;
     --text-color: #e0e0e0;
     --accent-color: #d4af37; /* Subtle gold */
     --accent-color-hover: #e6c158;
