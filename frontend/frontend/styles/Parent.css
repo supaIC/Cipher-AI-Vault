@@ -49,6 +49,17 @@
     --border-radius-sm: 0.125rem;
     --border-radius-md: 0.25rem;
     --border-radius-lg: 0.5rem;
+
+    --primary-color: #F9D342;
+    --secondary-color: #42DBF9;
+    --lp-accent-color: #F9428E;
+    --text-color: #FFFFFF;
+    --text-color-light: rgba(255, 255, 255, 0.8);
+    --card-bg-color: rgba(255, 255, 255, 0.05);
+    --card-border-color: rgba(255, 255, 255, 0.1);
+    --button-bg-color: #1e1e1e;
+    --button-hover-bg-color: #343434;
+    --footer-bg-color: #101010;
 }
 
 /* Light mode override */

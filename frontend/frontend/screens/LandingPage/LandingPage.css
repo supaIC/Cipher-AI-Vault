@@ -1,36 +1,10 @@
 /* LandingPage.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-:root {
-    --primary-color: #F9D342;
-    --secondary-color: #42DBF9;
-    --lp-accent-color: #F9428E;
-    --text-color: #FFFFFF;
-    --text-color-light: rgba(255, 255, 255, 0.8);
-    --card-bg-color: rgba(255, 255, 255, 0.05);
-    --card-border-color: rgba(255, 255, 255, 0.1);
-    --button-bg-color: #1e1e1e;
-    --button-hover-bg-color: #343434;
-    --footer-bg-color: #101010;
-}
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden;
 }
 
 .lp-container {
