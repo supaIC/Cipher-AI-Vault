@@ -1,0 +1,151 @@
+/* ImageStore.css */
+
+/* Container for all image store items */
+.image-store__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem; /* 20px */
+    max-width: 75rem; /* 1200px */
+    max-height: calc(100vh - 8.75rem);
+    overflow-y: hidden;
+    padding: 1.25rem; /* 20px */
+  }
+  
+  /* Individual image store item */
+  .image-store__item {
+    background-color: var(--bg-color-light); /* Use light mode background */
+    border-radius: 0.5rem; /* 8px */
+    padding: 0.625rem; /* 10px */
+    position: relative;
+    width: 200px;
+    box-shadow: var(--shadow-md); /* Adjust shadow for light mode */
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--text-color); /* Use dynamic text color */
+  }
+  
+  .image-store__item:hover {
+    transform: scale(1.03);
+    z-index: 1;
+    background-color: var(--hover-bg-color); /* Light mode hover background */
+  }
+  
+  /* Image name below the image */
+  .image-store__name {
+    font-size: 0.75rem; /* 12px */
+    padding-bottom: 0.3125rem; /* 5px */
+    margin: 0;
+    text-align: center;
+    color: var(--text-color); /* Dynamic text color */
+  }
+  
+  /* Asset image styling */
+  .image-store__image {
+    width: 100%;
+    height: auto;
+    border-radius: 0.3125rem; /* 5px */
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-store__item:hover .image-store__image {
+    opacity: 0.9;
+  }
+  
+  /* Asset view overlay */
+  .image-store__view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Content inside the asset view */
+  .image-store__view-content {
+    background-color: rgba(33, 33, 33, 0.33);
+    padding: 1.25rem; /* 20px */
+    border-radius: 0.5rem; /* 8px */
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+    width: 66%; /* About 2/3rds of the screen width */
+    height: 66%; /* About 2/3rds of the screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    color: #f5f5f7;
+  }
+  
+  /* JSON preview styles within asset view (if applicable) */
+  .image-store__view-content pre {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: #1e1e1e;
+    padding: 1rem;
+    border-radius: 0.3125rem; /* 5px */
+    color: #f5f5f7;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25rem; /* 20px */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  /* Syntax highlighting within JSON preview */
+  .image-store__view-content .string {
+    color: #ce9178;
+  }
+  .image-store__view-content .number {
+    color: #b5cea8;
+  }
+  .image-store__view-content .boolean {
+    color: #569cd6;
+  }
+  .image-store__view-content .null {
+    color: #569cd6;
+  }
+  .image-store__view-content .key {
+    color: #9cdcfe;
+  }
+  
+  /* Image within asset view */
+  .image-store__view-content img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0.5rem; /* 8px */
+    object-fit: contain;
+  }
+  
+  /* Actions section within asset view */
+  .image-store__view-actions {
+    margin-top: 1.875rem; /* 30px */
+  }
+  
+  /* Buttons within asset view actions */
+  .image-store__view-actions button {
+    background-color: #343434;
+    color: #fff;
+    padding: 0.5rem 1rem; /* 8px 16px */
+    border: none;
+    border-radius: 0.25rem; /* 4px */
+    cursor: pointer;
+    margin: 0 0.3125rem; /* 0 5px */
+    transition: background-color 0.3s ease;
+  }
+  
+  .image-store__view-actions button:hover {
+    background-color: #3367d6;
+  }
+  

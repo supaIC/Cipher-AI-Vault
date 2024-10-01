@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { modelsConfig } from '../../hooks/modelManager/modelsConfig'; // Import modelsConfig here
+import React from 'react';
+import { modelsConfig } from '../../hooks/modelManager/modelsConfig';
+import "./ModelManagement.css";
 
 interface ModelManagementProps {
   selectedModel: string;
@@ -12,7 +13,7 @@ interface ModelManagementProps {
     disabled: boolean,
     primary?: boolean
   ) => JSX.Element;
-  worker: React.MutableRefObject<Worker | null>;
+  loadModel: () => void;
   setStatus: React.Dispatch<React.SetStateAction<string | null>>;
   setStatusMessage: React.Dispatch<React.SetStateAction<string>>;
   log: (message: string) => void;
@@ -24,36 +25,31 @@ const ModelManagement: React.FC<ModelManagementProps> = ({
   loadedModels,
   isRunning,
   renderActionButton,
-  worker,
+  loadModel,
   setStatus,
   setStatusMessage,
   log,
 }) => {
-  // Set default selected model if none is selected
-  useEffect(() => {
-    if (!selectedModel && modelsConfig.length > 0) {
-      setSelectedModel(modelsConfig[0].model_id);
-    }
-  }, [selectedModel, setSelectedModel]);
-
   const handleLoadModel = () => {
-    worker.current?.postMessage({ type: 'load', data: { model_id: selectedModel } });
-    setStatus('loading');
-    setStatusMessage('Loading model...');
-    log(`Client: Sent load request for model ID "${selectedModel}"`);
+    if (selectedModel && !loadedModels.has(selectedModel)) {
+      loadModel();
+      setStatus('loading');
+      setStatusMessage('Loading model...');
+      log(`Client: Initiated load request for model ID "${selectedModel}"`);
+    }
   };
 
   return (
-    <div className="card">
-      <h3 className="card-title">Model Management</h3>
-      <div className="form-group">
+    <div className="model-management-card">
+      <h3 className="model-management-card-title">Model Management</h3>
+      <div className="model-management-form-group">
         <label htmlFor="modelSelect">Select Model:</label>
         <select
           id="modelSelect"
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
           disabled={isRunning}
-          className="select-input"
+          className="model-management-select-input"
           aria-label="Select Model"
         >
           {modelsConfig.map((model) => (
@@ -74,4 +70,3 @@ const ModelManagement: React.FC<ModelManagementProps> = ({
 };
 
 export default ModelManagement;
-

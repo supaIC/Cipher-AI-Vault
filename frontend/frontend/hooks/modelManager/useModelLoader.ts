@@ -31,12 +31,12 @@ const useModelLoader = ({
 
       log(`ModelLoader: Received message: ${JSON.stringify(e.data)}`);
 
-      if (!model_id) {
+      if (!model_id && msgStatus !== 'error') {
         console.warn(`ModelLoader: Received message without a valid model_id. Message: ${JSON.stringify(e.data)}`);
         return;
       }
 
-      if (model_id !== selectedModel) {
+      if (model_id && model_id !== selectedModel) {
         console.warn(
           `ModelLoader: Received message for model ID "${model_id}", which does not match the selected model "${selectedModel}". Ignoring.`
         );

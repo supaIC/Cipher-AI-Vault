@@ -105,13 +105,13 @@ export function Parent() {
     isMounted,
   });
 
-  const worker = useWorker({
+  const { workerRef, loadModel } = useWorker({
     selectedModel,
     log: console.log,
   });
 
   useModelLoader({
-    worker,
+    worker: workerRef,
     selectedModel,
     setStatus,
     setStatusMessage,
@@ -135,7 +135,7 @@ export function Parent() {
     isRunning,
     setIsRunning,
     selectedModel,
-    worker,
+    worker: workerRef,
     log: console.log,
     handleSearch,
     isMounted,
@@ -232,6 +232,15 @@ export function Parent() {
     []
   );
 
+  const handleLoadModel = useCallback(() => {
+    if (selectedModel && !loadedModels.has(selectedModel)) {
+      loadModel();
+      setStatus('loading');
+      setStatusMessage('Loading model...');
+      console.log(`Client: Initiated load request for model ID "${selectedModel}"`);
+    }
+  }, [selectedModel, loadedModels, loadModel, setStatus, setStatusMessage]);
+
   const renderContent = () => {
     switch (activeSection) {
       case 'Dashboard':
@@ -253,9 +262,9 @@ export function Parent() {
             selectedModel={selectedModel}
             setSelectedModel={setSelectedModel}
             loadedModels={loadedModels}
-            isRunning={isRunning}
+            isRunning={status === 'loading'}
             renderActionButton={renderActionButton}
-            worker={worker}
+            loadModel={handleLoadModel}
             setStatus={setStatus}
             setStatusMessage={setStatusMessage}
             log={console.log}
@@ -297,7 +306,7 @@ export function Parent() {
             setInput={setInput}
             onEnter={onEnter}
             onInterrupt={onInterrupt}
-            worker={worker}
+            worker={workerRef}
             setMessages={setMessages}
           />
         );

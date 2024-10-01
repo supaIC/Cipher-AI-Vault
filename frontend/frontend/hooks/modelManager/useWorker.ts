@@ -1,5 +1,3 @@
-// src/hooks/useWorker.ts
-
 import { useEffect, useRef, useCallback } from 'react';
 
 interface UseWorkerOptions {
@@ -17,21 +15,22 @@ const useWorker = ({ selectedModel, log }: UseWorkerOptions) => {
       log('Existing worker terminated.');
     }
 
-    // Adjust the path to worker.js based on your project structure
-    const workerUrl = new URL('./worker.js', import.meta.url);
-    log(`Worker URL: ${workerUrl}`);
+    try {
+      const workerUrl = new URL('./worker.js', import.meta.url);
+      log(`Worker URL: ${workerUrl}`);
 
-    workerRef.current = new Worker(workerUrl, { type: 'module' });
-    log('Worker initialized.');
+      workerRef.current = new Worker(workerUrl, { type: 'module' });
+      log('Worker initialized.');
 
-    // No need to add the message event listener here
-
-    // Post a message to the worker to load the selected model
-    workerRef.current.postMessage({
-      type: 'loadModel',
-      modelId: selectedModel,
-    });
-    log(`Requested to load model: ${selectedModel}`);
+      // Add an error event listener
+      workerRef.current.addEventListener('error', (error) => {
+        console.error('Worker error:', error);
+        log(`Worker error: ${error.message}`);
+      });
+    } catch (error) {
+      console.error('Failed to initialize worker:', error);
+      log(`Failed to initialize worker: ${error instanceof Error ? error.message : String(error)}`);
+    }
 
     return () => {
       if (workerRef.current) {
@@ -40,14 +39,27 @@ const useWorker = ({ selectedModel, log }: UseWorkerOptions) => {
         log('Worker terminated.');
       }
     };
-  }, [selectedModel, log]);
+  }, [log]);
 
   useEffect(() => {
     const cleanup = initializeWorker();
     return cleanup;
   }, [initializeWorker]);
 
-  return workerRef;
+  const loadModel = useCallback(() => {
+    if (workerRef.current && selectedModel) {
+      workerRef.current.postMessage({
+        type: 'load',
+        model_id: selectedModel
+      });
+      log(`Requested to load model: ${selectedModel}`);
+    } else if (!workerRef.current) {
+      console.error('Worker not initialized');
+      log('Worker not initialized');
+    }
+  }, [selectedModel, log]);
+
+  return { workerRef, loadModel };
 };
 
 export default useWorker;

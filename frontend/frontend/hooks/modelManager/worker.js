@@ -209,9 +209,9 @@ self.addEventListener('message', async (e) => {
         return;
     }
 
-    const { type, data } = e.data;
+    const { type, model_id, data } = e.data;
 
-    console.log(`Worker: Received message of type "${type}" with data:`, data);
+    console.log(`Worker: Received message of type "${type}" with model_id:`, model_id, `and data:`, data);
 
     if (!type) {
         console.error('Worker: Message type is missing.');
@@ -221,15 +221,21 @@ self.addEventListener('message', async (e) => {
 
     switch (type) {
         case 'load':
-            if (!data || !data.model_id) {
+            if (!model_id) {
                 console.error('Worker: model_id is missing in load message.');
                 self.postMessage({ status: 'error', message: 'model_id is missing in load message.', model_id: null });
                 break;
             }
-            load(data.model_id);
+            load(model_id);
             break;
 
         case 'generate':
+            if (!model_id) {
+                console.error('Worker: model_id is missing in generate message.');
+                self.postMessage({ status: 'error', message: 'model_id is missing in generate message.', model_id: null });
+                break;
+            }
+            TextGenerationPipeline.model_id = model_id;
             stopping_criteria.reset(); // Reset stopping criteria before generating
             generate(data);
             break;

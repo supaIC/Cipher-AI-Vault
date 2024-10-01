@@ -3,6 +3,7 @@ import { Types } from 'ic-auth';
 import * as Components from "../../components";
 import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight";
 import { useDataManager } from "../../hooks/dataManager/dataManager";
+import "./StableMemory.css"; // Import the new CSS
 
 interface Asset {
   key: string;
@@ -28,6 +29,7 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
 
   useEffect(() => {
     loadPrivateData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadPrivateData = async () => {
@@ -131,9 +133,9 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
   }
 
   return (
-    <div className="page-container">
-      <div className="top-section">
-        <div className="data-actions">
+    <div className="private-data-store-page-container">
+      <div className="private-data-store-top-section">
+        <div className="private-data-store-data-actions">
           <input
             type="file"
             accept=".json"
@@ -141,12 +143,14 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
             ref={fileInputRef}
             style={{ display: 'none' }}
           />
-          <button onClick={() => fileInputRef.current?.click()}>Upload Data to Stable Memory</button>
+          <button onClick={() => fileInputRef.current?.click()}>
+            Upload Data to Stable Memory
+          </button>
         </div>
       </div>
-  
-      <div className="assets-list-section">
-        <div className="data-list">
+
+      <div className="private-data-store-assets-list-section">
+        <div className="private-data-store-data-list">
           {privateData && privateData.length > 0 ? (
             privateData.flatMap((userDataMap: any) => {
               if (!Array.isArray(userDataMap)) {
@@ -161,14 +165,14 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
               return userData.allFiles.map((file: any) => (
                 <div
                   key={file.fileID}
-                  className="asset-item"
+                  className="private-data-store-asset-item"
                   onClick={() => handleAssetClick(file)}
                   onMouseEnter={() => onAssetHover({ key: file.fileID, url: '' })}
                   onMouseLeave={() => onAssetHover(null)}
                 >
-                  <div className="json-preview">
+                  <div className="private-data-store-json-preview">
                     <pre
-                      className="json-snippet"
+                      className="private-data-store-json-snippet"
                       dangerouslySetInnerHTML={{
                         __html: file.fileData && file.fileData.length > 0
                           ? syntaxHighlight(JSON.stringify(file.fileData[0], null, 2).substring(0, 100) + "...")
@@ -176,7 +180,7 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
                       }}
                     />
                   </div>
-                  <p className="asset-name" style={{ fontSize: "12px" }}>
+                  <p className="private-data-store-asset-name">
                     {file.fileName}
                   </p>
                 </div>
@@ -187,18 +191,19 @@ const PrivateDataStore: React.FC<DataStoreProps> = ({ assets, onDelete, userObje
           )}
         </div>
       </div>
-  
+
       {viewingAsset && (
-        <div className="asset-view">
-          <div className="asset-view-content">
+        <div className="private-data-store-asset-view">
+          <div className="private-data-store-asset-view-content">
             <pre
               dangerouslySetInnerHTML={{
                 __html: fullJsonData ? syntaxHighlight(fullJsonData) : "Loading full JSON...",
               }}
             />
             <Components.CopyToClipboard text={fullJsonData || ""} />
+            {/* If you prefer to use the copied feedback, you can implement it here */}
           </div>
-          <div className="asset-view-actions">
+          <div className="private-data-store-asset-view-actions">
             <button onClick={() => setViewingAsset(null)}>Close</button>
             <button onClick={() => handleDelete(viewingAsset)}>Delete</button>
           </div>

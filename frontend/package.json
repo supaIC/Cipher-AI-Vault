@@ -7,8 +7,8 @@
     "serve": "vite preview",
     "setup": "npm install && npm audit fix && dfx start --clean --background && dfx deploy && dfx stop && echo 'The frontend has been setup successfully!'",
     "deploy": "dfx deploy --network ic",
-    "format:css": "prettier --write \"frontend/styles/index.css\"",
-    "format:css:check": "prettier --check \"frontend/styles/index.css\""
+    "format:css": "prettier --write \"frontend/styles/Parent.css\"",
+    "format:css:check": "prettier --check \"frontend/styles/Parent.css\""
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
@@ -16,7 +16,7 @@
     "@dfinity/assets": "2.1.1",
     "@dfinity/candid": "2.1.1",
     "@dfinity/principal": "2.1.1",
-    "@huggingface/transformers": "^3.0.0-alpha.14",
+    "@huggingface/transformers": "^3.0.0-alpha.19",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@types/node": "22.5.2",
     "@xenova/transformers": "^2.17.2",

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./DocumentStorage.css";
 
 interface Asset {
   key: string;
@@ -100,7 +101,7 @@ const DocumentStore: React.FC<DocumentStoreProps> = ({ assets, onAssetHover, onD
       return <embed src={asset.url} type="application/pdf" width="100%" height="150px" />;
     } else if (asset.url.endsWith(".txt")) {
       return (
-        <div className="text-preview">
+        <div className="document-store-text-preview">
           <p>{textPreviews[asset.key] || "Loading..."}</p>
         </div>
       );
@@ -112,40 +113,42 @@ const DocumentStore: React.FC<DocumentStoreProps> = ({ assets, onAssetHover, onD
   return (
     <>
       {documentAssets.length > 0 ? (
-        documentAssets.map((asset) => (
-          <div
-            key={asset.key}
-            className="asset-item"
-            onMouseEnter={() => onAssetHover(asset)}
-            onMouseLeave={() => onAssetHover(null)}
-            onClick={() => handleAssetClick(asset)}
-          >
-            {renderDocumentPreview(asset)}
-            <p className="asset-name" style={{ fontSize: "12px", marginTop: "8px" }}>
-              {asset.key.split("/").pop()}
-            </p>
-          </div>
-        ))
+        <div className="document-store-container">
+          {documentAssets.map((asset) => (
+            <div
+              key={asset.key}
+              className="document-store-item"
+              onMouseEnter={() => onAssetHover(asset)}
+              onMouseLeave={() => onAssetHover(null)}
+              onClick={() => handleAssetClick(asset)}
+            >
+              {renderDocumentPreview(asset)}
+              <p className="document-store-name">
+                {asset.key.split("/").pop()}
+              </p>
+            </div>
+          ))}
+        </div>
       ) : (
         <p>No documents available.</p>
       )}
 
       {viewingAsset && (
-        <div className="asset-view">
-          <div className="asset-view-content">
+        <div className="document-store-view">
+          <div className="document-store-view-content">
             {viewingAsset.url.endsWith(".txt") ? (
               <>
                 <pre>{fullTextData || "Loading full text..."}</pre>
-                <button onClick={copyToClipboard} className="copy-text-button">
+                <button onClick={copyToClipboard} className="document-store-copy-button">
                   Copy Raw Text
                 </button>
-                {copySuccess && <div className="copy-feedback">{copySuccess}</div>}
+                {copySuccess && <div className="document-store-copy-feedback">{copySuccess}</div>}
               </>
             ) : (
               <embed src={viewingAsset.url} type="application/pdf" width="100%" height="600px" />
             )}
           </div>
-          <div className="asset-view-actions">
+          <div className="document-store-view-actions">
             <button onClick={() => window.open(viewingAsset.url, "_blank")}>
               View Asset on-chain
             </button>

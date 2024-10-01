@@ -1,0 +1,228 @@
+/* DataManagement.css */
+
+/* Container for DataManagement component */
+.data-management-card {
+    background-color: var(--bg-color-light);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow var(--transition-speed) var(--transition-ease);
+  }
+  
+  .data-management-card:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* Card Title */
+  .data-management-card-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-md);
+    color: var(--accent-color);
+  }
+  
+  /* Card Content */
+  .data-management-card-content {
+    /* Additional styles if needed */
+  }
+  
+  /* Form Group */
+  .data-management-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .data-management-form-group label {
+    margin-bottom: var(--spacing-xs);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    color: var(--text-color);
+  }
+  
+  /* Select Input */
+  .data-management-select-input,
+  .data-management-search-input {
+    height: var(--input-height);
+    padding: 0 var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background-color: var(--bg-color-lighter);
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) var(--transition-ease),
+                box-shadow var(--transition-speed) var(--transition-ease);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+  }
+  
+  .data-management-select-input:focus,
+  .data-management-search-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  }
+  
+  .data-management-select-input:disabled,
+  .data-management-search-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Button Group */
+  .data-management-button-group {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+  
+  /* Search Container */
+  .data-management-search-container {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* Search Button */
+  .data-management-search-button {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: var(--border-radius-md);
+    width: var(--input-height);
+    height: var(--input-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease);
+  }
+  
+  .data-management-search-button:hover {
+    background-color: var(--accent-color-hover);
+  }
+  
+  /* Recent Searches */
+  .data-management-recent-searches {
+    margin-top: var(--spacing-md);
+  }
+  
+  .data-management-recent-searches h4 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-sm);
+    color: var(--accent-color);
+  }
+  
+  .data-management-recent-search-button {
+    background-color: var(--bg-color-lighter);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-right: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease),
+                color var(--transition-speed) var(--transition-ease);
+  }
+  
+  .data-management-recent-search-button:hover {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+  }
+  
+  /* Search Results */
+  .data-management-search-results {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: var(--spacing-sm);
+  }
+  
+  .data-management-result-item {
+    background-color: var(--bg-color-lighter);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    transition: background-color var(--transition-speed) var(--transition-ease),
+                transform var(--transition-speed) var(--transition-ease);
+    border: 1px solid var(--border-color);
+  }
+  
+  .data-management-result-item:hover {
+    background-color: var(--bg-color-light);
+    transform: translateY(-2px);
+  }
+  
+  .data-management-result-item h4 {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--accent-color);
+  }
+  
+  .data-management-result-item p {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: var(--font-size-base);
+    word-wrap: break-word;
+  }
+  
+  .data-management-result-similarity {
+    font-size: var(--font-size-sm);
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+  
+  /* Status Message */
+  .data-management-status-message {
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+  }
+  
+  /* Copy Text Button */
+  .data-management-copy-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease);
+  }
+  
+  .data-management-copy-button:hover {
+    background-color: var(--accent-color-hover);
+  }
+  
+  /* Copy Feedback */
+  .data-management-copy-feedback {
+    margin-top: 0.5rem;
+    font-size: 0.75rem; /* 12px */
+    color: var(--success-color);
+    text-align: center;
+  }
+  
+  /* Additional styles for light mode */
+  .light-mode .data-management-view-content {
+    background-color: rgba(255, 255, 255, 0.9); /* Light mode asset view */
+  }
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 768px) {
+    .data-management-view-content {
+      width: 90%;
+      height: 90%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .data-management-view-content {
+      padding: 0.625rem; /* 10px */
+    }
+  
+    .data-management-view-actions button {
+      padding: 0.5rem;
+      margin: 0.15625rem; /* 2.5px */
+    }
+  }
+  

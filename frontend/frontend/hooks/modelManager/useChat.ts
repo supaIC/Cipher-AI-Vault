@@ -88,7 +88,7 @@ const useChat = ({
     worker.current?.postMessage({
       type: 'generate',
       data: messages,
-      modelId: selectedModel,
+      model_id: selectedModel,  // Changed from modelId to model_id
     });
     log(`Client: Sent generate request for model ID "${selectedModel}"`);
   }, [messages, selectedModel, worker, log]);

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { FiSend, FiStopCircle } from 'react-icons/fi';
+import "./ChatInterface.css";
 
 interface ChatInterfaceProps {
   messages: any[];
@@ -44,70 +45,83 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   }, [input]);
 
   useEffect(() => {
-    if (!chatContainerRef.current || !isRunning) return;
+    if (!chatContainerRef.current) return;
     const element = chatContainerRef.current;
-    if (element.scrollHeight - element.scrollTop - element.clientHeight < 120) {
-      element.scrollTop = element.scrollHeight;
-    }
+    element.scrollTop = element.scrollHeight;
   }, [messages, isRunning]);
 
+  const handleSend = () => {
+    if (input.trim() && status === "ready") {
+      onEnter(input.trim());
+      setInput('');
+    }
+  };
+
   return (
-    <div className="chat-interface">
-      <div className="chat-messages" ref={chatContainerRef} aria-live="polite" aria-atomic="false">
+    <div className="chat-interface-container">
+      <div className="chat-interface-messages" ref={chatContainerRef}>
         {messages.length === 0 ? (
-          <div className="welcome-message">
+          <div className="chat-interface-welcome-message">
             <h3>Welcome to AI Vault Admin Chat</h3>
             <p>Start interacting with the AI by typing a message below.</p>
           </div>
         ) : (
-          messages.map((msg, index) => (
-            <div key={index} className={`chat-message ${msg.role}`}>
-              <div className="message-content">
-                <p>{msg.content}</p>
+          <>
+            {messages.map((msg, index) => (
+              <div key={index} className={`chat-interface-message ${msg.role}`}>
+                <div className="chat-interface-message-content">
+                  <p>{msg.content}</p>
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+            {isRunning && (
+              <div className="chat-interface-thinking">
+                <span className="thinking-indicator">Thinking...</span>
+              </div>
+            )}
+          </>
         )}
       </div>
-      <div className="chat-input-area">
-        <textarea
-          ref={textareaRef}
-          className="chat-input-box"
-          placeholder="Type your message here..."
-          value={input}
-          disabled={status !== "ready"}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              onEnter(input.trim());
-            }
-          }}
-        />
-        <div className="chat-buttons">
+      <div className="chat-interface-input-wrapper">
+        <div className="chat-interface-input-area">
+          <textarea
+            ref={textareaRef}
+            className="chat-interface-input-box"
+            placeholder="Type your message here..."
+            value={input}
+            disabled={status !== "ready"}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+          />
           {isRunning ? (
-            <button className="input-button-stop" onClick={onInterrupt}>
-              <FiStopCircle /> Stop
+            <button className="chat-interface-button chat-interface-button-stop" onClick={onInterrupt} aria-label="Stop generation">
+              <FiStopCircle />
             </button>
           ) : (
             <button
-              className="input-button-send"
-              onClick={() => onEnter(input.trim())}
+              className="chat-interface-button chat-interface-button-send"
+              onClick={handleSend}
               disabled={input.trim().length === 0 || status !== "ready"}
+              aria-label="Send message"
             >
-              <FiSend /> Send
+              <FiSend />
             </button>
           )}
         </div>
-      </div>
-      {tps && messages.length > 0 && (
-        <div className="chat-info">
-          <span>
-            {numTokens} tokens generated in {(numTokens! / tps!).toFixed(2)} seconds ({tps!.toFixed(2)} tokens/second)
-          </span>
-          {!isRunning && (
+        <div className="chat-interface-info">
+          {tps && messages.length > 0 && (
+            <span className="chat-interface-stats">
+              {numTokens} tokens | {tps!.toFixed(2)} tokens/sec
+            </span>
+          )}
+          {!isRunning && messages.length > 0 && (
             <button
-              className="reset-button"
+              className="chat-interface-reset-button"
               onClick={() => {
                 worker.current?.postMessage({ type: "reset" });
                 setMessages([]);
@@ -118,9 +132,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             </button>
           )}
         </div>
-      )}
-      {/* Add the disclaimer here */}
-      <p className="disclaimer-text">Disclaimer: Generated content may be inaccurate or false.</p>
+      </div>
     </div>
   );
 };

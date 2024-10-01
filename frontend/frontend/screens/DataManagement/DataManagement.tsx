@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { FiSearch } from 'react-icons/fi';
+import './DataManagement.css'; // Import the new CSS
 
 interface SearchResult {
   input: string;
@@ -75,31 +76,31 @@ const DataManagement: React.FC<DataManagementProps> = ({
   return (
     <>
       {/* Database Initialization Card */}
-      <div className="card">
-        <h3 className="card-title">Vector Database Management</h3>
-        <div className="card-content">
-          <div className="form-group">
+      <div className="data-management-card">
+        <h3 className="data-management-card-title">Vector Database Management</h3>
+        <div className="data-management-card-content">
+          <div className="data-management-form-group">
             <label htmlFor="fileTypeSelect">File Type:</label>
             <select
               id="fileTypeSelect"
               value={selectedFileType}
               onChange={(e) => setSelectedFileType(e.target.value as 'public' | 'private')}
               disabled={isRunning}
-              className="select-input"
+              className="data-management-select-input"
               aria-label="Select File Type"
             >
               <option value="public">Public</option>
               <option value="private">Private</option>
             </select>
           </div>
-          <div className="form-group">
+          <div className="data-management-form-group">
             <label htmlFor="fileSelect">Data File:</label>
             <select
               id="fileSelect"
               value={selectedFile}
               onChange={(e) => setSelectedFile(e.target.value)}
               disabled={isRunning}
-              className="select-input"
+              className="data-management-select-input"
               aria-label="Select Data File"
             >
               <option value="">--Select a file--</option>
@@ -113,7 +114,7 @@ const DataManagement: React.FC<DataManagementProps> = ({
               ))}
             </select>
           </div>
-          <div className="button-group">
+          <div className="data-management-button-group">
             {renderActionButton('Initialize Database', initializeDB, isRunning || !selectedFile, true)}
             {renderActionButton('Clear Database', clearDatabase, isRunning)}
           </div>
@@ -121,20 +122,20 @@ const DataManagement: React.FC<DataManagementProps> = ({
       </div>
 
       {/* Search Database Card */}
-      <div className="card">
-        <h3 className="card-title">Search Database</h3>
-        <div className="card-content">
-          <div className="search-container">
+      <div className="data-management-card">
+        <h3 className="data-management-card-title">Search Database</h3>
+        <div className="data-management-card-content">
+          <div className="data-management-search-container">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
+              className="data-management-search-input"
               placeholder="Search database..."
               aria-label="Search Database"
             />
             <button
-              className="search-button"
+              className="data-management-search-button"
               onClick={performSearch}
               disabled={isRunning || !index || !searchQuery}
               aria-label="Execute Search"
@@ -142,13 +143,13 @@ const DataManagement: React.FC<DataManagementProps> = ({
               <FiSearch />
             </button>
           </div>
-          <div className="recent-searches">
+          <div className="data-management-recent-searches">
             <h4>Recent Searches:</h4>
             {recentSearches.map((search) => (
               <button
                 key={search} // Changed from key={index} to key={search}
                 onClick={() => handleRecentSearchClick(search)}
-                className="recent-search-button"
+                className="data-management-recent-search-button"
                 aria-label={`Search: ${search}`}
               >
                 {search}
@@ -159,16 +160,16 @@ const DataManagement: React.FC<DataManagementProps> = ({
       </div>
 
       {/* Search Results Card */}
-      <div className="card">
-        <h3 className="card-title">Search Results</h3>
-        <div className="card-content">
-          <div className="search-results" aria-live="polite" aria-atomic="true">
+      <div className="data-management-card">
+        <h3 className="data-management-card-title">Search Results</h3>
+        <div className="data-management-card-content">
+          <div className="data-management-search-results" aria-live="polite" aria-atomic="true">
             {searchResult.length > 0 ? (
               searchResult.map((result, index) => (
-                <div key={index} className="result-item" tabIndex={0}>
+                <div key={index} className="data-management-result-item" tabIndex={0}>
                   <h4>{result.object.name}</h4>
                   <p>{result.object.description}</p>
-                  <span className="result-similarity">
+                  <span className="data-management-result-similarity">
                     Similarity: {typeof result.similarity === 'number' ? result.similarity.toFixed(4) : 'N/A'}
                   </span>
                 </div>
@@ -181,10 +182,10 @@ const DataManagement: React.FC<DataManagementProps> = ({
       </div>
 
       {/* Status Card */}
-      <div className="card">
-        <h3 className="card-title">Status</h3>
-        <div className="card-content">
-          <p className="status-message">{statusMessage || 'No actions performed yet.'}</p>
+      <div className="data-management-card">
+        <h3 className="data-management-card-title">Status</h3>
+        <div className="data-management-card-content">
+          <p className="data-management-status-message">{statusMessage || 'No actions performed yet.'}</p>
         </div>
       </div>
     </>

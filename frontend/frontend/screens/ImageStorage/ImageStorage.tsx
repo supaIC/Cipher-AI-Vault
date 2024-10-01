@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./ImageStore.css";
 
 interface Asset {
   key: string;
@@ -23,30 +24,32 @@ const ImageStore: React.FC<ImageStoreProps> = ({ assets, onAssetHover, onDelete 
   return (
     <>
       {imageAssets.length > 0 ? (
-        imageAssets.map((asset) => (
-          <div
-            key={asset.key}
-            className="asset-item"
-            onMouseEnter={() => onAssetHover(asset)}
-            onMouseLeave={() => onAssetHover(null)}
-            onClick={() => setViewingAsset(asset)}
-          >
-            <img src={asset.url} alt="Asset" className="asset-image" />
-            <p className="asset-name" style={{ fontSize: "12px" }}>
-              {asset.key.split("/").pop()}
-            </p>
-          </div>
-        ))
+        <div className="image-store__container">
+          {imageAssets.map((asset) => (
+            <div
+              key={asset.key}
+              className="image-store__item"
+              onMouseEnter={() => onAssetHover(asset)}
+              onMouseLeave={() => onAssetHover(null)}
+              onClick={() => setViewingAsset(asset)}
+            >
+              <img src={asset.url} alt="Asset" className="image-store__image" />
+              <p className="image-store__name" style={{ fontSize: "12px" }}>
+                {asset.key.split("/").pop()}
+              </p>
+            </div>
+          ))}
+        </div>
       ) : (
         <p>No images available.</p>
       )}
 
       {viewingAsset && (
-        <div className="asset-view">
-          <div className="asset-view-content">
+        <div className="image-store__view">
+          <div className="image-store__view-content">
             <img src={viewingAsset.url} alt="Viewing Asset" />
           </div>
-          <div className="asset-view-actions">
+          <div className="image-store__view-actions">
             <button onClick={() => window.open(viewingAsset.url, "_blank")}>
               View Asset on-chain
             </button>
@@ -60,4 +63,3 @@ const ImageStore: React.FC<ImageStoreProps> = ({ assets, onAssetHover, onDelete 
 };
 
 export default ImageStore;
-

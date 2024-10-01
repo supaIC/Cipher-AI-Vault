@@ -1,0 +1,63 @@
+/* ModelManagement.css */
+
+/* Container for the ModelManagement component */
+.model-management-card {
+    background-color: var(--bg-color-light);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow var(--transition-speed) var(--transition-ease);
+  }
+  
+  .model-management-card:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* Card Title */
+  .model-management-card-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-md);
+    color: var(--accent-color);
+  }
+  
+  /* Form Group */
+  .model-management-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .model-management-form-group label {
+    margin-bottom: var(--spacing-xs);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    color: var(--text-color);
+  }
+  
+  /* Select Input */
+  .model-management-select-input {
+    height: var(--input-height);
+    padding: 0 var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background-color: var(--bg-color-lighter);
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) var(--transition-ease),
+                box-shadow var(--transition-speed) var(--transition-ease);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+  }
+  
+  .model-management-select-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  }
+  
+  .model-management-select-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  

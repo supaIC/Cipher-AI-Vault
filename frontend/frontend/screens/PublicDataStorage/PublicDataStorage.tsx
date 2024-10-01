@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Components from "../../components";
 import { syntaxHighlight } from "../../utils/jsonSyntaxHighlight";
+import "./PublicDataStorage.css"; // Import the new CSS
 
 interface Asset {
   key: string;
@@ -102,46 +103,53 @@ const PublicDataStore: React.FC<PublicDataStoreProps> = ({ assets, onDelete, onA
   return (
     <>
       {Object.keys(publicData).length > 0 ? (
-        Object.entries(publicData).map(([key, value]) => {
-          const parsedValue = JSON.parse(value);
-          const isError = parsedValue.error !== undefined;
-          const asset = assets.find(a => a.key === key);
+        <div className="public-data-store-container">
+          {Object.entries(publicData).map(([key, value]) => {
+            const parsedValue = JSON.parse(value);
+            const isError = parsedValue.error !== undefined;
+            const asset = assets.find(a => a.key === key);
 
-          return (
-            <div
-              key={key}
-              className={`asset-item ${isError ? 'error' : ''}`}
-              onMouseEnter={() => onAssetHover(asset || null)}
-              onMouseLeave={() => onAssetHover(null)}
-              onClick={() => asset && handleAssetClick(asset)}
-            >
-              <div className="json-preview">
-                <pre
-                  className="json-snippet"
-                  dangerouslySetInnerHTML={{
-                    __html: isError
-                      ? `Error: ${parsedValue.error}`
-                      : syntaxHighlight(value.substring(0, 100) + "...")
-                  }}
-                />
+            return (
+              <div
+                key={key}
+                className={`public-data-store-item ${isError ? 'public-data-store-error' : ''}`}
+                onMouseEnter={() => onAssetHover(asset || null)}
+                onMouseLeave={() => onAssetHover(null)}
+                onClick={() => asset && handleAssetClick(asset)}
+              >
+                <div className="public-data-store-json-preview">
+                  <pre
+                    className="public-data-store-json-snippet"
+                    dangerouslySetInnerHTML={{
+                      __html: isError
+                        ? `Error: ${parsedValue.error}`
+                        : syntaxHighlight(value.substring(0, 100) + "...")
+                    }}
+                  />
+                </div>
+                <p className="public-data-store-name">
+                  {key.split("/").pop()}
+                </p>
               </div>
-              <p className="asset-name" style={{ fontSize: "12px" }}>
-                {key.split("/").pop()}
-              </p>
-            </div>
-          );
-        })
+            );
+          })}
+        </div>
       ) : (
         <p>No public data available.</p>
       )}
 
       {viewingAsset && (
-        <div className="asset-view">
-          <div className="asset-view-content">
+        <div className="public-data-store-view">
+          <div className="public-data-store-view-content">
             <pre dangerouslySetInnerHTML={{ __html: syntaxHighlight(fullJsonData || "") }} />
-            <Components.CopyToClipboard text={fullJsonData || ""} />
+            <button onClick={() => navigator.clipboard.writeText(fullJsonData || "")} className="public-data-store-copy-button">
+              Copy Raw JSON
+            </button>
+            {fullJsonData && (
+              <div className="public-data-store-copy-feedback">Copied to clipboard!</div>
+            )}
           </div>
-          <div className="asset-view-actions">
+          <div className="public-data-store-view-actions">
             <button onClick={() => window.open(viewingAsset.url, "_blank")}>
               View Asset on-chain
             </button>
