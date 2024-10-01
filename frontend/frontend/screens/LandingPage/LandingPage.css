@@ -40,9 +40,9 @@
 }
 
 .lp-ic-logo {
-    max-width: 33vh; /* Adjust this value as needed */
+    max-width: 30vh; /* Adjust this value as needed */
     height: auto;
-    margin: 1rem auto 2rem;
+    margin: 2.2rem auto 2rem;
     display: block;
     padding: 1rem;
   }
@@ -239,7 +239,7 @@
     transform: translateX(-50%);
     width: 50px;
     height: 4px;
-    background-color: var(--lp-accent-color);
+    background-color: var(--accent-color);
     border-radius: 2px;
 }
 
