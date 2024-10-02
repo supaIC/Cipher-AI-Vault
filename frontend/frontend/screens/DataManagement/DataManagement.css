@@ -22,11 +22,6 @@
     color: var(--accent-color);
   }
   
-  /* Card Content */
-  .data-management-card-content {
-    /* Additional styles if needed */
-  }
-  
   /* Form Group */
   .data-management-form-group {
     display: flex;

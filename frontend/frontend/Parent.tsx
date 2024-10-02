@@ -23,8 +23,6 @@ import useDarkMode from './hooks/useDarkMode/useDarkMode';
 // Types
 import { Types } from "ic-auth";
 
-// Styles
-import './styles/Parent.css';
 
 interface SearchResult {
   input: string;

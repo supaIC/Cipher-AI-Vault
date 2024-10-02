@@ -63,7 +63,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {messages.length === 0 ? (
           <div className="chat-interface-welcome-message">
             <h3>Welcome to AI Vault Admin Chat</h3>
-            <p>Start interacting with the AI by typing a message below.</p>
+            <p>Load a model and start interacting with the AI by typing a message below.</p>
           </div>
         ) : (
           <>

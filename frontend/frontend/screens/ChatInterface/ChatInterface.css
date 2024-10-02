@@ -20,7 +20,7 @@
 .chat-interface-welcome-message {
   text-align: center;
   padding: 2rem;
-  background-color: var(--bg-color-lighter);
+  background-color: var(--bg-color-light);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -147,10 +147,12 @@
 
 .chat-interface-button-send {
   color: var(--accent-color);
+  margin: auto;
 }
 
 .chat-interface-button-stop {
   color: var(--error-color);
+  margin: auto;
 }
 
 .chat-interface-info {
