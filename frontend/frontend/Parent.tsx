@@ -1,5 +1,5 @@
-// React
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+// Parent.tsx
+import React, { useEffect, useRef, useCallback } from 'react';
 
 // Screens
 import * as Screens from "./screens";
@@ -11,7 +11,6 @@ import * as Components from "./components";
 import * as Actors from "./actors";
 
 // Hooks
-import * as data from './hooks/dataManager/dataManager';
 import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
 import { useDataManager } from "./hooks/dataManager/dataManager";
 import useWorker from './hooks/modelManager/useWorker';
@@ -23,46 +22,67 @@ import useDarkMode from './hooks/useDarkMode/useDarkMode';
 // Types
 import { Types } from "ic-auth";
 
-
-interface SearchResult {
-  input: string;
-  similarity: number;
-  object: {
-    name: string;
-    description: string;
-  };
-}
+// Zustand Store
+import { useStore } from './store/store';
 
 export function Parent() {
   const { currentUser, setCurrentUser } = Actors.useAuthActor();
   const { createBackendActor } = Actors.useBackendActor();
   const dataManager = useDataManager();
 
-  // State variables
-  const [hoveredAsset, setHoveredAsset] = useState<Asset | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [activeSection, setActiveSection] = useState<string>('Dashboard');
-  const [privateData, setPrivateData] = useState<data.FullDataQuery | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string>('');
-  const [status, setStatus] = useState<string | null>(null);
-  const [loadingMessage, setLoadingMessage] = useState<string>('');
-  const [progressItems, setProgressItems] = useState<any[]>([]);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [selectedModel, setSelectedModel] = useState<string>('');
-  const [loadedModels, setLoadedModels] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [tooltipContent, setTooltipContent] = useState<string | null>(null);
-  const [showUserFiles, setShowUserFiles] = useState<boolean>(false);
+  // Zustand State Variables and Actions
+  const hoveredAsset = useStore((state) => state.hoveredAsset);
+  const setHoveredAsset = useStore((state) => state.setHoveredAsset);
+
+  const tooltipPosition = useStore((state) => state.tooltipPosition);
+  const setTooltipPosition = useStore((state) => state.setTooltipPosition);
+
+  const activeSection = useStore((state) => state.activeSection);
+  const setActiveSection = useStore((state) => state.setActiveSection);
+
+  const privateData = useStore((state) => state.privateData);
+  const setPrivateData = useStore((state) => state.setPrivateData);
+
+  const statusMessage = useStore((state) => state.statusMessage);
+  const setStatusMessage = useStore((state) => state.setStatusMessage);
+
+  const status = useStore((state) => state.status);
+  const setStatus = useStore((state) => state.setStatus);
+
+  const loadingMessage = useStore((state) => state.loadingMessage);
+  const setLoadingMessage = useStore((state) => state.setLoadingMessage);
+
+  const progressItems = useStore((state) => state.progressItems);
+  const setProgressItems = useStore((state) => state.setProgressItems);
+
+  const isRunning = useStore((state) => state.isRunning);
+  const setIsRunning = useStore((state) => state.setIsRunning);
+
+  const selectedModel = useStore((state) => state.selectedModel);
+  const setSelectedModel = useStore((state) => state.setSelectedModel);
+
+  const loadedModels = useStore((state) => state.loadedModels);
+  const setLoadedModels = useStore((state) => state.setLoadedModels);
+
+  const searchQuery = useStore((state) => state.searchQuery);
+  const setSearchQuery = useStore((state) => state.setSearchQuery);
+
+  const recentSearches = useStore((state) => state.recentSearches);
+  const setRecentSearches = useStore((state) => state.setRecentSearches);
+  const addRecentSearch = useStore((state) => state.addRecentSearch);
+
+  const isMenuOpen = useStore((state) => state.isMenuOpen);
+  const setIsMenuOpen = useStore((state) => state.setIsMenuOpen);
+
+  const tooltipContent = useStore((state) => state.tooltipContent);
+  const setTooltipContent = useStore((state) => state.setTooltipContent);
+
+  const showUserFiles = useStore((state) => state.showUserFiles);
+  const setShowUserFiles = useStore((state) => state.setShowUserFiles);
 
   const isMounted = useRef<boolean>(true);
 
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-
-  const addRecentSearch = useCallback((query: string) => {
-    setRecentSearches((prev) => [query, ...prev.filter((item) => item !== query)].slice(0, 5));
-  }, []);
 
   const {
     assets,
@@ -154,7 +174,7 @@ export function Parent() {
     };
 
     loadPrivateData();
-  }, [currentUser, dataManager]);
+  }, [currentUser, dataManager, setPrivateData]);
 
   useEffect(() => {
     if (currentUser) {
@@ -171,7 +191,7 @@ export function Parent() {
     return () => {
       isMounted.current = false;
     };
-  }, []);
+  }, [setRecentSearches]);
 
   useEffect(() => {
     localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
@@ -184,7 +204,7 @@ export function Parent() {
     [setCurrentUser]
   );
 
-  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
+  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), [setIsMenuOpen]);
 
   const handleTooltip = useCallback((content: string | null, event?: React.MouseEvent) => {
     if (content) {
@@ -193,7 +213,7 @@ export function Parent() {
     } else {
       setTooltipContent(null);
     }
-  }, []);
+  }, [setTooltipContent, setTooltipPosition]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -370,7 +390,7 @@ export function Parent() {
       default:
         return null;
     }
-  };  
+  };
 
   return (
     <div className={`app admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
