@@ -1,20 +1,18 @@
 // store.ts
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { SetStateAction, Dispatch } from 'react';
-import { Asset } from "../hooks/assetManager/assetManager";
-import { Types } from "ic-auth";
+import { Asset, UserObject } from '../hooks/assetManager/assetManager';
 import * as data from '../hooks/dataManager/dataManager';
-import { UserObject } from '../hooks/assetManager/assetManager'; // Ensure correct path
 
 interface StoreState {
-  // State Variables
+  // **State Variables**
   hoveredAsset: Asset | null;
   tooltipPosition: { x: number; y: number };
   activeSection: string;
   privateData: data.FullDataQuery | null;
   statusMessage: string;
   status: string | null;
-  loadingMessage: string;
   progressItems: any[];
   isRunning: boolean;
   selectedModel: string;
@@ -24,21 +22,27 @@ interface StoreState {
   isMenuOpen: boolean;
   tooltipContent: string | null;
   showUserFiles: boolean;
-  
-  // Authentication State
+
+  // **Authentication State**
   currentUser: UserObject | null;
 
-  // CopyToClipboard State
+  // **CopyToClipboard State**
   copySuccess: string | null;
 
-  // Actions
+  // **Loading State**
+  isLoading: boolean;
+  loadingMessage: string;
+
+  // **Dark Mode State**
+  isDarkMode: boolean;
+
+  // **Actions**
   setHoveredAsset: Dispatch<SetStateAction<Asset | null>>;
   setTooltipPosition: Dispatch<SetStateAction<{ x: number; y: number }>>;
   setActiveSection: Dispatch<SetStateAction<string>>;
   setPrivateData: Dispatch<SetStateAction<data.FullDataQuery | null>>;
   setStatusMessage: Dispatch<SetStateAction<string>>;
   setStatus: Dispatch<SetStateAction<string | null>>;
-  setLoadingMessage: Dispatch<SetStateAction<string>>;
   setProgressItems: Dispatch<SetStateAction<any[]>>;
   setIsRunning: Dispatch<SetStateAction<boolean>>;
   setSelectedModel: Dispatch<SetStateAction<string>>;
@@ -51,106 +55,225 @@ interface StoreState {
   setCurrentUser: Dispatch<SetStateAction<UserObject | null>>;
   setCopySuccess: Dispatch<SetStateAction<string | null>>;
 
-  // Additional Actions
+  // **Loading Actions**
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setLoadingMessage: Dispatch<SetStateAction<string>>;
+
+  // **Dark Mode Actions**
+  setIsDarkMode: Dispatch<SetStateAction<boolean>>;
+  toggleDarkMode: () => void;
+
+  // **Additional Actions**
   addRecentSearch: (query: string) => void;
 }
 
-export const useStore = create<StoreState>((set) => ({
-  // Initial State
-  hoveredAsset: null,
-  tooltipPosition: { x: 0, y: 0 },
-  activeSection: 'Dashboard',
-  privateData: null,
-  statusMessage: '',
-  status: null,
-  loadingMessage: '',
-  progressItems: [],
-  isRunning: false,
-  selectedModel: '',
-  loadedModels: new Set(),
-  searchQuery: '',
-  recentSearches: [],
-  isMenuOpen: false,
-  tooltipContent: null,
-  showUserFiles: false,
-  currentUser: null, // Initialize as null
-  copySuccess: null, // Initialize as null
+export const useStore = create<StoreState>()(
+  persist(
+    (set, get) => ({
+      // **Initial State**
+      hoveredAsset: null,
+      tooltipPosition: { x: 0, y: 0 },
+      activeSection: 'Dashboard',
+      privateData: null,
+      statusMessage: '',
+      status: null,
+      loadingMessage: '', // Ensure it's always a string
+      progressItems: [],
+      isRunning: false,
+      selectedModel: '',
+      loadedModels: new Set(),
+      searchQuery: '',
+      recentSearches: [],
+      isMenuOpen: false,
+      tooltipContent: null,
+      showUserFiles: false,
+      currentUser: null, // Initialize as null
+      copySuccess: null, // Initialize as null
+      isLoading: false, // Initialize isLoading
+      isDarkMode: true, // Default dark mode
 
-  // Actions
-  setHoveredAsset: (value) => set((state) => ({
-    hoveredAsset: typeof value === 'function' ? (value as (prev: Asset | null) => Asset | null)(state.hoveredAsset) : value
-  })),
+      // **Actions**
+      setHoveredAsset: (value) =>
+        set((state) => ({
+          hoveredAsset:
+            typeof value === 'function'
+              ? (value as (prev: Asset | null) => Asset | null)(state.hoveredAsset)
+              : value,
+        })),
 
-  setTooltipPosition: (value) => set((state) => ({
-    tooltipPosition: typeof value === 'function' ? (value as (prev: { x: number; y: number }) => { x: number; y: number })(state.tooltipPosition) : value
-  })),
+      setTooltipPosition: (value) =>
+        set((state) => ({
+          tooltipPosition:
+            typeof value === 'function'
+              ? (value as (prev: { x: number; y: number }) => { x: number; y: number })(
+                  state.tooltipPosition
+                )
+              : value,
+        })),
 
-  setActiveSection: (value) => set((state) => ({
-    activeSection: typeof value === 'function' ? (value as (prev: string) => string)(state.activeSection) : value
-  })),
+      setActiveSection: (value) =>
+        set((state) => ({
+          activeSection:
+            typeof value === 'function'
+              ? (value as (prev: string) => string)(state.activeSection)
+              : value,
+        })),
 
-  setPrivateData: (value) => set((state) => ({
-    privateData: typeof value === 'function' ? (value as (prev: data.FullDataQuery | null) => data.FullDataQuery | null)(state.privateData) : value
-  })),
+      setPrivateData: (value) =>
+        set((state) => ({
+          privateData:
+            typeof value === 'function'
+              ? (value as (prev: data.FullDataQuery | null) => data.FullDataQuery | null)(
+                  state.privateData
+                )
+              : value,
+        })),
 
-  setStatusMessage: (value) => set((state) => ({
-    statusMessage: typeof value === 'function' ? (value as (prev: string) => string)(state.statusMessage) : value
-  })),
+      setStatusMessage: (value) =>
+        set((state) => ({
+          statusMessage:
+            typeof value === 'function'
+              ? (value as (prev: string) => string)(state.statusMessage)
+              : value,
+        })),
 
-  setStatus: (value) => set((state) => ({
-    status: typeof value === 'function' ? (value as (prev: string | null) => string | null)(state.status) : value
-  })),
+      setStatus: (value) =>
+        set((state) => ({
+          status:
+            typeof value === 'function'
+              ? (value as (prev: string | null) => string | null)(state.status)
+              : value,
+        })),
 
-  setLoadingMessage: (value) => set((state) => ({
-    loadingMessage: typeof value === 'function' ? (value as (prev: string) => string)(state.loadingMessage) : value
-  })),
+      setProgressItems: (value) =>
+        set((state) => ({
+          progressItems:
+            typeof value === 'function'
+              ? (value as (prev: any[]) => any[])(state.progressItems)
+              : value,
+        })),
 
-  setProgressItems: (value) => set((state) => ({
-    progressItems: typeof value === 'function' ? (value as (prev: any[]) => any[])(state.progressItems) : value
-  })),
+      setIsRunning: (value) =>
+        set((state) => ({
+          isRunning:
+            typeof value === 'function'
+              ? (value as (prev: boolean) => boolean)(state.isRunning)
+              : value,
+        })),
 
-  setIsRunning: (value) => set((state) => ({
-    isRunning: typeof value === 'function' ? (value as (prev: boolean) => boolean)(state.isRunning) : value
-  })),
+      setSelectedModel: (value) =>
+        set((state) => ({
+          selectedModel:
+            typeof value === 'function'
+              ? (value as (prev: string) => string)(state.selectedModel)
+              : value,
+        })),
 
-  setSelectedModel: (value) => set((state) => ({
-    selectedModel: typeof value === 'function' ? (value as (prev: string) => string)(state.selectedModel) : value
-  })),
+      setLoadedModels: (value) =>
+        set((state) => ({
+          loadedModels:
+            typeof value === 'function'
+              ? (value as (prev: Set<string>) => Set<string>)(state.loadedModels)
+              : value,
+        })),
 
-  setLoadedModels: (value) => set((state) => ({
-    loadedModels: typeof value === 'function' ? (value as (prev: Set<string>) => Set<string>)(state.loadedModels) : value
-  })),
+      setSearchQuery: (value) =>
+        set((state) => ({
+          searchQuery:
+            typeof value === 'function'
+              ? (value as (prev: string) => string)(state.searchQuery)
+              : value,
+        })),
 
-  setSearchQuery: (value) => set((state) => ({
-    searchQuery: typeof value === 'function' ? (value as (prev: string) => string)(state.searchQuery) : value
-  })),
+      setRecentSearches: (value) =>
+        set((state) => ({
+          recentSearches:
+            typeof value === 'function'
+              ? (value as (prev: string[]) => string[])(state.recentSearches)
+              : value,
+        })),
 
-  setRecentSearches: (value) => set((state) => ({
-    recentSearches: typeof value === 'function' ? (value as (prev: string[]) => string[])(state.recentSearches) : value
-  })),
+      setIsMenuOpen: (value) =>
+        set((state) => ({
+          isMenuOpen:
+            typeof value === 'function'
+              ? (value as (prev: boolean) => boolean)(state.isMenuOpen)
+              : value,
+        })),
 
-  setIsMenuOpen: (value) => set((state) => ({
-    isMenuOpen: typeof value === 'function' ? (value as (prev: boolean) => boolean)(state.isMenuOpen) : value
-  })),
+      setTooltipContent: (value) =>
+        set((state) => ({
+          tooltipContent:
+            typeof value === 'function'
+              ? (value as (prev: string | null) => string | null)(state.tooltipContent)
+              : value,
+        })),
 
-  setTooltipContent: (value) => set((state) => ({
-    tooltipContent: typeof value === 'function' ? (value as (prev: string | null) => string | null)(state.tooltipContent) : value
-  })),
+      setShowUserFiles: (value) =>
+        set((state) => ({
+          showUserFiles:
+            typeof value === 'function'
+              ? (value as (prev: boolean) => boolean)(state.showUserFiles)
+              : value,
+        })),
 
-  setShowUserFiles: (value) => set((state) => ({
-    showUserFiles: typeof value === 'function' ? (value as (prev: boolean) => boolean)(state.showUserFiles) : value
-  })),
+      setCurrentUser: (value) =>
+        set((state) => ({
+          currentUser:
+            typeof value === 'function'
+              ? (value as (prev: UserObject | null) => UserObject | null)(state.currentUser)
+              : value,
+        })),
 
-  setCurrentUser: (value) => set((state) => ({
-    currentUser: typeof value === 'function' ? (value as (prev: UserObject | null) => UserObject | null)(state.currentUser) : value
-  })),
+      setCopySuccess: (value) =>
+        set((state) => ({
+          copySuccess:
+            typeof value === 'function'
+              ? (value as (prev: string | null) => string | null)(state.copySuccess)
+              : value,
+        })),
 
-  setCopySuccess: (value) => set((state) => ({
-    copySuccess: typeof value === 'function' ? (value as (prev: string | null) => string | null)(state.copySuccess) : value
-  })),
+      // **Loading Actions**
+      setIsLoading: (value) =>
+        set((state) => ({
+          isLoading:
+            typeof value === 'function'
+              ? (value as (prev: boolean) => boolean)(state.isLoading)
+              : value,
+        })),
 
-  // Additional Actions
-  addRecentSearch: (query) => set((state) => ({
-    recentSearches: [query, ...state.recentSearches.filter(item => item !== query)].slice(0, 5),
-  })),
-}));
+      setLoadingMessage: (value) =>
+        set((state) => ({
+          loadingMessage:
+            typeof value === 'function'
+              ? (value as (prev: string) => string)(state.loadingMessage)
+              : value,
+        })),
+
+      // **Dark Mode Actions**
+      setIsDarkMode: (value) =>
+        set({
+          isDarkMode:
+            typeof value === 'function'
+              ? (value as (prev: boolean) => boolean)(get().isDarkMode)
+              : value,
+        }),
+      toggleDarkMode: () => set({ isDarkMode: !get().isDarkMode }),
+
+      // **Additional Actions**
+      addRecentSearch: (query) =>
+        set((state) => ({
+          recentSearches: [query, ...state.recentSearches.filter((item) => item !== query)].slice(
+            0,
+            5
+          ),
+        })),
+    }),
+    {
+      name: 'app-store', // Unique name for localStorage
+      partialize: (state) => ({
+        isDarkMode: state.isDarkMode, // Persist only isDarkMode
+      }),
+    }
+  )
+);

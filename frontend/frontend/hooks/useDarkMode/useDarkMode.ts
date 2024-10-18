@@ -1,26 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+// useDarkMode.ts
+import { useEffect } from 'react';
+import { useStore } from '../../store/store'; // Adjust the path as necessary
 
 const useDarkMode = () => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
-
-  const toggleDarkMode = useCallback(() => {
-    setIsDarkMode((prev) => !prev);
-    document.body.classList.toggle('dark-mode');
-  }, []);
+  const isDarkMode = useStore((state) => state.isDarkMode);
+  const toggleDarkMode = useStore((state) => state.toggleDarkMode);
 
   useEffect(() => {
-    // Load dark mode preference from localStorage
-    const savedDarkMode = localStorage.getItem('darkMode');
-    if (savedDarkMode !== null) {
-      const isDark = JSON.parse(savedDarkMode);
-      setIsDarkMode(isDark);
-      document.body.classList.toggle('dark-mode', isDark);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Save dark mode preference to localStorage
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    // Apply or remove the dark-mode class based on isDarkMode
+    document.body.classList.toggle('dark-mode', isDarkMode);
   }, [isDarkMode]);
 
   return { isDarkMode, toggleDarkMode };

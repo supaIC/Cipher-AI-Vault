@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+// DeleteConfirmation.tsx
+import React, { useEffect, useRef } from 'react';
 import './DeleteConfirmation.css';
-import LoadingOverlay from "../LoadingOverlay/LoadingOverlay";
+import LoadingOverlay from '../LoadingOverlay/LoadingOverlay';
+import { useStore } from '../../../store/store';
 
 interface DeleteConfirmationProps {
   asset: { key: string; url: string };
@@ -8,19 +10,18 @@ interface DeleteConfirmationProps {
   onCancel: () => void;
 }
 
-const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
-  asset,
-  onConfirm,
-  onCancel,
-}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const isMounted = useRef(true); // To track if component is mounted
+const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ asset, onConfirm, onCancel }) => {
+  // Access isLoading and setIsLoading from Zustand store
+  const isLoading = useStore((state) => state.isLoading);
+  const setIsLoading = useStore((state) => state.setIsLoading);
+
+  const isMounted = useRef(true);
 
   // Clean up and prevent state updates when component is unmounted
   useEffect(() => {
-    isMounted.current = true; // Set to true when mounted
+    isMounted.current = true;
     return () => {
-      isMounted.current = false; // Set to false when unmounted
+      isMounted.current = false;
     };
   }, []);
 
@@ -30,7 +31,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       await onConfirm();
     } finally {
       if (isMounted.current) {
-        setIsLoading(false); // Only update state if component is still mounted
+        setIsLoading(false);
       }
     }
   };
@@ -41,7 +42,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({
       <div className="confirm-box">
         <h2>Delete Asset</h2>
         <p>Are you sure you want to delete this asset?</p>
-        <p><strong>{asset.url}</strong></p>
+        <p>
+          <strong>{asset.url}</strong>
+        </p>
         <div className="confirm-actions">
           <button onClick={handleConfirm} className="confirm-delete" disabled={isLoading}>
             Delete

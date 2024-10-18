@@ -2,17 +2,17 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 
 // Screens
-import * as Screens from "./screens";
+import * as Screens from './screens';
 
 // Components
-import * as Components from "./components";
+import * as Components from './components';
 
 // Actors
-import * as Actors from "./actors";
+import * as Actors from './actors';
 
 // Hooks
-import { useAssetManager, Asset } from "./hooks/assetManager/assetManager";
-import { useDataManager } from "./hooks/dataManager/dataManager";
+import { useAssetManager, Asset } from './hooks/assetManager/assetManager';
+import { useDataManager } from './hooks/dataManager/dataManager';
 import useWorker from './hooks/modelManager/useWorker';
 import useChat from './hooks/modelManager/useChat';
 import useModelLoader from './hooks/modelManager/useModelLoader';
@@ -20,10 +20,13 @@ import useDatabase from './hooks/dataManager/useDatabase';
 import useDarkMode from './hooks/useDarkMode/useDarkMode';
 
 // Types
-import { Types } from "ic-auth";
+import { Types } from 'ic-auth';
 
 // Zustand Store
 import { useStore } from './store/store';
+
+// Logger
+import { debugLog, errorLog } from './utils/logger'; // Adjust the path as necessary
 
 export function Parent() {
   const { currentUser, setCurrentUser } = Actors.useAuthActor();
@@ -50,7 +53,7 @@ export function Parent() {
   const setStatus = useStore((state) => state.setStatus);
 
   const loadingMessage = useStore((state) => state.loadingMessage);
-  const setLoadingMessage = useStore((state) => state.setLoadingMessage);
+  // Removed redundant setters as they are handled within the hook
 
   const progressItems = useStore((state) => state.progressItems);
   const setProgressItems = useStore((state) => state.setProgressItems);
@@ -99,7 +102,9 @@ export function Parent() {
 
   const publicJsonAssets = assets.filter((asset) => asset.key.includes('/data-store/'));
   const privateJsonAssets = privateData
-    ? privateData.flatMap((userDataMap) => (Array.isArray(userDataMap) ? userDataMap[1].allFiles : []))
+    ? privateData.flatMap((userDataMap) =>
+        Array.isArray(userDataMap) ? userDataMap[1].allFiles : []
+      )
     : [];
 
   const {
@@ -115,7 +120,7 @@ export function Parent() {
   } = useDatabase({
     isRunning,
     setIsRunning,
-    log: console.log,
+    log: debugLog,
     addRecentSearch,
     setStatusMessage,
     publicJsonAssets,
@@ -125,36 +130,28 @@ export function Parent() {
 
   const { workerRef, loadModel } = useWorker({
     selectedModel,
-    log: console.log,
+    log: debugLog,
   });
+
+  // **Access Loading States from Zustand Store**
+  const isLoading = useStore((state) => state.isLoading);
+  const currentLoadingMessage = useStore((state) => state.loadingMessage);
 
   useModelLoader({
     worker: workerRef,
     selectedModel,
-    setStatus,
-    setStatusMessage,
     setLoadedModels,
     setProgressItems,
-    setLoadingMessage,
     isMounted,
-    log: console.log,
+    log: debugLog,
   });
 
-  const {
-    messages,
-    setMessages,
-    input,
-    setInput,
-    tps,
-    numTokens,
-    onEnter,
-    onInterrupt,
-  } = useChat({
+  const { messages, setMessages, input, setInput, tps, numTokens, onEnter, onInterrupt } = useChat({
     isRunning,
     setIsRunning,
     selectedModel,
     worker: workerRef,
-    log: console.log,
+    log: debugLog,
     handleSearch,
     isMounted,
     setStatus,
@@ -168,7 +165,7 @@ export function Parent() {
           const userData = await dataManager.getAllUserData(currentUser);
           setPrivateData(userData);
         } catch (error) {
-          console.error("Error loading private data:", error);
+          errorLog('Error loading private data:', error);
         }
       }
     };
@@ -206,28 +203,36 @@ export function Parent() {
 
   const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), [setIsMenuOpen]);
 
-  const handleTooltip = useCallback((content: string | null, event?: React.MouseEvent) => {
-    if (content) {
-      setTooltipContent(content);
-      setTooltipPosition({ x: event?.clientX || 0, y: event?.clientY || 0 });
-    } else {
-      setTooltipContent(null);
-    }
-  }, [setTooltipContent, setTooltipPosition]);
+  const handleTooltip = useCallback(
+    (content: string | null, event?: React.MouseEvent) => {
+      if (content) {
+        setTooltipContent(content);
+        setTooltipPosition({ x: event?.clientX || 0, y: event?.clientY || 0 });
+      } else {
+        setTooltipContent(null);
+      }
+    },
+    [setTooltipContent, setTooltipPosition]
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file && currentUser) {
-        handleFileUpload(file, currentUser.principal || "");
+        handleFileUpload(file, currentUser.principal || '');
       }
     },
     [currentUser, handleFileUpload]
   );
 
   const renderActionButton = useCallback(
-    (label: string, onClick: () => void, disabled: boolean, primary: boolean = false): JSX.Element => (
+    (
+      label: string,
+      onClick: () => void,
+      disabled: boolean,
+      primary: boolean = false
+    ): JSX.Element => (
       <button
         onClick={onClick}
         disabled={disabled}
@@ -253,11 +258,10 @@ export function Parent() {
   const handleLoadModel = useCallback(() => {
     if (selectedModel && !loadedModels.has(selectedModel)) {
       loadModel();
-      setStatus('loading');
-      setStatusMessage('Loading model...');
-      console.log(`Client: Initiated load request for model ID "${selectedModel}"`);
+      // No need to set isLoading and loadingMessage here as the hook manages it
+      debugLog(`Client: Initiated load request for model ID "${selectedModel}"`);
     }
-  }, [selectedModel, loadedModels, loadModel, setStatus, setStatusMessage]);
+  }, [selectedModel, loadedModels, loadModel]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -280,12 +284,16 @@ export function Parent() {
             selectedModel={selectedModel}
             setSelectedModel={setSelectedModel}
             loadedModels={loadedModels}
-            isRunning={status === 'loading'}
+            isRunning={
+              isLoading &&
+              typeof currentLoadingMessage === 'string' &&
+              currentLoadingMessage.startsWith('Loading')
+            }
             renderActionButton={renderActionButton}
             loadModel={handleLoadModel}
             setStatus={setStatus}
             setStatusMessage={setStatusMessage}
-            log={console.log}
+            log={debugLog}
           />
         );
       case 'Data Management':
@@ -329,18 +337,9 @@ export function Parent() {
           />
         );
       case 'Cycle Management':
-        return (
-          <Screens.CycleManagement
-            currentUser={currentUser}
-          />
-        );
+        return <Screens.CycleManagement currentUser={currentUser} />;
       case 'Settings':
-        return (
-          <Screens.Settings
-            currentUser={currentUser}
-            onLogout={() => setCurrentUser(null)}
-          />
-        );
+        return <Screens.Settings currentUser={currentUser} onLogout={() => setCurrentUser(null)} />;
       case 'Image Storage':
       case 'Document Storage':
       case 'Public Data':
@@ -348,7 +347,10 @@ export function Parent() {
           <Components.DragAndDropContainer onDrop={handleDrop}>
             {activeSection === 'Image Storage' && (
               <>
-                <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
+                <Components.UploadButton
+                  onUpload={(file) => handleFileUpload(file, currentUser?.principal || '')}
+                  disabled={globalLoading}
+                />
                 <Screens.ImageStore
                   assets={assets}
                   onAssetHover={setHoveredAsset}
@@ -358,7 +360,10 @@ export function Parent() {
             )}
             {activeSection === 'Document Storage' && (
               <>
-                <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
+                <Components.UploadButton
+                  onUpload={(file) => handleFileUpload(file, currentUser?.principal || '')}
+                  disabled={globalLoading}
+                />
                 <Screens.DocumentStore
                   assets={assets}
                   onAssetHover={setHoveredAsset}
@@ -368,7 +373,10 @@ export function Parent() {
             )}
             {activeSection === 'Public Data' && (
               <>
-                <Components.UploadButton onUpload={(file) => handleFileUpload(file, currentUser?.principal || "")} disabled={globalLoading} />
+                <Components.UploadButton
+                  onUpload={(file) => handleFileUpload(file, currentUser?.principal || '')}
+                  disabled={globalLoading}
+                />
                 <Screens.PublicDataStore
                   assets={assets}
                   onAssetHover={setHoveredAsset}
@@ -391,6 +399,13 @@ export function Parent() {
         return null;
     }
   };
+
+  // **Determine Which Overlay to Show to Prevent Overlapping**
+  const shouldShowModelLoading = isLoading;
+  const shouldShowGlobalLoading = globalLoading && !isLoading;
+
+  // **Debugging Logs**
+  debugLog(`Parent Component: isLoading=${isLoading}, loadingMessage='${currentLoadingMessage}'`);
 
   return (
     <div className={`app admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -418,15 +433,27 @@ export function Parent() {
               {renderContent()}
 
               {tooltipContent && (
-                <div className="tooltip" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>
+                <div
+                  className="tooltip"
+                  style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
+                >
                   <p>{tooltipContent}</p>
                 </div>
               )}
             </section>
           </main>
 
-          {globalLoading && <Components.LoadingOverlay message={loadingMessage} />}
+          {/* **Loading Overlays** */}
+          {/* Model Loading Overlay */}
+          {shouldShowModelLoading && <Components.LoadingOverlay message={currentLoadingMessage} />}
+
+          {/* Global Loading Overlay */}
+          {shouldShowGlobalLoading && <Components.LoadingOverlay message={loadingMessage} />}
+
+          {/* Error Notification */}
           {error && <Components.ErrorNotification message={error} onClose={() => setError(null)} />}
+
+          {/* Delete Confirmation Modal */}
           {confirmDelete && (
             <Components.DeleteConfirmation
               asset={confirmDelete}
@@ -437,7 +464,6 @@ export function Parent() {
               onCancel={() => setConfirmDelete(null)}
             />
           )}
-          <Components.ModelStatusOverlay status={status} loadingMessage={loadingMessage} />
         </>
       )}
     </div>
