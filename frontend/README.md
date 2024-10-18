@@ -194,3 +194,7 @@ To interact with canisters on the Internet Computer, actors need to be created w
 - [ ] Clean up unused or duplicate style entries in index.css
 - [ ] Create CSS files for different components
 - [ ] Implement choice of various LLMs for the chatbot
+
+-- 
+Built using React, Zustand, Tailwind CSS, react-query, typescript, and Vite.
+--

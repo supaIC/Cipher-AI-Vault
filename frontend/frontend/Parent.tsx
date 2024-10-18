@@ -53,7 +53,6 @@ export function Parent() {
   const setStatus = useStore((state) => state.setStatus);
 
   const loadingMessage = useStore((state) => state.loadingMessage);
-  // Removed redundant setters as they are handled within the hook
 
   const progressItems = useStore((state) => state.progressItems);
   const setProgressItems = useStore((state) => state.setProgressItems);
@@ -83,6 +82,18 @@ export function Parent() {
   const showUserFiles = useStore((state) => state.showUserFiles);
   const setShowUserFiles = useStore((state) => state.setShowUserFiles);
 
+  const selectedFile = useStore((state) => state.selectedFile);
+  const setSelectedFile = useStore((state) => state.setSelectedFile);
+
+  const selectedFileType = useStore((state) => state.selectedFileType);
+  const setSelectedFileType = useStore((state) => state.setSelectedFileType);
+
+  const searchResult = useStore((state) => state.searchResult);
+  const setSearchResult = useStore((state) => state.setSearchResult);
+
+  const index = useStore((state) => state.index);
+  const setIndex = useStore((state) => state.setIndex);
+
   const isMounted = useRef<boolean>(true);
 
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -108,21 +119,12 @@ export function Parent() {
     : [];
 
   const {
-    index,
-    searchResult,
-    selectedFile,
-    setSelectedFile,
-    selectedFileType,
-    setSelectedFileType,
     initializeDB,
     handleSearch,
     clearDatabase,
   } = useDatabase({
-    isRunning,
-    setIsRunning,
     log: debugLog,
     addRecentSearch,
-    setStatusMessage,
     publicJsonAssets,
     privateJsonAssets,
     isMounted,
@@ -258,7 +260,6 @@ export function Parent() {
   const handleLoadModel = useCallback(() => {
     if (selectedModel && !loadedModels.has(selectedModel)) {
       loadModel();
-      // No need to set isLoading and loadingMessage here as the hook manages it
       debugLog(`Client: Initiated load request for model ID "${selectedModel}"`);
     }
   }, [selectedModel, loadedModels, loadModel]);
@@ -404,9 +405,6 @@ export function Parent() {
   const shouldShowModelLoading = isLoading;
   const shouldShowGlobalLoading = globalLoading && !isLoading;
 
-  // **Debugging Logs**
-  debugLog(`Parent Component: isLoading=${isLoading}, loadingMessage='${currentLoadingMessage}'`);
-
   return (
     <div className={`app admin-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       {!currentUser ? (
@@ -469,3 +467,4 @@ export function Parent() {
     </div>
   );
 }
+

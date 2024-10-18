@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { getEmbedding, EmbeddingIndex, initializeModel } from '../client-vector-search/src/index';
+import { useStore } from '../../store/store'; // Import Zustand store
 
 interface SearchResult {
   input: string;
@@ -11,30 +12,33 @@ interface SearchResult {
 }
 
 interface UseDatabaseOptions {
-  isRunning: boolean;
-  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
   log: (message: string) => void;
   addRecentSearch: (query: string) => void;
-  setStatusMessage: React.Dispatch<React.SetStateAction<string>>;
   publicJsonAssets: any[];
   privateJsonAssets: any[];
   isMounted: React.MutableRefObject<boolean>;
 }
 
 const useDatabase = ({
-  isRunning,
-  setIsRunning,
   log,
   addRecentSearch,
-  setStatusMessage,
   publicJsonAssets,
   privateJsonAssets,
   isMounted,
 }: UseDatabaseOptions) => {
-  const [index, setIndex] = useState<EmbeddingIndex | null>(null);
-  const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
-  const [selectedFile, setSelectedFile] = useState<string>('');
-  const [selectedFileType, setSelectedFileType] = useState<'public' | 'private'>('public');
+  const {
+    index,
+    setIndex,
+    searchResult,
+    setSearchResult,
+    selectedFile,
+    setSelectedFile,
+    selectedFileType,
+    setSelectedFileType,
+    isRunning,
+    setIsRunning,
+    setStatusMessage,
+  } = useStore();
 
   const initializeDB = useCallback(async () => {
     if (isRunning || !selectedFile) return;
@@ -118,6 +122,7 @@ const useDatabase = ({
     log,
     setStatusMessage,
     isMounted,
+    setIndex,
   ]);
 
   const handleSearch = useCallback(
@@ -173,7 +178,7 @@ const useDatabase = ({
         }
       }
     },
-    [index, isRunning, addRecentSearch, log, setStatusMessage, isMounted, setIsRunning]
+    [index, isRunning, addRecentSearch, log, setStatusMessage, isMounted, setIsRunning, setSearchResult]
   );
 
   const clearDatabase = useCallback(async () => {
@@ -205,7 +210,7 @@ const useDatabase = ({
         setIsRunning(false);
       }
     }
-  }, [isRunning, index, log, setStatusMessage, isMounted, setIsRunning]);
+  }, [isRunning, index, log, setStatusMessage, isMounted, setIsRunning, setIndex, setSearchResult]);
 
   return {
     index,
