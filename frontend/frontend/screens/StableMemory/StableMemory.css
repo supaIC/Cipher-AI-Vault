@@ -1,0 +1,242 @@
+/* PrivateDataStore.css */
+
+/* Container for the PrivateDataStore component */
+.private-data-store-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Top section with upload button */
+  .private-data-store-top-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Data actions (e.g., upload button) */
+  .private-data-store-data-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .private-data-store-data-actions button {
+    background-color: #1e90ff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .private-data-store-data-actions button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  .private-data-store-data-actions button:hover:not(:disabled) {
+    background-color: #4682b4;
+    transform: scale(1.05);
+  }
+  
+  /* Assets List Section */
+  .private-data-store-assets-list-section {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .private-data-store-data-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    max-width: 100%;
+  }
+  
+  /* Individual Asset Item */
+  .private-data-store-asset-item {
+    background-color: var(--bg-color-light);
+    border-radius: var(--border-radius-lg);
+    padding: 0.625rem; /* 10px */
+    position: relative;
+    width: 200px;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--text-color);
+    cursor: pointer;
+  }
+  
+  .private-data-store-asset-item:hover {
+    transform: scale(1.03);
+    z-index: 1;
+    background-color: var(--hover-bg-color);
+  }
+  
+  /* JSON Preview */
+  .private-data-store-json-preview {
+    background-color: var(--bg-color-lighter);
+    padding: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    height: 150px;
+    overflow-y: auto;
+    font-size: 0.875rem; /* 14px */
+    color: var(--text-color);
+  }
+  
+  .private-data-store-json-snippet {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 150px;
+  }
+  
+  .private-data-store-json-snippet .string {
+    color: #ce9178;
+  }
+  
+  .private-data-store-json-snippet .number {
+    color: #b5cea8;
+  }
+  
+  .private-data-store-json-snippet .boolean {
+    color: #569cd6;
+  }
+  
+  .private-data-store-json-snippet .null {
+    color: #569cd6;
+  }
+  
+  .private-data-store-json-snippet .key {
+    color: #9cdcfe;
+  }
+  
+  /* Asset Name */
+  .private-data-store-asset-name {
+    font-size: 12px;
+    padding-bottom: 0.3125rem; /* 5px */
+    margin: 0;
+    text-align: center;
+    color: var(--text-color);
+  }
+  
+  /* Asset View Modal */
+  .private-data-store-asset-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .private-data-store-asset-view-content {
+    background-color: rgba(33, 33, 33, 0.33);
+    padding: 1.25rem; /* 20px */
+    border-radius: 0.5rem; /* 8px */
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+    width: 66%;
+    height: 66%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    color: #f5f5f7;
+  }
+  
+  .private-data-store-asset-view-content pre {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: #1e1e1e;
+    padding: 1rem;
+    border-radius: var(--border-radius-sm);
+    color: #f5f5f7;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25rem; /* 20px */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  .private-data-store-copy-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease);
+  }
+  
+  .private-data-store-copy-button:hover {
+    background-color: var(--accent-color-hover);
+  }
+  
+  .private-data-store-copy-feedback {
+    margin-top: 0.5rem;
+    font-size: 0.75rem; /* 12px */
+    color: var(--success-color);
+    text-align: center;
+  }
+  
+  .private-data-store-asset-view-actions {
+    margin-top: 1.875rem; /* 30px */
+    display: flex;
+    gap: 0.3125rem; /* 5px */
+  }
+  
+  .private-data-store-asset-view-actions button {
+    background-color: #343434;
+    color: #fff;
+    padding: 0.5rem 1rem; /* 8px 16px */
+    border: none;
+    border-radius: 0.25rem; /* 4px */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .private-data-store-asset-view-actions button:hover {
+    background-color: #3367d6;
+  }
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 768px) {
+    .private-data-store-asset-view-content {
+      width: 90%;
+      height: 90%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .private-data-store-asset-view-content {
+      padding: 0.625rem; /* 10px */
+    }
+  
+    .private-data-store-asset-view-actions button {
+      padding: 0.5rem;
+      margin: 0.15625rem; /* 2.5px */
+    }
+  }
+  

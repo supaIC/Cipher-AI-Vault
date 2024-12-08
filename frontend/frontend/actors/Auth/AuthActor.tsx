@@ -1,11 +1,12 @@
-import React, { createContext, useContext, useState } from 'react';
-// Import UserObject type from another file
-import { UserObject } from '../../hooks/assetManager/assetManager';
+// AuthActorContext.tsx
+import React, { createContext, useContext, Dispatch, SetStateAction } from 'react';
+import { UserObject } from '../../hooks/assetManager/assetManager'; // Ensure correct path
+import { useStore } from '../../store/store'; // Adjust the path based on your project structure
 
 // Define the shape of our context
 interface AuthActorContextType {
   currentUser: UserObject | null;  // The current user or null if not logged in
-  setCurrentUser: (user: UserObject | null) => void;  // Function to update the current user
+  setCurrentUser: Dispatch<SetStateAction<UserObject | null>>;  // Function to update the current user
 }
 
 // Create a new context with the defined type
@@ -23,8 +24,9 @@ export const useAuthActor = () => {
 
 // AuthActorProvider component to wrap the app and provide the context
 export const AuthActorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // State to hold the current user
-  const [currentUser, setCurrentUser] = useState<UserObject | null>(null);
+  // Retrieve currentUser and setCurrentUser from Zustand store
+  const currentUser = useStore((state) => state.currentUser);
+  const setCurrentUser = useStore((state) => state.setCurrentUser);
 
   // Provide the context value to all children components
   return (

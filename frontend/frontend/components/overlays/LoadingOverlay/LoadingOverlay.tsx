@@ -1,17 +1,23 @@
-import React from "react";
-import './LoadingOverlay.css'; // Import the CSS file for styling
+// LoadingOverlay.tsx
+import React from 'react';
+import './LoadingOverlay.css';
 
 interface LoadingOverlayProps {
   message: string;
 }
 
-const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ message }) => (
-  <div className="overlay">
-    <div className="loading-container">
-      <div className="spinner"></div>
-      <div className="loading-message">{message}</div>
+const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ message }) => {
+  // **Handle Empty Messages**
+  const displayMessage = message || 'Loading...';
+
+  return (
+    <div className="overlay" role="alert" aria-live="assertive">
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p className="loading-message">{displayMessage}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default LoadingOverlay;

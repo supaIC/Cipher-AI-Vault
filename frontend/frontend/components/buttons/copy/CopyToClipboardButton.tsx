@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+// CopyToClipboard.tsx
+import React from 'react';
 import './CopyToClipboardButton.css';
+import { useStore } from '../../../store/store'; // Adjust the path based on your project structure
 
 interface CopyToClipboardProps {
   text: string;
 }
 
 const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
-  const [copySuccess, setCopySuccess] = useState<string | null>(null);
+  // Retrieve copySuccess and setCopySuccess from the store
+  const copySuccess = useStore((state) => state.copySuccess);
+  const setCopySuccess = useStore((state) => state.setCopySuccess);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(text)

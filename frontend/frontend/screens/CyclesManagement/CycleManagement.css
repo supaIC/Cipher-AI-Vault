@@ -1,0 +1,70 @@
+.cycle-management-card {
+    background-color: var(--bg-color-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    transition: all 0.3s ease;
+  }
+  
+  .cycle-management-title {
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .cycle-management-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .cycle-management-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cycle-management-button-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+  }
+  
+  .cycle-management-button-primary:hover {
+    background-color: var(--primary-color-dark);
+  }
+  
+  .cycle-management-button-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+  }
+  
+  .cycle-management-button-secondary:hover {
+    background-color: var(--secondary-color-dark);
+  }
+  
+  @media (max-width: 768px) {
+    .cycle-management-card {
+      padding: var(--spacing-lg);
+    }
+  
+    .cycle-management-title {
+      font-size: var(--font-size-xl);
+    }
+  
+    .cycle-management-controls {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+  
+    .cycle-management-button {
+      width: 100%;
+    }
+  }
+  

@@ -1,16 +1,10 @@
-import { useCallback, useState, useEffect } from "react";
+// useAssetManager.ts
+import { useCallback, useEffect } from "react";
 import { AssetManager } from "@dfinity/assets";
 import { canisterId } from "../../configs/config";
+import { useStore } from "../../store/store";
 
 function useAssetManager(currentUser, bucketName) {
-  // State variables
-  const [assets, setAssets] = useState([]);
-  const [showUserFiles, setShowUserFiles] = useState(false);
-  const [globalLoading, setGlobalLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
-  const [error, setError] = useState(null);
-  const [confirmDelete, setConfirmDelete] = useState(null);
-
   // Create an AssetManager instance
   const createAssetManager = useCallback(async () => {
     console.log("Creating Asset Manager...");
@@ -23,12 +17,27 @@ function useAssetManager(currentUser, bucketName) {
     });
   }, [currentUser, bucketName]);
 
+  // Zustand Store State
+  const {
+    assets,
+    setAssets,
+    showUserFiles,
+    isLoading,
+    setIsLoading,
+    loadingMessage,
+    setLoadingMessage,
+    error,
+    setError,
+    confirmDelete,
+    setConfirmDelete,
+  } = useStore();
+
   // Generic function to handle API requests
   const handleApiRequest = useCallback(
     async (requestFunction, loadingMessage) => {
       console.log("Handling API request...");
       try {
-        setGlobalLoading(true);
+        setIsLoading(true);
         setLoadingMessage(loadingMessage);
         await requestFunction();
         console.log("API Request succeeded.");
@@ -37,10 +46,11 @@ function useAssetManager(currentUser, bucketName) {
         console.error("API Request failed:", err);
         setError("Operation failed.");
       } finally {
-        setGlobalLoading(false);
+        setIsLoading(false);
+        setLoadingMessage("");
       }
     },
-    []
+    [setIsLoading, setLoadingMessage, setError]
   );
 
   // Load the list of assets
@@ -51,7 +61,7 @@ function useAssetManager(currentUser, bucketName) {
       const assetManager = await createAssetManager();
       const list = await assetManager.list();
       const filteredList = showUserFiles
-        ? list.filter((file) => file.key.startsWith(`/${currentUser?.principal}/`))
+        ? list.filter((file) => file.key.startsWith(`${currentUser?.principal}`))
         : list;
       console.log("Assets fetched successfully.");
       setAssets(
@@ -61,7 +71,7 @@ function useAssetManager(currentUser, bucketName) {
         }))
       );
     }, "Loading assets...");
-  }, [createAssetManager, currentUser, showUserFiles, handleApiRequest]);
+  }, [createAssetManager, currentUser, showUserFiles, handleApiRequest, setAssets]);
 
   // Delete an asset
   const handleDeleteAsset = useCallback(
@@ -76,7 +86,7 @@ function useAssetManager(currentUser, bucketName) {
         console.log("Asset deleted successfully.");
       }, "Deleting asset...");
     },
-    [createAssetManager, loadAssetList, handleApiRequest]
+    [createAssetManager, loadAssetList, handleApiRequest, setConfirmDelete]
   );
 
   // Upload a file
@@ -87,10 +97,10 @@ function useAssetManager(currentUser, bucketName) {
         setError("User not authenticated.");
         return;
       }
-  
+
       await handleApiRequest(async () => {
         const assetManager = await createAssetManager();
-  
+
         // Determine the correct bucket based on the file type
         let bucketPath;
         if (file.type.startsWith("image/")) {
@@ -103,25 +113,25 @@ function useAssetManager(currentUser, bucketName) {
           setError("Unsupported file type.");
           return;
         }
-  
+
         // Construct the key using the bucket path
         const key = `${principal}/${bucketPath}/${file.name}`;
         const arrayBuffer = await file.arrayBuffer();
         const uint8Array = new Uint8Array(arrayBuffer);
-  
+
         // Store the file using the AssetManager
         await assetManager.store(uint8Array, { fileName: key });
         await loadAssetList();
         console.log("File uploaded successfully.");
       }, "Uploading file...");
     },
-    [createAssetManager, loadAssetList, handleApiRequest]
+    [createAssetManager, loadAssetList, handleApiRequest, setError]
   );
 
   // Toggle visibility of user files
   const toggleUserFiles = useCallback(() => {
     console.log("Toggling user files visibility...");
-    setShowUserFiles((prevVisibility) => !prevVisibility);
+    useStore.setState((state) => ({ showUserFiles: !state.showUserFiles }));
   }, []);
 
   // Effect to load asset list when the component mounts
@@ -130,12 +140,12 @@ function useAssetManager(currentUser, bucketName) {
     if (currentUser) {
       loadAssetList();
     }
-  }, []); // Empty dependency array to ensure it runs only once
+  }, [currentUser, loadAssetList]);
 
   // Return the hook's API
   return {
     assets,
-    globalLoading,
+    isLoading,
     loadingMessage,
     error,
     setError,

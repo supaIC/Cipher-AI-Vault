@@ -1,0 +1,131 @@
+.settings-card {
+    background-color: var(--bg-color-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    transition: all 0.3s ease;
+  }
+  
+  .settings-card-title {
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .settings-card-description {
+    font-size: var(--font-size-base);
+    color: var(--text-color-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .settings-section {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .settings-section-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .settings-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .settings-button-danger {
+    background-color: var(--error-color);
+    color: white;
+    border: none;
+  }
+  
+  .settings-button-danger:hover {
+    background-color: var(--error-color-dark);
+  }
+  
+  .settings-cycle-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .settings-toggle-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .settings-toggle-label {
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+  }
+  
+  .settings-toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  
+  .settings-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .settings-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-color-lighter);
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .settings-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  .settings-toggle-input:checked + .settings-toggle-slider {
+    background-color: var(--accent-color);
+  }
+  
+  .settings-toggle-input:checked + .settings-toggle-slider:before {
+    transform: translateX(26px);
+  }
+  
+  @media (max-width: 768px) {
+    .settings-card {
+      padding: var(--spacing-lg);
+    }
+  
+    .settings-card-title {
+      font-size: var(--font-size-xl);
+    }
+  
+    .settings-section-title {
+      font-size: var(--font-size-md);
+    }
+  
+    .settings-button {
+      width: 100%;
+    }
+  }

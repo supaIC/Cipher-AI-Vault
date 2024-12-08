@@ -1,0 +1,205 @@
+/* PublicDataStore.css */
+
+/* Container for public data items */
+.public-data-store-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem; /* 20px */
+    max-width: 75rem; /* 1200px */
+    max-height: calc(100vh - 8.75rem);
+    overflow-y: auto;
+    padding: 1.25rem; /* 20px */
+  }
+  
+  /* Individual public data item */
+  .public-data-store-item {
+    background-color: var(--bg-color-light); /* Use light mode background */
+    border-radius: 0.5rem; /* 8px */
+    padding: 0.625rem; /* 10px */
+    position: relative;
+    width: 200px;
+    box-shadow: var(--shadow-md); /* Adjust shadow for light mode */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--text-color); /* Use dynamic text color */
+    cursor: pointer;
+  }
+  
+  .public-data-store-item:hover {
+    transform: scale(1.03);
+    z-index: 1;
+    background-color: var(--hover-bg-color); /* Light mode hover background */
+  }
+  
+  /* Error state for public data item */
+  .public-data-store-error {
+    color: var(--error-color);
+  }
+  
+  /* JSON preview for public data */
+  .public-data-store-json-preview {
+    background-color: var(--bg-color-lighter);
+    padding: 0.5rem;
+    border-radius: 0.3125rem; /* 5px */
+    height: 150px;
+    overflow-y: auto;
+    font-size: 0.875rem; /* 14px */
+    color: var(--text-color);
+  }
+  
+  /* JSON snippet within preview */
+  .public-data-store-json-snippet {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding: 0.5rem;
+    border-radius: 0.3125rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 150px; /* Limit height for previews */
+  }
+  
+  .public-data-store-json-snippet .string {
+    color: #ce9178;
+  }
+  .public-data-store-json-snippet .number {
+    color: #b5cea8;
+  }
+  .public-data-store-json-snippet .boolean {
+    color: #569cd6;
+  }
+  .public-data-store-json-snippet .null {
+    color: #569cd6;
+  }
+  .public-data-store-json-snippet .key {
+    color: #9cdcfe;
+  }
+  
+  /* Document name */
+  .public-data-store-name {
+    font-size: 0.75rem; /* 12px */
+    padding-bottom: 0.3125rem; /* 5px */
+    margin: 0;
+    text-align: center;
+    color: var(--text-color); /* Dynamic text color */
+  }
+  
+  /* Asset view modal */
+  .public-data-store-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Content within the asset view */
+  .public-data-store-view-content {
+    background-color: rgba(33, 33, 33, 0.33);
+    padding: 1.25rem; /* 20px */
+    border-radius: 0.5rem; /* 8px */
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+    width: 66%; /* About 2/3rds of the screen width */
+    height: 66%; /* About 2/3rds of the screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    color: #f5f5f7;
+  }
+  
+  .public-data-store-view-content pre {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: #1e1e1e;
+    padding: 1rem;
+    border-radius: 0.3125rem; /* 5px */
+    color: #f5f5f7;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25rem; /* 20px */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  /* Copy button within asset view */
+  .public-data-store-copy-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease);
+  }
+  
+  .public-data-store-copy-button:hover {
+    background-color: var(--accent-color-hover);
+  }
+  
+  /* Feedback message after copying */
+  .public-data-store-copy-feedback {
+    margin-top: 0.5rem;
+    font-size: 0.75rem; /* 12px */
+    color: var(--success-color);
+    text-align: center;
+  }
+  
+  /* Actions within the asset view */
+  .public-data-store-view-actions {
+    margin-top: 1.875rem; /* 30px */
+    display: flex;
+    gap: 0.3125rem; /* 5px */
+  }
+  
+  .public-data-store-view-actions button {
+    background-color: #343434;
+    color: #fff;
+    padding: 0.5rem 1rem; /* 8px 16px */
+    border: none;
+    border-radius: 0.25rem; /* 4px */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .public-data-store-view-actions button:hover {
+    background-color: #3367d6;
+  }
+  
+  /* Additional styles for light mode */
+  .light-mode .public-data-store-view-content {
+    background-color: rgba(255, 255, 255, 0.9); /* Light mode asset view */
+  }
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 768px) {
+    .public-data-store-view-content {
+      width: 90%;
+      height: 90%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .public-data-store-view-content {
+      padding: 0.625rem; /* 10px */
+    }
+  
+    .public-data-store-view-actions button {
+      padding: 0.5rem;
+      margin: 0.15625rem; /* 2.5px */
+    }
+  }
+  
