@@ -1,4 +1,28 @@
 // store.ts
+
+/*
+Ideally we would do something like this to modularize the store:
+```
+import { useUIStore } from './uiStore';
+import { useAssetStore } from './assetStore';
+import { useAuthStore } from './authStore';
+import { useLoadingStore } from './loadingStore';
+import { useSearchStore } from './searchStore';
+import { CombinedStoreState } from './types';
+
+export { useUIStore, useAssetStore, useAuthStore, useLoadingStore, useSearchStore };
+
+export const useStore = (): CombinedStoreState => ({
+  ...useUIStore(),
+  ...useAssetStore(),
+  ...useAuthStore(),
+  ...useLoadingStore(),
+  ...useSearchStore(),
+});
+```
+*/
+
+// Imports
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { SetStateAction, Dispatch } from 'react';
